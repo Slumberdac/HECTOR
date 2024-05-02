@@ -1,0 +1,409 @@
+{
+	"info": {
+		"_postman_id": "0ce7f1de-4e58-4fed-a48c-7e9f239d00ee",
+		"name": "Hector",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34221252",
+		"_collection_link": "https://hector.postman.co/workspace/Team-Workspace~807b911b-6287-415a-8944-f41cfa97511f/collection/34221252-0ce7f1de-4e58-4fed-a48c-7e9f239d00ee?action=share&source=collection_link&creator=34221252"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get specific user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{basic_url}}/users/:userId",
+							"host": ["{{basic_url}}"],
+							"path": ["users", ":userId"],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{user_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{basic_url}}/users",
+							"host": ["{{basic_url}}"],
+							"path": ["users"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    const responseBody = pm.response.json();\r",
+									"    const user = responseBody.user;\r",
+									"    pm.collectionVariables.set(\"user_id\", user.id);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"\",\r\n\t\"username\": \"\",\r\n\t\"password\": \"\"\r\n\t\"pfp_eyes\": \"\",\r\n\t\"pfp_mouth\": \"\",\r\n\t\"pfp_color\": \"\",\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{basic_url}}/users",
+							"host": ["{{basic_url}}"],
+							"path": ["users"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Signin user",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"\",\r\n    \"password\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{basic_url}}/users/signin",
+							"host": ["{{basic_url}}"],
+							"path": ["users", "signin"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit user",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"This_HasBeenUpdated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{basic_url}}/users/:userId",
+							"host": ["{{basic_url}}"],
+							"path": ["users", ":userId"],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{user_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Réinitialise rock_id si la réponse est 404\r",
+									"pm.test(\"Reset rock_id if response is 404\", function () {\r",
+									"    if (pm.response.code === 404) {\r",
+									"        pm.collectionVariables.set(\"user_id\",\"\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{basic_url}}/users/:usersId",
+							"host": ["{{basic_url}}"],
+							"path": ["users", ":usersId"],
+							"variable": [
+								{
+									"key": "usersId",
+									"value": "{{user_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User's rocks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{basic_url}}/users/:userId/rocks",
+							"host": ["{{basic_url}}"],
+							"path": ["users", ":userId", "rocks"],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{user_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add rock to User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{basic_url}}/users/:userId/rocks/:rockId",
+							"host": ["{{basic_url}}"],
+							"path": ["users", ":userId", "rocks", ":rockId"],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{user_id}}"
+								},
+								{
+									"key": "rockId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove a User's rock",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{basic_url}}/users/:userId/rocks/:rockId",
+							"host": ["{{basic_url}}"],
+							"path": ["users", ":userId", "rocks", ":rockId"],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{user_id}}"
+								},
+								{
+									"key": "rockId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "rocks",
+			"item": [
+				{
+					"name": "Get specific rock",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{basic_url}}/rocks/:rockId",
+							"host": ["{{basic_url}}"],
+							"path": ["rocks", ":rockId"],
+							"variable": [
+								{
+									"key": "rockId",
+									"value": "{{rock_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get rocks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{basic_url}}/rocks",
+							"host": ["{{basic_url}}"],
+							"path": ["rocks"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create rock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    const responseBody = pm.response.json();\r",
+									"    const rock = responseBody.rock;\r",
+									"    pm.collectionVariables.set(\"rock_id\", rock.id);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"\",\r\n    \"gender\": \"\",\r\n    \"personality\": \"\",\r\n    \"description\": \"\",\r\n    \"image\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{basic_url}}/rocks",
+							"host": ["{{basic_url}}"],
+							"path": ["rocks"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit rock",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"image\": \"https://mcusercontent.com/0433afe635fdac757a8565904/images/245832a8-e43a-401c-b888-9c187e687633.png\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{basic_url}}/rocks/:rockId",
+							"host": ["{{basic_url}}"],
+							"path": ["rocks", ":rockId"],
+							"variable": [
+								{
+									"key": "rockId",
+									"value": "{{rock_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete rock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Réinitialise rock_id si la réponse est 404\r",
+									"pm.test(\"Reset rock_id if response is 404\", function () {\r",
+									"    if (pm.response.code === 404) {\r",
+									"        pm.collectionVariables.set(\"rock_id\",\"\");\r",
+									"        console.log(\"rock_id has been reset due to a 404 response.\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{basic_url}}/rocks/:rockId",
+							"host": ["{{basic_url}}"],
+							"path": ["rocks", ":rockId"],
+							"variable": [
+								{
+									"key": "rockId",
+									"value": "{{rock_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [""]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [""]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "rock_id",
+			"value": ""
+		},
+		{
+			"key": "user_id",
+			"value": ""
+		}
+	]
+}
