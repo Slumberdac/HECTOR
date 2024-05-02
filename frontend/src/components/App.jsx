@@ -1,12 +1,11 @@
-
+import Welcome from "./Welcome/Welcome";
 
 const App = () => {
- 
-  return (
-    <h1>
-      hello word
-    </h1>
-  );
+	return (
+		<>
+			<Welcome />
+		</>
+	);
 };
 
 export default App;

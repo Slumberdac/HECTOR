@@ -1,0 +1,38 @@
+body {
+	margin: 0;
+}
+.welcome-logo {
+	position: relative;
+	box-shadow: 0 0 2em 0.5em rgba(0, 0, 0, 1);
+	height: 30vw;
+}
+.welcome-logo img {
+	width: 50%;
+	height: 50%;
+	position: fixed;
+	left: 25%;
+}
+
+.background {
+	min-height: 1080px;
+
+	background-attachment: fixed;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.welcome-content {
+	height: 100vw;
+}
+
+.burger-menu {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 100;
+}
+.burger-menu img {
+	width: 300%;
+	height: 300%;
+}
