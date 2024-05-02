@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "0ce7f1de-4e58-4fed-a48c-7e9f239d00ee",
+		"_postman_id": "08a20459-7eff-4ece-af22-66a7a7e187b1",
 		"name": "Hector",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "34221252",
-		"_collection_link": "https://hector.postman.co/workspace/Team-Workspace~807b911b-6287-415a-8944-f41cfa97511f/collection/34221252-0ce7f1de-4e58-4fed-a48c-7e9f239d00ee?action=share&source=collection_link&creator=34221252"
+		"_exporter_id": "34653816",
+		"_collection_link": "https://hector-containment.postman.co/workspace/Team-Workspace~2402e7a7-6ba5-40cc-8fe9-985683da19ce/collection/34653816-08a20459-7eff-4ece-af22-66a7a7e187b1?action=share&source=collection_link&creator=34653816"
 	},
 	"item": [
 		{
@@ -17,8 +17,13 @@
 						"header": [],
 						"url": {
 							"raw": "{{basic_url}}/users/:userId",
-							"host": ["{{basic_url}}"],
-							"path": ["users", ":userId"],
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"users",
+								":userId"
+							],
 							"variable": [
 								{
 									"key": "userId",
@@ -36,8 +41,12 @@
 						"header": [],
 						"url": {
 							"raw": "{{basic_url}}/users",
-							"host": ["{{basic_url}}"],
-							"path": ["users"]
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"users"
+							]
 						}
 					},
 					"response": []
@@ -75,8 +84,12 @@
 						},
 						"url": {
 							"raw": "{{basic_url}}/users",
-							"host": ["{{basic_url}}"],
-							"path": ["users"]
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"users"
+							]
 						}
 					},
 					"response": []
@@ -97,8 +110,13 @@
 						},
 						"url": {
 							"raw": "{{basic_url}}/users/signin",
-							"host": ["{{basic_url}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						}
 					},
 					"response": []
@@ -119,8 +137,13 @@
 						},
 						"url": {
 							"raw": "{{basic_url}}/users/:userId",
-							"host": ["{{basic_url}}"],
-							"path": ["users", ":userId"],
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"users",
+								":userId"
+							],
 							"variable": [
 								{
 									"key": "userId",
@@ -156,8 +179,13 @@
 						"header": [],
 						"url": {
 							"raw": "{{basic_url}}/users/:usersId",
-							"host": ["{{basic_url}}"],
-							"path": ["users", ":usersId"],
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"users",
+								":usersId"
+							],
 							"variable": [
 								{
 									"key": "usersId",
@@ -175,8 +203,14 @@
 						"header": [],
 						"url": {
 							"raw": "{{basic_url}}/users/:userId/rocks",
-							"host": ["{{basic_url}}"],
-							"path": ["users", ":userId", "rocks"],
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"rocks"
+							],
 							"variable": [
 								{
 									"key": "userId",
@@ -194,8 +228,15 @@
 						"header": [],
 						"url": {
 							"raw": "{{basic_url}}/users/:userId/rocks/:rockId",
-							"host": ["{{basic_url}}"],
-							"path": ["users", ":userId", "rocks", ":rockId"],
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"rocks",
+								":rockId"
+							],
 							"variable": [
 								{
 									"key": "userId",
@@ -217,8 +258,15 @@
 						"header": [],
 						"url": {
 							"raw": "{{basic_url}}/users/:userId/rocks/:rockId",
-							"host": ["{{basic_url}}"],
-							"path": ["users", ":userId", "rocks", ":rockId"],
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"rocks",
+								":rockId"
+							],
 							"variable": [
 								{
 									"key": "userId",
@@ -245,8 +293,13 @@
 						"header": [],
 						"url": {
 							"raw": "{{basic_url}}/rocks/:rockId",
-							"host": ["{{basic_url}}"],
-							"path": ["rocks", ":rockId"],
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"rocks",
+								":rockId"
+							],
 							"variable": [
 								{
 									"key": "rockId",
@@ -264,8 +317,12 @@
 						"header": [],
 						"url": {
 							"raw": "{{basic_url}}/rocks",
-							"host": ["{{basic_url}}"],
-							"path": ["rocks"]
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"rocks"
+							]
 						}
 					},
 					"response": []
@@ -303,8 +360,12 @@
 						},
 						"url": {
 							"raw": "{{basic_url}}/rocks",
-							"host": ["{{basic_url}}"],
-							"path": ["rocks"]
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"rocks"
+							]
 						}
 					},
 					"response": []
@@ -325,8 +386,13 @@
 						},
 						"url": {
 							"raw": "{{basic_url}}/rocks/:rockId",
-							"host": ["{{basic_url}}"],
-							"path": ["rocks", ":rockId"],
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"rocks",
+								":rockId"
+							],
 							"variable": [
 								{
 									"key": "rockId",
@@ -363,8 +429,13 @@
 						"header": [],
 						"url": {
 							"raw": "{{basic_url}}/rocks/:rockId",
-							"host": ["{{basic_url}}"],
-							"path": ["rocks", ":rockId"],
+							"host": [
+								"{{basic_url}}"
+							],
+							"path": [
+								"rocks",
+								":rockId"
+							],
 							"variable": [
 								{
 									"key": "rockId",
@@ -384,7 +455,9 @@
 			"script": {
 				"type": "text/javascript",
 				"packages": {},
-				"exec": [""]
+				"exec": [
+					""
+				]
 			}
 		},
 		{
@@ -392,7 +465,9 @@
 			"script": {
 				"type": "text/javascript",
 				"packages": {},
-				"exec": [""]
+				"exec": [
+					""
+				]
 			}
 		}
 	],
@@ -404,6 +479,10 @@
 		{
 			"key": "user_id",
 			"value": ""
+		},
+		{
+			"key": "basic_url",
+			"value": "localhost:5000/ap1/v1"
 		}
 	]
 }
