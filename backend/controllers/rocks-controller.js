@@ -2,6 +2,19 @@ const Rock = require("../models/rock");
 const HttpError = require("../util/http-error");
 const { validationResult } = require("express-validator");
 
+// Creates a response object for a user with a comprehensive _id
+const getResponseRock = (rock) => {
+	return {
+		_id: rock._id,
+		name: rock.name,
+		gender: rock.gender,
+		personality: rock.personality,
+		description: rock.description,
+		image: rock.image,
+		owner: rock.owner,
+	};
+};
+
 const getRocks = async (req, res, next) => {
 	let rocks;
 	try {
@@ -10,7 +23,7 @@ const getRocks = async (req, res, next) => {
 		const err = new HttpError("A database error occured", 500);
 		return next(err);
 	}
-	res.json({ rocks: rocks });
+	res.json({ rocks: rocks.map((rock) => getResponseRock(rock)) });
 };
 
 const getRockById = async (req, res, next) => {
@@ -30,7 +43,7 @@ const getRockById = async (req, res, next) => {
 		return next(error); // Déclenche une erreur personnalisée
 	}
 
-	res.json({ rock: rock });
+	res.json({ rock: getResponseRock(rock) });
 };
 
 //POST
@@ -52,13 +65,12 @@ const createRock = async (req, res, next) => {
 
 	const { name, gender, personality, description, image } = req.body;
 
-	// Crée un nouvel objet Rock, si l'image n'est pas fournie, elle sera définie sur null
 	const createdRock = new Rock({
 		name,
 		gender: gender ?? "N/A",
 		personality,
 		description,
-		image: image ?? null,
+		image: image,
 	});
 
 	try {
@@ -67,7 +79,7 @@ const createRock = async (req, res, next) => {
 		return res.status(500).json({ message: "Cannot create the companion" });
 	}
 	//201 standard pour créé avec succès
-	res.status(201).json({ rock: createdRock });
+	res.status(201).json({ rock: getResponseRock(createdRock) });
 };
 
 //PATCH
@@ -80,8 +92,7 @@ const updateRock = async (req, res, next) => {
 		if (!updatedRock) {
 			return res.status(404).json({ message: "Companion not found" });
 		}
-
-		res.status(200).json({ rock: updatedRock });
+		res.status(200).json({ rock: getResponseRock(updatedRock) });
 	} catch (e) {
 		res.status(500).json({
 			message: "Cannot update the companion",
@@ -95,12 +106,9 @@ const deleteRock = async (req, res, next) => {
 	try {
 		const deletedRock = await Rock.findByIdAndDelete(rockId).exec();
 		if (!deletedRock) {
-			return res
-				.status(404)
-				.json({ meCompanionge: "Companion not found" });
+			return res.status(404).json({ message: "Companion not found" });
 		}
 		res.status(200).json({ message: "Companion deleted" });
-		companion;
 	} catch (e) {
 		res.status(500).json({
 			message: "Cannot delete the companion",
@@ -108,6 +116,7 @@ const deleteRock = async (req, res, next) => {
 	}
 };
 
+exports.getResponseRock = getResponseRock;
 exports.getRocks = getRocks;
 exports.getRockById = getRockById;
 exports.createRock = createRock;

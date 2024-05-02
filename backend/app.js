@@ -13,6 +13,7 @@ const uri =
 
 //Parse le code entrant pour ajouter une propriété body sur la request
 app.use(express.json());
+
 // ce middleware ne rtourne pas de reponse mais va ajoute run header
 app.use((req, res, next) => {
 	res.setHeader("Access-Control-Allow-Origin", "*"); // header et value * quels domaines peuvent acceder a notre serveur
@@ -29,7 +30,7 @@ app.use("/api/v1/rocks", rocksRoutes);
 app.use("/api/v1/users", usersRoutes);
 
 app.use((req, res, next) => {
-	const error = new Error("Route non trouvée");
+	const error = new Error("Not found");
 	error.code = 404;
 	next(error);
 });

@@ -3,6 +3,20 @@ const User = require("../models/user");
 const Rock = require("../models/rock");
 const HttpError = require("../util/http-error");
 const { validationResult } = require("express-validator");
+const { getResponseRock } = require("./rocks-controller");
+
+// Creates a response object for a user with a comprehensive _id
+const getResponseUser = (user) => {
+	return {
+		_id: user._id,
+		name: user.name,
+		username: user.username,
+		password: user.password,
+		pfp_eyes: user.pfp_eyes,
+		pfp_mouth: user.pfp_mouth,
+		pfp_color: user.pfp_color,
+	};
+};
 
 const getUsers = async (req, res, next) => {
 	let users;
@@ -12,7 +26,7 @@ const getUsers = async (req, res, next) => {
 		const err = new HttpError("A database error occured", 500);
 		return next(err);
 	}
-	res.json({ users: users.map((user) => user.toObject({ getters: true })) });
+	res.json({ users: users.map((user) => getResponseUser(user)) });
 };
 
 const getUserById = async (req, res, next) => {
@@ -29,7 +43,8 @@ const getUserById = async (req, res, next) => {
 		err.code = 404;
 		return next(err);
 	}
-	res.json({ user: user });
+
+	res.json({ user: getResponseUser(user) });
 };
 
 const registerUser = async (req, res, next) => {
@@ -38,7 +53,7 @@ const registerUser = async (req, res, next) => {
 		// Format the validation errors to create a more readable string
 		const errors = validationErrors
 			.array()
-			.map((err) => `${err.param}: ${err.msg}`)
+			.map((err) => `${err.path}: ${err.msg}`)
 			.join(", ");
 		return next(
 			new HttpError(
@@ -57,6 +72,7 @@ const registerUser = async (req, res, next) => {
 			Math.floor(Math.random() * (256 - 100) + 100)
 				.toString(16)
 				.padStart(2, "0")
+				.toUpperCase()
 		)
 		.join("")}`;
 
@@ -92,7 +108,8 @@ const registerUser = async (req, res, next) => {
 		);
 		return next(err);
 	}
-	res.status(201).json({ user: createdUser });
+
+	res.status(201).json({ user: getResponseUser(createdUser) });
 };
 
 const signInUser = async (req, res, next) => {
@@ -112,7 +129,7 @@ const signInUser = async (req, res, next) => {
 		const err = new HttpError("Mot de passe incorrect", 401);
 		return next(err);
 	}
-	res.status(200).json({ user: user });
+	res.status(200).json({ user: getResponseUser(user) });
 };
 
 const updateUserById = async (req, res, next) => {
@@ -125,7 +142,7 @@ const updateUserById = async (req, res, next) => {
 			const err = new Error("User not found", 404);
 			return next(err);
 		}
-		res.status(200).json({ user: updatedUser });
+		res.status(200).json({ user: getResponseUser(updatedUser) });
 	} catch (e) {
 		const err = new HttpError("A database error occured", 500);
 		return next(err);
@@ -155,7 +172,7 @@ const getRocksByUser = async (req, res, next) => {
 		const err = new HttpError("A database error occured", 500);
 		return next(err);
 	}
-	res.json({ rocks: rocks });
+	res.json({ rocks: rocks.map((rock) => getResponseRock(rock)) });
 };
 
 const addRockToUser = async (req, res, next) => {
@@ -184,7 +201,7 @@ const addRockToUser = async (req, res, next) => {
 	try {
 		if (rock.owner) {
 			const err = new HttpError(
-				"Companion has already found; the way home",
+				`${rock.name} has already found; the way home`,
 				409
 			);
 			return next(err);
@@ -221,7 +238,7 @@ const removeRockFromUser = async (req, res, next) => {
 		return next(err);
 	}
 	try {
-		rock.owner = null;
+		rock.owner = undefined;
 		await rock.save();
 	} catch (e) {
 		const err = new HttpError("A database error occured", 500);

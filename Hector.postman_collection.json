@@ -27,7 +27,8 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "{{user_id}}"
+									"value": "{{user_id}}",
+									"uuid": "e34f4b4d-a36f-4726-9333-6313a4a61534"
 								}
 							]
 						}
@@ -61,8 +62,7 @@
 									"pm.test(\"Status code is 201\", function () {\r",
 									"    pm.response.to.have.status(201);\r",
 									"    const responseBody = pm.response.json();\r",
-									"    const user = responseBody.user;\r",
-									"    pm.collectionVariables.set(\"user_id\", user.id);\r",
+									"    pm.collectionVariables.set(\"user_id\", responseBody.user._id);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -75,7 +75,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n\t\"username\": \"\",\r\n\t\"password\": \"\"\r\n\t\"pfp_eyes\": \"\",\r\n\t\"pfp_mouth\": \"\",\r\n\t\"pfp_color\": \"\",\r\n}",
+							"raw": "{\r\n    \"name\": \"Loic\",\r\n\t\"username\": \"Pwel\",\r\n\t\"password\": \"Passw0rd!\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -147,7 +147,8 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "{{user_id}}"
+									"value": "{{user_id}}",
+									"uuid": "9d9d88f2-509b-433c-9e7b-709e87c84887"
 								}
 							]
 						}
@@ -164,7 +165,7 @@
 									"// Réinitialise rock_id si la réponse est 404\r",
 									"pm.test(\"Reset rock_id if response is 404\", function () {\r",
 									"    if (pm.response.code === 404) {\r",
-									"        pm.collectionVariables.set(\"user_id\",\"\");\r",
+									"        pm.collectionVariables.set(\"user_id\", null);\r",
 									"    }\r",
 									"});\r",
 									""
@@ -178,18 +179,19 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{basic_url}}/users/:usersId",
+							"raw": "{{basic_url}}/users/:userId",
 							"host": [
 								"{{basic_url}}"
 							],
 							"path": [
 								"users",
-								":usersId"
+								":userId"
 							],
 							"variable": [
 								{
-									"key": "usersId",
-									"value": "{{user_id}}"
+									"key": "userId",
+									"value": "",
+									"uuid": "0ba0c40b-386e-4927-aef9-f027177648fb"
 								}
 							]
 						}
@@ -214,7 +216,8 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "{{user_id}}"
+									"value": "{{user_id}}",
+									"uuid": "8ae13a44-16c6-4351-870c-9020798aebf7"
 								}
 							]
 						}
@@ -240,11 +243,13 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "{{user_id}}"
+									"value": "{{user_id}}",
+									"uuid": "0f0cee43-76aa-4446-a559-395e3b8c9fa1"
 								},
 								{
 									"key": "rockId",
-									"value": ""
+									"value": "{{rock_id}}",
+									"uuid": "356658e3-4c79-40cb-9d33-4906b1aa13fc"
 								}
 							]
 						}
@@ -270,11 +275,13 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "{{user_id}}"
+									"value": "{{user_id}}",
+									"uuid": "9dcd792c-d57c-4c55-8264-fd242bbec644"
 								},
 								{
 									"key": "rockId",
-									"value": ""
+									"value": "{{rock_id}}",
+									"uuid": "317b5f6d-84b0-4c37-a60d-0539ba99546f"
 								}
 							]
 						}
@@ -303,7 +310,8 @@
 							"variable": [
 								{
 									"key": "rockId",
-									"value": "{{rock_id}}"
+									"value": "{{rock_id}}",
+									"uuid": "a60c8b99-d1e3-450e-b766-7714a32a2c4d"
 								}
 							]
 						}
@@ -337,8 +345,7 @@
 									"pm.test(\"Status code is 201\", function () {\r",
 									"    pm.response.to.have.status(201);\r",
 									"    const responseBody = pm.response.json();\r",
-									"    const rock = responseBody.rock;\r",
-									"    pm.collectionVariables.set(\"rock_id\", rock.id);\r",
+									"    pm.collectionVariables.set(\"rock_id\", responseBody.rock._id);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -351,7 +358,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"gender\": \"\",\r\n    \"personality\": \"\",\r\n    \"description\": \"\",\r\n    \"image\": \"\"\r\n}",
+							"raw": "{\r\n    \"name\": \"peter\",\r\n    \"gender\": \"rock\",\r\n    \"personality\": \"quite rocky\",\r\n    \"description\": \"stone type of rock\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -396,7 +403,8 @@
 							"variable": [
 								{
 									"key": "rockId",
-									"value": "{{rock_id}}"
+									"value": "{{rock_id}}",
+									"uuid": "77b2a59c-99ec-4109-893e-41ceae68d507"
 								}
 							]
 						}
@@ -439,7 +447,8 @@
 							"variable": [
 								{
 									"key": "rockId",
-									"value": "{{rock_id}}"
+									"value": "{{rock_id}}",
+									"uuid": "e51a60d4-1495-47d7-b0d3-7aac02892da2"
 								}
 							]
 						}
@@ -482,7 +491,7 @@
 		},
 		{
 			"key": "basic_url",
-			"value": "localhost:5000/ap1/v1"
+			"value": "localhost:5000/api/v1"
 		}
 	]
 }

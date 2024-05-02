@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const rockSchema = new mongoose.Schema({
 	_id: {
 		type: mongoose.Schema.Types.UUID,
+		default: () => new mongoose.Types.UUID(),
+		required: true,
 	},
 	name: {
 		type: String,

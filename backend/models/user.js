@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
 	_id: {
 		type: mongoose.Schema.Types.UUID,
+		default: () => new mongoose.Types.UUID(),
+		required: true,
 	},
 	name: {
 		type: String,
@@ -15,7 +17,7 @@ const userSchema = new mongoose.Schema({
 	password: {
 		type: String,
 		required: true,
-		// Valide que le mot de passe contient au moins 8 caractères, au moins une lettre, au moins un chiffre, et au moins un caractère spécial, et ne contient pas d'espaces
+		// Valide que la complexité du mot de passe est respectée
 		validate: {
 			validator: (password) =>
 				/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/.test(
@@ -26,7 +28,7 @@ const userSchema = new mongoose.Schema({
 	},
 	pfp_eyes: {
 		type: Number,
-		required: true,
+		required: false,
 		min: 1,
 		max: 9,
 		validate: {
@@ -36,7 +38,7 @@ const userSchema = new mongoose.Schema({
 	},
 	pfp_mouth: {
 		type: Number,
-		required: true,
+		required: false,
 		min: 1,
 		max: 8,
 		validate: {
@@ -46,7 +48,7 @@ const userSchema = new mongoose.Schema({
 	},
 	pfp_color: {
 		type: String,
-		required: true,
+		required: false,
 		validate: {
 			// Valide que la couleur est un code hexadécimal
 			validator: (color) => /^#[0-9A-F]{6}$/i.test(color),
