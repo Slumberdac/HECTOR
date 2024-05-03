@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
 		// Valide que la complexité du mot de passe est respectée
 		validate: {
 			validator: (password) =>
-				/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/.test(
+				/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*=])[A-Za-z\d!@#$%^&*=]{8,}$/.test(
 					password
 				),
 			message: "{VALUE} is not a valid password",
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
 		type: Number,
 		required: false,
 		min: 1,
-		max: 9,
+		max: 10,
 		validate: {
 			validator: Number.isInteger,
 			message: "{VALUE} is not an integer value",
@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
 		type: Number,
 		required: false,
 		min: 1,
-		max: 8,
+		max: 12,
 		validate: {
 			validator: Number.isInteger,
 			message: "{VALUE} is not an integer value",
