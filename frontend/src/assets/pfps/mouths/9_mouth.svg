@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- License: CC Attribution. Made by vectordoodle: https://vectordoodle.gumroad.com/l/FOCLd -->
-<svg width="800px" height="800px" viewBox="0 0 450 400" fill="none" xmlns="http://www.w3.org/2000/svg">
- 
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="165 52 162 176">
+
 # Mouth
 <line x1="220" y1="145" x2="210" y2="150" style="stroke:black;stroke-width:8" stroke-linecap="round"/>
 <line x1="280" y1="125" x2="287" y2="126" style="stroke:black;stroke-width:8" stroke-linecap="round"/>
 <path d="M 220 145 C 242 152, 265 145, 280 125" stroke="black" fill="transparent" stroke-width="8" stroke-linecap="round" />
- 
+
 </svg>

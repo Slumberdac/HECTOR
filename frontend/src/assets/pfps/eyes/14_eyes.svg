@@ -2,10 +2,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="165 52 162 176">
 
 # Left Eye
-<circle r="2" cx="210" cy="130" fill="black" />
+<circle r="4" cx="202" cy="127" fill="black" />
 <circle r="15" cx="210" cy="130" stroke="black" stroke-width="3" />
 # Right Eye
-<circle r="2" cx="280" cy="100" fill="black" />
+<circle r="4" cx="285" cy="102" fill="black" />
 <circle r="15" cx="280" cy="100" stroke="black" stroke-width="3" />
 
 </svg>

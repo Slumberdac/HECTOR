@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- License: CC Attribution. Made by vectordoodle: https://vectordoodle.gumroad.com/l/FOCLd -->
-<svg width="800px" height="800px" viewBox="0 0 450 400" fill="none" xmlns="http://www.w3.org/2000/svg">
- 
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="165 52 162 176">
+
 # Left Eye
 <circle r="4" cx="235" cy="130" fill="black" />
 # Right Eye
 <circle r="4" cx="255" cy="125" fill="black" />
- 
+
 </svg>

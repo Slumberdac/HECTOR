@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="165 52 162 176">
+
+# Left Eye
+<path d="M 220  90 C 220 100, 225 110, 235 110" stroke="black" fill="transparent" stroke-width="3" stroke-linecap="round" />
+<path d="M 235 110 C 225 110, 220 120, 220 130" stroke="black" fill="transparent" stroke-width="3" stroke-linecap="round" />
+<path d="M 220 130 C 220 120, 215 110, 205 110" stroke="black" fill="transparent" stroke-width="3" stroke-linecap="round" />
+<path d="M 205 110 C 215 110, 220 100, 220  90" stroke="black" fill="transparent" stroke-width="3" stroke-linecap="round" />
+# Right Eye
+<path d="M 270  80 C 270  90, 275 100, 285 100" stroke="black" fill="transparent" stroke-width="3" stroke-linecap="round" />
+<path d="M 285 100 C 275 100, 270 110, 270 120" stroke="black" fill="transparent" stroke-width="3" stroke-linecap="round" />
+<path d="M 270 120 C 270 110, 265 100, 255 100" stroke="black" fill="transparent" stroke-width="3" stroke-linecap="round" />
+<path d="M 255 100 C 265 100, 270  90, 270  80" stroke="black" fill="transparent" stroke-width="3" stroke-linecap="round" />
+
+</svg>
