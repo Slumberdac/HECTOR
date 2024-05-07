@@ -1,0 +1,10 @@
+.nav-container {
+	display: flex;
+	align-items: center;
+	padding: 15px;
+	background-color: var(--primary);
+	color: white;
+}
+.users-button {
+	margin: 0 10px;
+}
