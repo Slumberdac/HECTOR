@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="165 52 162 176">
 
 # Mouth
-<path    d="M 215 140 C 210 180, 250 180, 255 150, " stroke="black" fill="transparent" stroke-width="8" stroke-linecap="round" />
-<path    d="M 255 150 C 260 180, 300 180, 295 140" stroke="black" fill="transparent" stroke-width="8" stroke-linecap="round" />
+<path d="M 205 160 C 200 200, 240 200, 245 170, " stroke="black" fill="transparent" stroke-width="8" stroke-linecap="round" />
+<path d="M 245 170 C 250 200, 290 200, 285 160" stroke="black" fill="transparent" stroke-width="8" stroke-linecap="round" />
 
 </svg>

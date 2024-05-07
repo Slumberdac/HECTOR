@@ -12,8 +12,9 @@ const Svg8Mouth = (props) => (
 			stroke="#000"
 			strokeLinecap="round"
 			strokeWidth={8}
-			d="M215 140c-5 40 35 40 40 10M255 150c5 30 45 30 40-10"
+			d="M205 160c-5 40 35 40 40 10M245 170c5 30 45 30 40-10"
 		/>
 	</svg>
 );
 export default Svg8Mouth;
+
