@@ -1,7 +1,7 @@
- @font-face {
- 	font-family: Omori;
- 	src: url('../../assets/fonts/OMORI_GAME2.ttf');
- }
+@font-face {
+	font-family: Omori;
+	src: url("../../assets/fonts/OMORI_GAME2.ttf");
+}
 
 body {
 	margin: 0;
@@ -25,7 +25,8 @@ p {
 	font-size: 8vw;
 	color: #fff;
 	/* add black outline */
-	text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+	text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+		2px 2px 0 #000;
 	text-align: center;
 }
 .logo {
@@ -35,4 +36,13 @@ p {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+}
+
+.burger-menu {
+	position: absolute;
+	top: 100;
+	right: 100;
+	margin: 5em;
+	z-index: 1000;
+	transform: scale(3.75);
 }

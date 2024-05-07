@@ -1,6 +1,7 @@
 import React from "react";
 import Logo from "../../assets/Logo";
 import Background from "../../assets/background.jpg";
+import SvgBurgerMenu from "../../assets/BurgerMenu.js";
 import "./Welcome.css";
 
 function Welcome() {
