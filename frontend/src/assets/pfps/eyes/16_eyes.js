@@ -7,13 +7,13 @@ const Svg16Eyes = (props) => (
 		{...props}
 	>
 		{"# Left Eye"}
-		<circle cx={210} cy={130} r={4} fill="#000" />
+		<circle cx={210} cy={120} r={4} fill="#000" />
 		<path
 			fill="transparent"
 			stroke="#000"
 			strokeLinecap="round"
 			strokeWidth={2}
-			d="M200 130c0 10 20 10 20 0"
+			d="M200 120c0 10 20 10 20 0"
 		/>
 		{"# Right Eye"}
 		<circle cx={280} cy={100} r={4} fill="#000" />
