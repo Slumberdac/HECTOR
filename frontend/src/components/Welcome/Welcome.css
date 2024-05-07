@@ -10,7 +10,8 @@ body {
 	position: relative;
 	background-color: var(--background);
 	box-shadow: 0 0 2em 0.5em rgba(0, 0, 0, 1);
-	height: 300px;
+	height: 650px;
+	padding-bottom: 25px;
 }
 .background {
 	min-height: 1080px;
@@ -20,20 +21,25 @@ body {
 	background-repeat: no-repeat;
 	background-size: cover;
 }
-p {
+h1 {
 	font-family: Omori;
-	font-size: 8vw;
 	color: #fff;
 	/* add black outline */
 	text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
 		2px 2px 0 #000;
 	text-align: center;
 }
-.logo {
+h2 {
+	font-family: Omori;
+	color: #000;
+	text-align: center;
+}
+
+.welcome-logo .logo {
 	position: absolute;
 	width: 350px;
 	height: 350px;
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -50%);
+	transform: translate(-50%, -46%);
 }

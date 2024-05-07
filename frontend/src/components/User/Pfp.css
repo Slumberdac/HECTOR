@@ -1,9 +1,4 @@
 .pfp {
-	position: absolute;
-	right: 3vh;
-	top: 1vh;
-	width: 75px;
-	height: 75px;
 	transition: all 0.15s ease-in-out;
 }
 
