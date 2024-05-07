@@ -6,22 +6,23 @@
 body {
 	margin: 0;
 }
+.welcome-background {
+	position: fixed;
+	top: 0;
+	filter: blur(3px);
+}
 .welcome-logo {
 	position: relative;
 	background-color: var(--background);
 	box-shadow: 0 0 2em 0.5em rgba(0, 0, 0, 1);
 	height: 650px;
 	padding-bottom: 25px;
+	width: 90%;
+	margin: 50px auto 0 auto;
+	z-index: 1;
 }
-.background {
-	min-height: 1080px;
-	z-index: -1;
-	background-attachment: fixed;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-}
-h1 {
+.welcome-logo h1 {
+	position: relative;
 	font-family: Omori;
 	color: #fff;
 	/* add black outline */
@@ -29,17 +30,31 @@ h1 {
 		2px 2px 0 #000;
 	text-align: center;
 }
-h2 {
+.welcome-logo h2 {
+	position: relative;
 	font-family: Omori;
-	color: #000;
+	color: var(--text);
 	text-align: center;
 }
 
 .welcome-logo .logo {
-	position: absolute;
+	position: relative;
 	width: 350px;
 	height: 350px;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -46%);
+}
+.welcome-content {
+	position: relative;
+	background-color: var(--background);
+	box-shadow: 0 0 2em 0.5em rgba(0, 0, 0, 1);
+	height: fit-content;
+	padding: 25px 0;
+	width: 90%;
+	margin: 0 auto 50px auto;
+	z-index: 1;
+	color: var(--text);
+	font: 1.2em Courier New;
+	text-align: center;
 }
