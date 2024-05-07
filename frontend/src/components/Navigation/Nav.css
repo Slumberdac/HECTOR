@@ -1,10 +1,38 @@
+@font-face {
+	font-family: Omori;
+	src: url("../../assets/fonts/OMORI_GAME2.ttf");
+}
+
 .nav-container {
+	font-family: omori;
 	display: flex;
 	align-items: center;
-	padding: 15px;
-	background-color: var(--primary);
+	padding: 3vh;
+	background-color: var(--secondary);
 	color: white;
+	z-index: 1001;
 }
 .users-button {
 	margin: 0 10px;
+	font-size: 4vh;
+	transition: all 0.15s ease-in-out;
+}
+.users-button:hover {
+	cursor: pointer;
+	text-shadow: 0 0 10px black;
+}
+.rocks-button {
+	margin: 0 10px;
+	font-size: 4vh;
+	transition: all 0.15s ease-in-out;
+}
+
+.rocks-button:hover {
+	cursor: pointer;
+	text-shadow: 0 0 10px black;
+}
+
+.pfp:hover {
+	cursor: pointer;
+	transform: scale(1.2);
 }

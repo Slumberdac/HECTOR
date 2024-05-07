@@ -1,12 +1,13 @@
 .pfp {
-        position: absolute;
-        right: 3vh;
-        top: 3vh;
-        width: 100px;
-        height: 100px;
-    }
+	position: absolute;
+	right: 3vh;
+	top: 1vh;
+	width: 75px;
+	height: 75px;
+	transition: all 0.15s ease-in-out;
+}
 
 .pfp > * {
-        position: absolute;
-        z-index: 2;
-    }
+	position: absolute;
+	z-index: 2;
+}
