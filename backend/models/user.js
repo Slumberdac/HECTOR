@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
 		type: Number,
 		required: false,
 		min: 1,
-		max: 10,
+		max: 16,
 		validate: {
 			validator: Number.isInteger,
 			message: "{VALUE} is not an integer value",
@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
 		type: Number,
 		required: false,
 		min: 1,
-		max: 12,
+		max: 14,
 		validate: {
 			validator: Number.isInteger,
 			message: "{VALUE} is not an integer value",

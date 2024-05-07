@@ -65,8 +65,8 @@ const registerUser = async (req, res, next) => {
 
 	const { name, username, password } = req.body;
 
-	const pfp_eyes = Math.floor(Math.random() * 9) + 1;
-	const pfp_mouth = Math.floor(Math.random() * 8) + 1;
+	const pfp_eyes = Math.floor(Math.random() * 16) + 1;
+	const pfp_mouth = Math.floor(Math.random() * 14) + 1;
 	const pfp_color = `#${[0, 0, 0]
 		.map(() =>
 			Math.floor(Math.random() * (256 - 100) + 100)

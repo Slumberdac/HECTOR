@@ -1,26 +1,32 @@
-import React from 'react';
+import React from "react";
 
-import eyes from "../assets/pfps/eyes/*.svg";
-import mouths from "../assets/pfps/mouths/*.svg";
-import head from "../assets/pfps/head.svg"
+import "./Pfp.css";
+import Head from "../../assets/pfps/head";
+import { eyes, mouths } from "../../assets/pfps/index";
 
-function GenerateProfilePicture(color, eye, mouth) {
-    const SetEyes = eyes[eye + 1];
-    const SetMouth = mouths[mouth + 1];
+function GenerateProfilePicture(props) {
+	const Eyes = eyes[props.eye - 1];
+	const Mouth = mouths[props.mouth - 1];
 
-    {/* Template Sizes */}
-    return (
-        <svg width="200" height="200">
-            {/* Background color asd*/}
-            <rect width="100%" height="100%" fill={color} />
-            {/* Head */}
-            <image href={head} x="50" y="50" width="100" height="100" />
-            {/* Eyes */}
-            <image href={SetEyes} x="50" y="50" width="100" height="100" />
-            {/* Mouth */}
-            <image href={SetMouth} x="50" y="50" width="100" height="100" />
-        </svg>
-    );
+	console.log(Eyes);
+	console.log(Mouth);
+
+	{
+		/* Template Sizes */
+	}
+	return (
+		<div className="pfp">
+			{/* // Eyes */}
+			<Eyes style={{ position: "absolute", zIndex: 2 }} />
+			{/* // Mouth */}
+			<Mouth style={{ position: "absolute", zIndex: 2 }} />
+			{/* // Head */}
+			<Head
+				color={props.color}
+				style={{ position: "absolute", zIndex: 1 }}
+			/>
+		</div>
+	);
 }
 
 export default GenerateProfilePicture;
