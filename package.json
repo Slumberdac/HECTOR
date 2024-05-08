@@ -6,11 +6,13 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"backend": "nodemon backend/app.js",
-		"frontend": "cd frontend && react-scripts start"
+		"frontend": "cd frontend && react-scripts start",
+		"app": "concurrently \"npm run backend\" \"npm run frontend\""
 	},
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"concurrently": "^8.2.2",
 		"express": "^4.18.2",
 		"express-validator": "^7.0.1",
 		"jsonwebtoken": "^9.0.2",
