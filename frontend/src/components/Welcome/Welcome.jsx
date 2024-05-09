@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 import Logo from "../../assets/Logo";
 import Background from "../../assets/background.jpg";
+import Hector from "../../assets/hectorHimself.jpg";
 import "./Welcome.css";
 
 function Welcome() {
@@ -74,6 +75,7 @@ function Welcome() {
 			</div>
 			<div style={{ height: "100px" }}></div>
 			<div className="welcome-content">
+				<img src={Hector}></img>
 				<p>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
 					sit amet sapien ut tortor pellentesque fringilla a et
