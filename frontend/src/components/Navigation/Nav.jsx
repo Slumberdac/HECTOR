@@ -13,8 +13,8 @@ function Nav() {
 
 	React.useEffect(() => {
 		// if a uuid is stored in cookies, set isLoggedIn to true
-		if (document.cookie.includes("uuid")) {
-			// if (true) {
+		// if (document.cookie.includes("uuid")) {
+		if (true) {
 			// fetch user data
 			// fetch(`http://localhost:5000/users/${uuid}`, {
 			fetch(
@@ -70,17 +70,33 @@ function Nav() {
 				</Link>
 				<ul>
 					<li>
-						<Link to="/users" className="users-button">
+						<Link to="/users">
 							<h1>Users</h1>
 						</Link>
 					</li>
 					<li>
-						<Link to="/rocks" className="rocks-button">
+						<Link to="/rocks">
 							<h1>Companions</h1>
 						</Link>
 					</li>
+					<li>
+						<Link to="/blog">
+							<h1>Blog</h1>
+						</Link>
+					</li>
+					<li>
+						{isLoggedIn ? (
+							<Link to="/profile">
+								<h1>Profile</h1>
+							</Link>
+						) : (
+							<Link to="/signin">
+								<h1>Sign In</h1>
+							</Link>
+						)}
+					</li>
 				</ul>
-				{isLoggedIn && (
+				{isLoggedIn ? (
 					<Link to="/profile" className="nav-button">
 						<Pfp
 							color={user.pfp_color ?? "#999"}
@@ -88,9 +104,8 @@ function Nav() {
 							mouth={user.pfp_mouth ?? 1}
 						/>
 					</Link>
-				)}
-				{!isLoggedIn && (
-					<Link to="/signup" className="nav-button">
+				) : (
+					<Link to="/signin" className="nav-button">
 						<div className="missing-pfp">
 							<Head color="#999999" />
 							<QuestionMark color="#000" />

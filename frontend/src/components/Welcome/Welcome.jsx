@@ -26,185 +26,49 @@ function Welcome() {
 				<img src={Background} alt="background" />
 			</div>
 			<div className="welcome-logo">
-				{/* when scrollY reaches 50, slide logo to the left and fade in some text */}
+				<h1>Welcome to</h1>
+				{/* when scrollY reaches 80, slide logo up and fade in some text */}
 				<Logo
 					color="#050604"
 					style={{
-						transform: `translateX(${scrollY > 20 ? "-15%" : "0"})`,
+						transform: `translateY(${scrollY > 80 ? "-10%" : "0"})`,
 						transition: "transform 1.5s ease-out",
 					}}
 				/>
-				<h1
+				<p
+					className="logo-text"
 					style={{
-						position: "absolute",
-						top: "38.5%",
-						left: "59.5%",
-						transform: `translate(-50%, -50%)`,
-						fontSize: "6rem",
-						fontWeight: "bold",
-						opacity: `${scrollY > 20 ? "1" : "0"}`,
+						// fade in text
+						opacity: `${scrollY > 80 ? "1" : "0"}`,
 						transition: "opacity 1s",
 					}}
 				>
-					R
-				</h1>
-				<h2
-					style={{
-						position: "absolute",
-						top: "43.8%",
-						left: "64%",
-						transform: `translate(-50%, -50%)`,
-						fontSize: "3rem",
-						fontWeight: "bold",
-						opacity: `${scrollY > 20 ? "1" : "0"}`,
-						transition: "opacity 1s",
-					}}
-				>
-					ocks
-				</h2>
-				<h1
-					style={{
-						position: "absolute",
-						top: "42.5%",
-						left: "55%",
-						transform: `translate(-50%, -50%)`,
-						fontSize: "6rem",
-						fontWeight: "bold",
-						opacity: `${scrollY > 20 ? "1" : "0"}`,
-						transition: "opacity 1s",
-					}}
-				>
-					O
-				</h1>
-				<h2
-					style={{
-						position: "absolute",
-						top: "48%",
-						left: "57.2%",
-						transform: `translate(-50%, -50%)`,
-						fontSize: "3rem",
-						fontWeight: "bold",
-						opacity: `${scrollY > 20 ? "1" : "0"}`,
-						transition: "opacity 1s",
-					}}
-				>
-					f
-				</h2>
-				<h1
-					style={{
-						position: "absolute",
-						top: "48.5%",
-						left: "51.5%",
-						transform: `translate(-50%, -50%)`,
-						fontSize: "6rem",
-						fontWeight: "bold",
-						opacity: `${scrollY > 20 ? "1" : "0"}`,
-						transition: "opacity 1s",
-					}}
-				>
-					T
-				</h1>
-				<h2
-					style={{
-						position: "absolute",
-						top: "53.5%",
-						left: "55.5%",
-						transform: `translate(-50%, -50%)`,
-						fontSize: "3rem",
-						fontWeight: "bold",
-						opacity: `${scrollY > 20 ? "1" : "0"}`,
-						transition: "opacity 1s",
-					}}
-				>
-					errain
-				</h2>
-				<h1
-					style={{
-						position: "absolute",
-						top: "52%",
-						left: "47%",
-						transform: `translate(-50%, -50%)`,
-						fontSize: "6rem",
-						fontWeight: "bold",
-						opacity: `${scrollY > 20 ? "1" : "0"}`,
-						transition: "opacity 1s",
-					}}
-				>
-					C
-				</h1>
-				<h2
-					style={{
-						position: "absolute",
-						top: "58.5%",
-						left: "55%",
-						transform: `translate(-50%, -50%)`,
-						fontSize: "3rem",
-						fontWeight: "bold",
-						opacity: `${scrollY > 20 ? "1" : "0"}`,
-						transition: "opacity 1s",
-					}}
-				>
-					ontainment
-				</h2>
-				<h1
-					style={{
-						position: "absolute",
-						top: "57.7%",
-						left: "43.2%",
-						transform: `translate(-50%, -50%)`,
-						fontSize: "6rem",
-						fontWeight: "bold",
-						opacity: `${scrollY > 20 ? "1" : "0"}`,
-						transition: "opacity 1s",
-					}}
-				>
-					E
-				</h1>
-				<h2
-					style={{
-						position: "absolute",
-						top: "63.5%",
-						left: "51.4%",
-						transform: `translate(-50%, -50%)`,
-						fontSize: "3rem",
-						fontWeight: "bold",
-						opacity: `${scrollY > 20 ? "1" : "0"}`,
-						transition: "opacity 1s",
-					}}
-				>
-					xtravagant
-				</h2>
-				<h1
-					style={{
-						position: "absolute",
-						top: "62%",
-						left: "39.3%",
-						transform: `translate(-50%, -50%)`,
-						fontSize: "6rem",
-						fontWeight: "bold",
-						opacity: `${scrollY > 20 ? "1" : "0"}`,
-						transition: "opacity 1s",
-					}}
-				>
-					H
-				</h1>
-				<h2
-					style={{
-						position: "absolute",
-						top: "68.5%",
-						left: "45.2%",
-						transform: `translate(-50%, -50%)`,
-						fontSize: "3rem",
-						fontWeight: "bold",
-						opacity: `${scrollY > 20 ? "1" : "0"}`,
-						transition: "opacity 1s",
-					}}
-				>
+					<span className="cap">H</span>
 					ector's
-				</h2>
+					<span className="cap">E</span>
+					xtravagant
+					<span className="cap">C</span>
+					ontainement
+					<span className="cap" style={{ marginRight: "-15px" }}>
+						T
+					</span>
+					errain
+					<span className="cap">O</span>f
+					<span className="cap">R</span>
+					ocks
+				</p>
+				<p
+					id="number-1"
+					style={{
+						// fade in text
+						opacity: `${scrollY > 80 ? "1" : "0"}`,
+						transition: "opacity 1s",
+					}}
+				>
+					The World's #1 Pet Rock Registry
+				</p>
 			</div>
-			{/* 200px spacing */}
-			<div style={{ height: "200px" }}></div>
+			<div style={{ height: "100px" }}></div>
 			<div className="welcome-content">
 				<p>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
