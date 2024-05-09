@@ -1,0 +1,15 @@
+.user-card {
+	display: block;
+	width: 30%;
+	margin: 10px;
+}
+.user-card-container .pfp {
+	position: relative;
+	left: 0;
+	margin-right: 30px;
+}
+
+.user-card-container #username {
+	position: relative;
+	width: fit-content;
+}
