@@ -7,6 +7,8 @@ import "./Welcome.css";
 
 function Welcome() {
 	const [scrollY, setScrollY] = useState(0);
+	// set scroll threshold to adapt to different screen sizes
+	const scrollThreshold = window.innerHeight / 10;
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -27,11 +29,13 @@ function Welcome() {
 			</div>
 			<div className="welcome-logo">
 				<h1>Welcome to</h1>
-				{/* when scrollY reaches 80, slide logo up and fade in some text */}
+				{/* when scrollY reaches {scrollThreshold}, slide logo up and fade in some text */}
 				<Logo
 					color="#050604"
 					style={{
-						transform: `translateY(${scrollY > 80 ? "-10%" : "0"})`,
+						transform: `translateY(${
+							scrollY > scrollThreshold ? "-10%" : "0"
+						})`,
 						transition: "transform 1.5s ease-out",
 					}}
 				/>
@@ -39,7 +43,7 @@ function Welcome() {
 					className="logo-text"
 					style={{
 						// fade in text
-						opacity: `${scrollY > 80 ? "1" : "0"}`,
+						opacity: `${scrollY > scrollThreshold ? "1" : "0"}`,
 						transition: "opacity 1s",
 					}}
 				>
@@ -61,7 +65,7 @@ function Welcome() {
 					id="number-1"
 					style={{
 						// fade in text
-						opacity: `${scrollY > 80 ? "1" : "0"}`,
+						opacity: `${scrollY > scrollThreshold ? "1" : "0"}`,
 						transition: "opacity 1s",
 					}}
 				>
