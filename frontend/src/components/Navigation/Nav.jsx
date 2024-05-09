@@ -48,6 +48,8 @@ function Nav() {
 	useEffect(() => {
 		const handleScroll = () => {
 			setScrollY(window.scrollY);
+			console.log(window.scrollY)
+			console.log(window.innerHeight)
 		};
 		handleScroll();
 
@@ -59,7 +61,7 @@ function Nav() {
 
 	return (
 		// if scrollY is greater than 0, add class "scrolled" to nav-container
-		<div className={`nav-container ${scrollY > 20 ? "scrolled" : ""}`}>
+		<div className={`nav-container ${scrollY > window.innerHeight / 2000 ? "scrolled" : ""}`}>
 			<nav>
 				<Link to="/">
 					<Logo
