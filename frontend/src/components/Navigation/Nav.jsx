@@ -13,8 +13,8 @@ function Nav() {
 
 	React.useEffect(() => {
 		// if a uuid is stored in cookies, set isLoggedIn to true
-		// if (document.cookie.includes("uuid")) {
-		if (true) {
+		if (document.cookie.includes("uuid")) {
+			// if (true) {
 			// fetch user data
 			// fetch(`http://localhost:5000/users/${uuid}`, {
 			fetch(

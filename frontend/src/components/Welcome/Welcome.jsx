@@ -23,7 +23,7 @@ function Welcome() {
 	return (
 		<div className="welcome">
 			<div className="welcome-background">
-				<img src={Background} alt="background" />
+				<img id="rocks-bg" src={Background} alt="background" />
 			</div>
 			<div className="welcome-logo">
 				<h1>Welcome to</h1>
