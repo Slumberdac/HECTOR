@@ -5,7 +5,7 @@ import Head from "../../assets/pfps/head";
 import { eyes, mouths } from "../../assets/pfps/index";
 
 const GenerateProfilePicture = (props) => {
-	const Eyes = eyes[props.eye - 1];
+	const Eyes = eyes[props.eyes - 1];
 	const Mouth = mouths[props.mouth - 1];
 
 	{

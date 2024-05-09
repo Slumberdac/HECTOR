@@ -1,0 +1,22 @@
+@font-face {
+	font-family: Omori;
+	src: url("../../assets/fonts/OMORI_GAME2.ttf");
+}
+
+.user-card {
+	display: block;
+	width: 30%;
+	margin: 10px;
+}
+.user-card-container .pfp {
+	position: relative;
+	left: 0;
+	margin-right: 30px;
+}
+
+.user-card-container #username {
+	font-family: Omori;
+	font-size: 1.75em;
+	position: relative;
+	width: fit-content;
+}

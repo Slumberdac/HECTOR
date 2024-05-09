@@ -100,7 +100,7 @@ function Nav() {
 					<Link to="/profile" className="nav-button">
 						<Pfp
 							color={user.pfp_color ?? "#999"}
-							eye={user.pfp_eyes ?? 1}
+							eyes={user.pfp_eyes ?? 1}
 							mouth={user.pfp_mouth ?? 1}
 						/>
 					</Link>
