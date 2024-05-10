@@ -7,6 +7,7 @@ import RocksRegistry from "./Rock/RocksRegistry";
 import Profile from "./User/Profile";
 import SignUp from "./User/SignUp";
 import SignIn from "./User/SignIn";
+import NotFound from "../assets/404 NotFound.png";
 import "./App.css";
 const App = () => {
 	return (
@@ -31,7 +32,14 @@ const App = () => {
 					<Route path="/signin" element={<Nav />}>
 						<Route index element={<SignIn />} />
 					</Route>
-					<Route path="*" element={<h1>404 Not Found</h1>} />
+					<Route
+						path="*"
+						element={
+							<div id="not-found">
+								<img src={NotFound} />
+							</div>
+						}
+					/>
 				</Routes>
 			</BrowserRouter>
 		</div>

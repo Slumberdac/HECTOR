@@ -2,9 +2,6 @@
 	font-family: Omori;
 	src: url("../../assets/fonts/OMORI_GAME2.ttf");
 }
-.nav-container{
-	position: absolute;
-}
 .nav-container nav {
 	position: sticky;
 	top: 0;
