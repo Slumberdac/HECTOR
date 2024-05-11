@@ -1,2 +1,7 @@
-.users-registry {
+.search-bar {
+	display: flex;
+	padding: 10px;
+	width: 30%;
+	margin: 0 0 0 50px;
+	background-color: var(--background);
 }

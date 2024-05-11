@@ -25,6 +25,7 @@ export default function UsersRegistry() {
 				placeholder="Rechercher"
 				value={searchTerm}
 				onChange={(e) => setSearchTerm(e.target.value)}
+				className="search-bar"
 			/>
 			<ul className="users-registry">
 				{filteredList?.map((user) => (
