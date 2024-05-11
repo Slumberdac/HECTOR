@@ -39,7 +39,3 @@ a {
 	box-shadow: 0 0 1em black;
 	transform: scale(1.05);
 }
-
-.rock-card-container {
-    flex-direction: column;
-}
