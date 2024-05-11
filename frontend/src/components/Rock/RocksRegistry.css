@@ -1,15 +1,9 @@
 body {
 	color: var(--text);
-	background-image: url("../../assets/bg_looped.jpg");
-	background-repeat: repeat;
+	background-image: url("../../assets/bg_looped_alot.jpg");
+    background-repeat: repeat;
 }
 
 div {
-	width: 100%;
-}
-
-.rocks-registry {
-	display: flex;
-	flex-wrap: wrap;
-	margin-top: 20px;
+    width: 100%;
 }
