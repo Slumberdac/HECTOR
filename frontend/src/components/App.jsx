@@ -3,7 +3,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Nav from "./Navigation/Nav";
 import Welcome from "./Welcome/Welcome";
 import UsersRegistry from "./User/UsersRegistry";
+import User from ".//User/User";
 import RocksRegistry from "./Rock/RocksRegistry";
+import Rock from "./Rock/Rock";
+import Blog from "./Blog/Blog";
 import Profile from "./User/Profile";
 import SignUp from "./User/SignUp";
 import SignIn from "./User/SignIn";
@@ -20,8 +23,17 @@ const App = () => {
 					<Route path="/users" element={<Nav />}>
 						<Route index element={<UsersRegistry />} />
 					</Route>
+					<Route path="/users/:uid" element={<Nav />}>
+						<Route index element={<User />} />
+					</Route>
 					<Route path="/rocks" element={<Nav />}>
 						<Route index element={<RocksRegistry />} />
+					</Route>
+					<Route path="/rocks/:rid" element={<Nav />}>
+						<Route index element={<Rock />} />
+					</Route>
+					<Route path="/blog" element={<Nav />}>
+						<Route index element={<Blog />} />
 					</Route>
 					<Route path="/profile" element={<Nav />}>
 						<Route index element={<Profile />} />

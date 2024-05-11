@@ -20,3 +20,8 @@
 	position: relative;
 	width: fit-content;
 }
+
+a {
+	text-decoration: none;
+	color: var(--text);
+}

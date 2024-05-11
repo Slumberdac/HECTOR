@@ -12,7 +12,7 @@ const Svg10Mouth = (props) => (
 			stroke="#000"
 			strokeLinecap="round"
 			strokeWidth={5}
-			d="M215 140c35 40 35 40 80 0"
+			d="M215 150c35 40 35 40 80 -20"
 		/>
 	</svg>
 );

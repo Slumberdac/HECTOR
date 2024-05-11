@@ -8,7 +8,7 @@ router.get("/", usersController.getUsers);
 router.get("/:uid", usersController.getUserById);
 
 router.post(
-	"/",
+	"/register",
 	[
 		check("name").not().isEmpty(),
 		check("username").not().isEmpty(),
@@ -17,7 +17,7 @@ router.post(
 	usersController.registerUser
 );
 
-router.patch("/", usersController.signInUser);
+router.patch("/signin", usersController.signInUser);
 
 router.patch("/:uid", usersController.updateUserById);
 

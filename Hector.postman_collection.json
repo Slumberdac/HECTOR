@@ -27,8 +27,7 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "{{user_id}}",
-									"uuid": "e34f4b4d-a36f-4726-9333-6313a4a61534"
+									"value": "{{user_id}}"
 								}
 							]
 						}
@@ -83,12 +82,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{basic_url}}/users",
+							"raw": "{{basic_url}}/users/register",
 							"host": [
 								"{{basic_url}}"
 							],
 							"path": [
-								"users"
+								"users",
+								"register"
 							]
 						}
 					},
@@ -101,7 +101,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"\",\r\n    \"password\": \"\"\r\n}",
+							"raw": "{\r\n    \"username\": \"slumbydac\",\r\n    \"password\": \"Passw0rd!\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -147,8 +147,7 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "{{user_id}}",
-									"uuid": "9d9d88f2-509b-433c-9e7b-709e87c84887"
+									"value": "{{user_id}}"
 								}
 							]
 						}
@@ -190,8 +189,7 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "",
-									"uuid": "0ba0c40b-386e-4927-aef9-f027177648fb"
+									"value": "{{user_id}}"
 								}
 							]
 						}
@@ -216,8 +214,7 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "{{user_id}}",
-									"uuid": "8ae13a44-16c6-4351-870c-9020798aebf7"
+									"value": "{{user_id}}"
 								}
 							]
 						}
@@ -243,13 +240,11 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "{{user_id}}",
-									"uuid": "0f0cee43-76aa-4446-a559-395e3b8c9fa1"
+									"value": "{{user_id}}"
 								},
 								{
 									"key": "rockId",
-									"value": "{{rock_id}}",
-									"uuid": "356658e3-4c79-40cb-9d33-4906b1aa13fc"
+									"value": "{{rock_id}}"
 								}
 							]
 						}
@@ -275,13 +270,11 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "{{user_id}}",
-									"uuid": "9dcd792c-d57c-4c55-8264-fd242bbec644"
+									"value": "{{user_id}}"
 								},
 								{
 									"key": "rockId",
-									"value": "{{rock_id}}",
-									"uuid": "317b5f6d-84b0-4c37-a60d-0539ba99546f"
+									"value": "{{rock_id}}"
 								}
 							]
 						}
@@ -310,8 +303,7 @@
 							"variable": [
 								{
 									"key": "rockId",
-									"value": "{{rock_id}}",
-									"uuid": "a60c8b99-d1e3-450e-b766-7714a32a2c4d"
+									"value": "{{rock_id}}"
 								}
 							]
 						}
@@ -403,8 +395,7 @@
 							"variable": [
 								{
 									"key": "rockId",
-									"value": "{{rock_id}}",
-									"uuid": "77b2a59c-99ec-4109-893e-41ceae68d507"
+									"value": "{{rock_id}}"
 								}
 							]
 						}
@@ -447,8 +438,7 @@
 							"variable": [
 								{
 									"key": "rockId",
-									"value": "{{rock_id}}",
-									"uuid": "e51a60d4-1495-47d7-b0d3-7aac02892da2"
+									"value": "{{rock_id}}"
 								}
 							]
 						}

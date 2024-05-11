@@ -7,30 +7,27 @@ import Pfp from "../User/Pfp";
 import Head from "../../assets/pfps/head";
 import QuestionMark from "../../assets/pfps/QuestionMark";
 import "./Nav.css";
+import { useCookies } from "react-cookie";
 function Nav() {
+	const [cookies, setCookie, removeCookie] = useCookies(["uuid"]);
 	const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 	const [user, setUser] = React.useState({});
 
 	React.useEffect(() => {
 		// if a uuid is stored in cookies, set isLoggedIn to true
-		if (document.cookie.includes("uuid")) {
-			// if (true) {
-			// fetch user data
-			// fetch(`http://localhost:5000/users/${uuid}`, {
-			fetch(
-				"http://localhost:5000/api/v1/users/0ad0d1c9-90d3-4e7d-845a-8d97fa10a32e",
-				{
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-					},
-				}
-			)
+		if (cookies.uuid && cookies.uuid !== "undefined") {
+			fetch(`http://localhost:5000/api/v1/users/${cookies.uuid}`, {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
 				.then((res) => res.json())
 				.then((data) => {
 					setUser(data.user);
 					setIsLoggedIn(true);
-				});
+				})
+				.catch((err) => {});
 		}
 	}, []);
 

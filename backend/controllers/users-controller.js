@@ -31,6 +31,7 @@ const getUsers = async (req, res, next) => {
 
 const getUserById = async (req, res, next) => {
 	const userId = req.params.uid;
+
 	let user;
 	try {
 		user = await User.findById(userId).exec();
@@ -82,7 +83,7 @@ const registerUser = async (req, res, next) => {
 		}).exec();
 		if (existingUser) {
 			const err = new HttpError(
-				"A user with the same name already exists",
+				"A user with the same username already exists",
 				422
 			);
 			return next(err);
@@ -109,7 +110,7 @@ const registerUser = async (req, res, next) => {
 		return next(err);
 	}
 
-	res.status(201).json({ user: getResponseUser(createdUser) });
+	res.status(201).json({ user: getResponseUser(createdUser)._id });
 };
 
 const signInUser = async (req, res, next) => {
@@ -129,7 +130,7 @@ const signInUser = async (req, res, next) => {
 		const err = new HttpError("Mot de passe incorrect", 401);
 		return next(err);
 	}
-	res.status(200).json({ user: getResponseUser(user) });
+	res.status(200).json({ user: getResponseUser(user)._id });
 };
 
 const updateUserById = async (req, res, next) => {
@@ -157,6 +158,8 @@ const deleteUserById = async (req, res, next) => {
 			return res.status(404).json({ message: "User not found" });
 		}
 		res.status(200).json({ message: "User deleted" });
+		// set all rocks owned by user to null
+		await Rock.updateMany({ owner: userId }, { owner: undefined }).exec();
 	} catch (e) {
 		const err = new HttpError("A database error occured", 500);
 		return next(err);

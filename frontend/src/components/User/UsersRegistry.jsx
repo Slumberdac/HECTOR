@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import UserCard from "./UserCard";
+import "./UsersRegistry.css";
 
 export default function UsersRegistry() {
 	const [userList, setUserList] = useState([]);
@@ -10,8 +11,7 @@ export default function UsersRegistry() {
 			.then((res) => res.json())
 			.then((data) => {
 				setUserList(data.users);
-			})
-			.catch((err) => console.log(err));
+			});
 	}, []);
 	return (
 		<div>
