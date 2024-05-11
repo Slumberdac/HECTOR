@@ -2,6 +2,11 @@
 	font-family: Omori;
 	src: url("../../assets/fonts/OMORI_GAME2.ttf");
 }
+
+body {
+	margin: 0;
+}
+
 .nav-container{
 	position: absolute;
 }
