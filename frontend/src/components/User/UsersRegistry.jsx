@@ -27,11 +27,18 @@ export default function UsersRegistry() {
 				onChange={(e) => setSearchTerm(e.target.value)}
 				className="search-bar"
 			/>
-			<ul className="users-registry">
-				{filteredList?.map((user) => (
-					<UserCard key={user._id} user={user} />
-				))}
-			</ul>
+
+			<div className="users-grid">
+                {filteredList?.map((user, index) => (
+				index % 2 === 0 && (
+					<div key={user._id} className="user-row">
+                        <UserCard user={user} className="user-card" />
+                        {filteredList[index + 1] && (
+                            <UserCard user={filteredList[index + 1]} className="user-card" />
+                        )}
+                    </div>
+				)))}
+            </div>
 		</div>
 	);
 }

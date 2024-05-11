@@ -5,3 +5,15 @@
 	margin: 0 0 0 50px;
 	background-color: var(--background);
 }
+
+.user-row {
+	display: flex;
+	width: 80vw;
+	margin-left: 10vw;
+	margin-top: 5vw;
+	padding: 20px;
+}
+
+.user-row .user-card {
+	margin-right: 10vw;
+}
