@@ -5,3 +5,26 @@
 	--secondary: #acaac5;
 	--accent: #b292b5;
 }
+body {
+	margin: 0;
+	color: var(--text);
+	background-image: url("../assets/bg_looped.jpg");
+	/* backdrop-filter: blur(5px); */
+	background-repeat: repeat-y;
+
+}
+#not-found {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: -5px;
+	right: 0;
+	background-color: var(--background);
+}
+#not-found img {
+	position: relative;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	height: 100vh;
+}

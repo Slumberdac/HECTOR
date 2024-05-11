@@ -24,8 +24,6 @@ function Welcome() {
 
 	return (
 		<div className="welcome">
-			<div className="welcome-background">
-			</div>
 			<div className="welcome-logo">
 				<h1>Welcome to</h1>
 				{/* when scrollY reaches {scrollThreshold}, slide logo up and fade in some text */}
