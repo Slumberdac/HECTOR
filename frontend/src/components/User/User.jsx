@@ -9,7 +9,6 @@ const User = () => {
 	// extract the user id from the URL
 	const uid = window.location.pathname.split("/")[2];
 	const [user, setUser] = useState({});
-	const [isOwner, setIsOwner] = useState(false);
 	const [rockList, setRockList] = useState([]);
 
 	// fetch the user data from the server and set the user state
@@ -29,7 +28,10 @@ const User = () => {
 				alert(err.message);
 			});
 	}, [uid]);
-
+	const [searchTerm, setSearchTerm] = useState("");
+	const filteredList = rockList?.filter((item) =>
+		item["name"].toLowerCase().includes(searchTerm.toLowerCase())
+	);
 	// fetch the rocks data from the server and filters the list to the rocks the user owns
 	useEffect(() => {
 		fetch(`http://localhost:5000/api/v1/rocks/`)
@@ -41,19 +43,33 @@ const User = () => {
 	return (
 		<div>
 			<div className="user-container">
-				<Pfp
-					eyes={user.pfp_eyes ?? 1}
-					mouth={user.pfp_mouth ?? 1}
-					color={user.pfp_color ?? "#999"}
-					className="pfp"
-				/>
-				<h1 id="username">{user.username}</h1>
-
-				<ul className="rock-list">
-					{rockList?.map((rock) => (
-						<RockCard key={rock._id} rock={rock} />
-					))}
-				</ul>
+				<div className="user-info">
+					<Pfp
+						eyes={user.pfp_eyes ?? 1}
+						mouth={user.pfp_mouth ?? 1}
+						color={user.pfp_color ?? "#999"}
+						className="pfp"
+					/>
+					<h1 id="username">{user.username}</h1>
+				</div>
+				{filteredList?.length > 0 ? (
+					<div className="rock-list-container">
+						<input
+							type="text"
+							placeholder="Rechercher"
+							value={searchTerm}
+							onChange={(e) => setSearchTerm(e.target.value)}
+							className="search-bar"
+						/>
+						<ul className="rock-list">
+							{filteredList?.map((rock) => (
+								<RockCard key={rock._id} rock={rock} />
+							))}
+						</ul>
+					</div>
+				) : (
+					<h1>This user does not own any rocks</h1>
+				)}
 			</div>
 			<Link to="/users">Back to Users</Link>
 		</div>
