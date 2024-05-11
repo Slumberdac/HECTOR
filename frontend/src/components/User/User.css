@@ -1,0 +1,27 @@
+@font-face {
+	font-family: Omori;
+	src: url("../../assets/fonts/OMORI_GAME2.ttf");
+}
+.user-container {
+	display: flex;
+	background-color: var(--background);
+	width: 80vw;
+	margin-left: 10vw;
+	margin-top: 5vw;
+	padding: 20px;
+	border-radius: 6px;
+	box-shadow: 0 0 10px 0 black;
+}
+
+.user-container .pfp {
+	position: relative;
+	left: 0;
+	margin-right: 30px;
+}
+
+.user-container #username {
+	font-family: Omori;
+	font-size: 2em;
+	position: relative;
+	width: fit-content;
+}

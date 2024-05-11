@@ -1,0 +1,31 @@
+@font-face {
+	font-family: Omori;
+	src: url("../../assets/fonts/OMORI_GAME2.ttf");
+}
+
+.rock-card {
+	display: block;
+	width: 30%;
+	margin: 10px;
+	transition: all 0.15s ease-in-out;
+}
+.rock-card-container img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.rock-card-container #name {
+	font-family: Omori;
+	font-size: 1.5em;
+}
+
+a {
+	text-decoration: none;
+	color: var(--text);
+}
+.rock-card:hover {
+	cursor: pointer;
+	box-shadow: 0 0 1em 0 black;
+	transform: scale(1.05);
+}
