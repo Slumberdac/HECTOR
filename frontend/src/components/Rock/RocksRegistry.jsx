@@ -1,72 +1,37 @@
 import React from "react";
-import "./RocksRegistry.css"
+import { useEffect, useState } from "react";
+import RockCard from "./RockCard";
+import "./RocksRegistry.css";
 
 export default function RocksRegistry() {
-	const [searchQuery, setSearchQuery] = useState("");
-	const [searchResults, setSearchResults] = useState([]);
-	const localStorage = LocalStorage();
+	const [rockList, setRockList] = useState([]);
 
 	useEffect(() => {
-		setSearchResults(
-			localStorage
-				.getGames()
-				.filter((game) =>
-				  game.title.toLowerCase().includes(searchQuery.toLowerCase())
-				)
-		);
-	  }, [
-		searchQuery,
-		localStorage.getGames(),
-	  ]);
-
-
+		fetch("http://localhost:5000/api/v1/rocks/")
+			.then((res) => res.json())
+			.then((data) => {
+				setRockList(data.rocks);
+			});
+	}, []);
+	const [searchTerm, setSearchTerm] = useState("");
+	const filteredList = rockList?.filter((item) =>
+		item["name"].toLowerCase().includes(searchTerm.toLowerCase())
+	);
 	return (
 		<div>
-      <div className="search-bar">
-        <ReactSVG src={glass} className={styles.glass} />
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <ReactSVG src={funnel} className={styles.funnel} />
-      </div>
-        {searchingGames && (
-          <div>
-            <span data-tooltip="Update" data-flow="top">
-              <button className="update" onClick={update}>
-                Remove
-              </button>
-            </span>
-          </div>
-        )}
-      <div className="search-results">
-        <ul className="items">
-          {searchResults.map((result) =>
-            searchingGames ? (
-              <li id={result.id} className="item">
-                <GameCard game={result} />
-              </li>
-            ) : (
-              <li id={result.id}>
-                <UserCard user={result} />
-              </li>
-            )
-          )}
-          {searchingGames && (
-            <li>
-              <span data-tooltip="Add a Game" data-flow="top">
-                <button className="add-game" onClick={add}>
-                  +
-                </button>
-              </span>
-            </li>
-          )}
-        </ul>
-      </div>
-      <button onClick={() => setSearchingGames(!searchingGames)}>
-        {searchingGames ? "Search for Users" : "Search for Games"}
-      </button>
-    </div>
+			<h1>Rocks Registry</h1>
+			<input
+				type="text"
+				placeholder="Rechercher"
+				value={searchTerm}
+				onChange={(e) => setSearchTerm(e.target.value)}
+				className="search-bar"
+			/>
+			<ul className="rocks-registry">
+				{filteredList?.map((rock) => (
+					<RockCard key={rock._id} rock={rock} />
+				))}
+			</ul>
+		</div>
 	);
 }
