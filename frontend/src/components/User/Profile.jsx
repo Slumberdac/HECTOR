@@ -145,7 +145,7 @@ export default function Profile() {
 			</div>
 			{/* scrollable container of rockCards */}
 			<h2 id="your-rocks">Your Rocks</h2>
-			<div className="rock-card-container">
+			<div className="rock-card-container-profile">
 				{rocks.map((rock) => {
 					return (
 						<div className="rock-card" key={rock._id}>
