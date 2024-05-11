@@ -5,27 +5,37 @@
 
 .rock-card {
 	display: block;
-	width: 30%;
+	width: 30vh;
 	margin: 10px;
 	transition: all 0.15s ease-in-out;
 }
+.rock-card-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: var(--background);
+	margin: 0;
+	transition: all 0.15s ease-in-out;
+	border-radius: 6px;
+}
 .rock-card-container img {
-	width: 100%;
-	height: 100%;
+	width: 30vh;
+	height: 30vh;
 	object-fit: cover;
 }
 
 .rock-card-container #name {
 	font-family: Omori;
-	font-size: 1.5em;
+	font-size: 2em;
+	position: relative;
 }
 
 a {
 	text-decoration: none;
 	color: var(--text);
 }
-.rock-card:hover {
+.rock-card-container:hover {
 	cursor: pointer;
-	box-shadow: 0 0 1em 0 black;
+	box-shadow: 0 0 1em black;
 	transform: scale(1.05);
 }
