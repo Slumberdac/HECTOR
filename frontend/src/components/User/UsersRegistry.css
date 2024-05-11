@@ -5,3 +5,15 @@
 	margin: 0 0 0 50px;
 	background-color: var(--background);
 }
+
+.users-registry {
+	display: flex;
+	flex-wrap: wrap;
+	margin-top: 20px;
+}
+
+.users-registry .user-card {
+	display: block;
+	width: 30vh;
+	margin: 30px;
+}
