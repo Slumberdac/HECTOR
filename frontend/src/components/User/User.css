@@ -17,7 +17,7 @@
 	display: flex;
 	width: max-content;
 }
-.user-info .pfp {
+.user-info > .pfp {
 	position: relative;
 	top: 0;
 	left: 0;

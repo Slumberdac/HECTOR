@@ -18,7 +18,7 @@ export default function RocksRegistry() {
 		item["name"].toLowerCase().includes(searchTerm.toLowerCase())
 	);
 	return (
-		<div>
+		<div className="rocks-registry-container">
 			<h1>Rocks Registry</h1>
 			<input
 				type="text"

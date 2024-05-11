@@ -5,14 +5,15 @@
 
 .user-card {
 	display: block;
-	width: 30%;
 	margin: 10px;
 	transition: all 0.15s ease-in-out;
 }
-.user-card-container .pfp {
+.user-card-container > .pfp {
 	position: relative;
 	left: 0;
-	margin-right: 30px;
+	min-width: 90px;
+	height: 100px;
+	margin-right: 15px;
 }
 
 .user-card-container #username {

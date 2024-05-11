@@ -62,7 +62,7 @@
     border-radius: 15px;
     transition: all 0.15s ease-in-out;
 }
-.profile-container .pfp {
+.profile-container > .pfp {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -82,6 +82,10 @@
     text-align: center;
     margin: 0 auto;
     color: var(--text);
+}
+#your-rocks:hover {
+    cursor: pointer;
+    transform: translateY(-45%);
 }
 .rock-card-container {
     position: absolute;
