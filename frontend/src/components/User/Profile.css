@@ -1,18 +1,18 @@
 .profile-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0;
-    color: var(--text);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+	margin: 0 auto;
+	padding: 0;
+	color: var(--text);
 }
 .profile-container {
-    font-family: Omori;
-    display: flex;
-    flex-direction: column;
+	font-family: Omori;
+	display: flex;
+	flex-direction: column;
 	position: relative;
 	background-color: var(--background);
 	box-shadow: 0 0 2em 0.5em rgba(0, 0, 0, 1);
@@ -23,10 +23,10 @@
 	z-index: 1;
 }
 .profile-container .profile-info > * {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
+	position: relative;
+	width: 100%;
+	display: flex;
+	justify-content: center;
 }
 .profile-container .profile-info h1 {
 	color: var(--background);
@@ -38,29 +38,29 @@
 	margin: -20px auto;
 }
 .profile-container .profile-info h2 {
-    color: var(--text);
-    font-size: 3rem;
-    text-align: center;
-    margin: 0 auto;
+	color: var(--text);
+	font-size: 3rem;
+	text-align: center;
+	margin: 0 auto;
 }
 .profile-info .buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
 }
 .profile-info .buttons button {
-    display: inline-block;
-    margin: 0 10px;
-    width: 150px;
-    height: fit-content;
-    padding: 10px;
-    font-size: 1.5em;
-    font-family: Omori;
-    background-color: var(--accent);
-    border: 3px solid black;
-    border-radius: 15px;
-    transition: all 0.15s ease-in-out;
+	display: inline-block;
+	margin: 0 10px;
+	width: 150px;
+	height: fit-content;
+	padding: 10px;
+	font-size: 1.5em;
+	font-family: Omori;
+	background-color: var(--accent);
+	border: 3px solid black;
+	border-radius: 15px;
+	transition: all 0.15s ease-in-out;
 }
 .profile-container > .pfp {
     position: absolute;
@@ -72,37 +72,33 @@
     height: 200px;
 }
 /* h2 to go over rock-card-container */
-#your-rocks{
-    z-index: 1;
-    position: absolute;
-    top: 0;
-    right: 60px;
-    font-family: Omori;
-    font-size: 3rem;
-    text-align: center;
-    margin: 0 auto;
-    color: var(--text);
+#your-rocks {
+	z-index: 1;
+	position: absolute;
+	top: 0;
+	right: 60px;
+	font-family: Omori;
+	font-size: 3rem;
+	text-align: center;
+	margin: 0 auto;
+	color: var(--text);
 }
-#your-rocks:hover {
-    cursor: pointer;
-    transform: translateY(-45%);
-}
-.rock-card-container {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-45%);
-    right: 20px;
-    width: 20%;
-    height: 70%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.rock-card-container-profile {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-45%);
+	right: 20px;
+	width: 20%;
+	height: 70%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 
-    /* add an outline */
-    border: 2px solid black;
-    border-radius: 15px;
-    padding: 10px;
-    margin: 0 0 20px 0;
-    overflow-y: scroll;
+	/* add an outline */
+	border: 2px solid black;
+	border-radius: 15px;
+	padding: 10px;
+	margin: 0 0 20px 0;
+	overflow-y: scroll;
 }
