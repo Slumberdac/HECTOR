@@ -59,6 +59,7 @@ export default function SignUp() {
 					type="text"
 					placeholder="Name"
 					onChange={(e) => setName(e.target.value)}
+					maxLength={10}
 				/>
 				<input
 					type="text"

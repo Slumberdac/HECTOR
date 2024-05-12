@@ -2,13 +2,18 @@ import "./RockCard.css";
 import Card from "../Card/Card.jsx";
 import React from "react";
 import { Link } from "react-router-dom";
+import Missing from "../../assets/MissingImage.js";
 
 const RockCard = ({ rock }) => {
 	return (
 		<li className="rock-card">
 			<Link to={`/rocks/${rock._id}`}>
 				<Card className="rock-card-container">
-					<img src={rock.image} alt={rock.name} />
+					{rock.image !== undefined ? (
+						<img src={rock.image} alt={rock.name} />
+					) : (
+						<Missing />
+					)}
 					<h3 id="name">{rock.name}</h3>
 				</Card>
 			</Link>
