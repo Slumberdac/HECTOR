@@ -9,6 +9,7 @@ export default function SignIn() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [cookies, setCookie, removeCookie] = useCookies(["uuid"]);
+	const [error, setError] = useState("");
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -27,7 +28,17 @@ export default function SignIn() {
 				if (res.ok) {
 					return res.json();
 				} else {
-					throw new Error("Invalid username or password");
+					res.json()
+						.then((data) => {
+							setError(data.message);
+							if (!username || !password) {
+								setError("Please fill in all fields");
+							}
+							throw new Error("Sign in failed");
+						})
+						.catch((err) => {
+							console.log(error);
+						});
 				}
 			})
 			.then((data) => {
@@ -38,14 +49,15 @@ export default function SignIn() {
 				window.location.href = "/";
 			})
 			.catch((err) => {
-				alert(err.message); // TODO: display error message on the page
+				console.log(error);
 			});
 	};
 
 	return (
 		<div className="signin-container">
-			<h1>Sign In</h1>
 			<form className="signin-form" onSubmit={handleSubmit}>
+				<h1>Sign In</h1>
+				{error && <label className="error">{error}</label>}
 				<input
 					type="text"
 					placeholder="Username"

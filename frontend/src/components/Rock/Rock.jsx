@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useState } from "react";
-import "./Rock.css";
-import Pfp from "../User/Pfp";
 import { useCookies } from "react-cookie";
+import Hammer from "../../assets/Hammer.js";
+import Missing from "../../assets/MissingImage.js";
+import "./Rock.css";
 const Rock = () => {
 	// extract the rock id from the URL
 	const rid = window.location.pathname.split("/")[2];
@@ -102,39 +102,42 @@ const Rock = () => {
 			<div className="rock-container">
 				<div className="rock-info">
 					<h1 id="name">{rock.name}</h1>
-					<img src={rock.image} alt={rock.name} />
+					{rock.image ? (
+						<img src={rock.image} alt={rock.name} />
+					) : (
+						<Missing />
+					)}
 					<h2 id="gender">Gender: {rock.gender}</h2>
 					<h3 id="personnality">{rock.personality}</h3>
 					<p if="description">{rock.description}</p>
-
-					<h1 id="username">{rock.name}</h1>
-					{!rock.owner && cookies.uuid && (
-						<button
-							className="adopt-button"
-							onClick={handleAdoption}
-						>
-							adopt
-						</button>
-					)}
-					{rock.owner === cookies?.uuid && cookies.uuid && (
-						<button
-							className="abandon-button"
-							onClick={handleAbandon}
-						>
-							abandon
-						</button>
-					)}
-					{rock.owner === cookies?.uuid && cookies.uuid && (
-						<button
-							className="delete-button"
-							onClick={handleDelete}
-						>
-							delete
-						</button>
-					)}
+					<div className="buttons">
+						{!rock.owner && cookies.uuid && (
+							<button
+								className="adopt-button"
+								onClick={handleAdoption}
+							>
+								Adopt
+							</button>
+						)}
+						{rock.owner === cookies?.uuid && cookies.uuid && (
+							<button
+								className="abandon-button"
+								onClick={handleAbandon}
+							>
+								Abandon
+							</button>
+						)}
+						{rock.owner === cookies?.uuid && cookies.uuid && (
+							<button
+								className="delete-button"
+								onClick={handleDelete}
+							>
+								<Hammer />
+							</button>
+						)}
+					</div>
 				</div>
 			</div>
-			<Link to="/rocks">Back to Rocks</Link>
 		</div>
 	);
 };

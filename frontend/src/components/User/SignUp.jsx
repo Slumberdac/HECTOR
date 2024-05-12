@@ -9,6 +9,7 @@ export default function SignUp() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [cookies, setCookie, removeCookie] = useCookies(["uuid"]);
+	const [error, setError] = useState("");
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -28,13 +29,28 @@ export default function SignUp() {
 				if (res.ok) {
 					return res.json();
 				} else {
-					res.text()
-						.then((text) => {
-							throw new Error(text);
+					res.json()
+						.then((data) => {
+							if (!name || !username || !password) {
+								setError("Please fill in all fields");
+							} else if (
+								data.message ===
+								"A user with the same username already exists"
+							) {
+								setError(data.message);
+							} else if (
+								!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*=])[A-Za-z\d!@#$%^&*=]{8,}$/.test(
+									password
+								) ||
+								data.message === "password: Invalid value"
+							) {
+								setError(
+									"Password must contain at least 8 characters, one letter, one number, and one special character"
+								);
+							}
+							throw new Error("Sign in failed");
 						})
-						.catch((err) => {
-							alert(err.message.split('"')[3]); // TODO: display error message on the page
-						});
+						.catch((err) => {});
 				}
 			})
 			.then((data) => {
@@ -54,8 +70,9 @@ export default function SignUp() {
 
 	return (
 		<div className="signup-container">
-			<h1>Sign Up</h1>
 			<form onSubmit={handleSubmit} className="signup-form">
+				<h1>Sign Up</h1>
+				{error && <label className="error">{error}</label>}
 				<input
 					type="text"
 					placeholder="Name"

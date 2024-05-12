@@ -40,8 +40,7 @@ const getUserById = async (req, res, next) => {
 		return next(err);
 	}
 	if (!user) {
-		const err = new Error("User not found");
-		err.code = 404;
+		const err = new Error(404, "User not found");
 		return next(err);
 	}
 
@@ -49,21 +48,6 @@ const getUserById = async (req, res, next) => {
 };
 
 const registerUser = async (req, res, next) => {
-	const validationErrors = validationResult(req);
-	if (!validationErrors.isEmpty()) {
-		// Format the validation errors to create a more readable string
-		const errors = validationErrors
-			.array()
-			.map((err) => `${err.path}: ${err.msg}`)
-			.join(", ");
-		return next(
-			new HttpError(
-				`Invalid payload, please check your information: ${errors}`,
-				422
-			)
-		);
-	}
-
 	const { name, username, password } = req.body;
 
 	const pfp_eyes = Math.floor(Math.random() * 16) + 1;
@@ -90,6 +74,22 @@ const registerUser = async (req, res, next) => {
 		}
 	} catch (e) {
 		const err = new HttpError("A database error occured", 500);
+		res.status(500).json({ message: "A database error occured" });
+		return next(err);
+	}
+
+	const validationErrors = validationResult(req);
+	if (!validationErrors.isEmpty()) {
+		// Format the validation errors to create a more readable string
+		const errors = validationErrors
+			.array()
+			.map((err) => `${err.path}: ${err.msg}`)
+			.join(", ");
+		const err = new HttpError(
+			`Invalid payload, please check your information: ${errors}`,
+			422
+		);
+		res.status(422).json({ message: errors });
 		return next(err);
 	}
 	const createdUser = new User({
@@ -107,6 +107,9 @@ const registerUser = async (req, res, next) => {
 			"Signing up failed, please try again later.",
 			500
 		);
+		res.status(500).json({
+			message: "Signing up failed, please try again later.",
+		});
 		return next(err);
 	}
 
@@ -120,14 +123,17 @@ const signInUser = async (req, res, next) => {
 		user = await User.findOne({ username }).exec();
 	} catch (e) {
 		const err = new HttpError("A database error occured", 500);
+		res.status(500).json({ message: "A database error occured" });
 		return next(err);
 	}
 	if (!user) {
 		const err = new HttpError("User not found", 404);
+		res.status(404).json({ message: "User not found" });
 		return next(err);
 	}
 	if (user.password !== password) {
-		const err = new HttpError("Mot de passe incorrect", 401);
+		const err = new HttpError("Incorrect password", 401);
+		res.status(401).json({ message: "Incorrect password" });
 		return next(err);
 	}
 	res.status(200).json({ user: getResponseUser(user)._id });

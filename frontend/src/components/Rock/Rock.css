@@ -5,8 +5,7 @@
 .rock-container {
 	background-color: var(--background);
 	width: 80vw;
-	margin-left: 10vw;
-	margin-top: 5vw;
+	margin: 5vh 10vw;
 	padding: 20px;
 	border-radius: 6px;
 	box-shadow: 0 0 10px 0 black;
@@ -29,67 +28,72 @@
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
+.rock-info h2 {
+	font-family: Omori;
+	font-size: 3em;
+	position: relative;
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+.rock-info h3 {
+	font-family: Omori;
+	font-size: 2em;
+	position: relative;
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+.rock-info p {
+	font-family: Omori;
+	font-size: 1.5em;
+	position: relative;
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
 
 .rock-info img {
 	width: 100%;
 	height: 350px;
 	object-fit: cover;
 }
-
-.adopt-button {
+.rock-info .svg-missing-image {
+	width: 280px;
+	margin: 0 auto;
+}
+.rock-info .buttons {
+	display: flex;
+	justify-content: center;
+}
+.rock-info .buttons button {
 	display: inline-block;
-	margin: 0 10px;
+	margin: 10px 10px;
 	width: 150px;
 	height: fit-content;
 	padding: 10px;
 	font-size: 1.5em;
 	font-family: Omori;
-	background-color: var(--secondary);
+	/* background-color: var(--secondary); */
 	border: 3px solid black;
 	border-radius: 15px;
 	transition: all 0.15s ease-in-out;
 }
 
-.adopt-button:hover {
-	cursor: pointer;
-	transform: scale(1.1);
-	background-color: var(--accent);
-}
-.abandon-button {
-	display: inline-block;
-	margin: 0 10px;
-	width: 150px;
-	height: fit-content;
-	padding: 10px;
-	font-size: 1.5em;
-	font-family: Omori;
-	background-color: var(--secondary);
-	border: 3px solid black;
-	border-radius: 15px;
-	transition: all 0.15s ease-in-out;
-}
-
-.abandon-button:hover {
+.rock-info .buttons button:hover {
 	cursor: pointer;
 	transform: scale(1.1);
 	background-color: var(--accent);
 }
 .delete-button {
-	display: inline-block;
-	margin: 0 10px;
-	width: 150px;
-	height: fit-content;
-	padding: 10px;
-	font-size: 1.5em;
-	font-family: Omori;
-	background-color: var(--secondary);
-	border: 3px solid black;
-	border-radius: 15px;
-	transition: all 0.15s ease-in-out;
+	background-color: red;
 }
-
-.delete-button:hover {
-	cursor: pointer;
-	transform: scale(1.1);
-	background-color: var(--accent);
+.hammer {
+	width: 50px;
 }

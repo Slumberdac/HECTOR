@@ -72,7 +72,7 @@ body {
 .nav-container nav ul li a h1 {
 	margin: 0;
 }
-.nav-container a> .pfp {
+.nav-container a > .pfp {
 	position: absolute;
 	top: 14%;
 	right: 2%;
@@ -80,7 +80,7 @@ body {
 	height: 65px;
 	transition: all 0.15s ease-in-out;
 }
-.nav-container a> .pfp:hover {
+.nav-container a > .pfp:hover {
 	cursor: pointer;
 	transform: scale(1.1);
 }
@@ -106,7 +106,7 @@ body {
 .scrolled nav .logo:hover {
 	transform: scale(1.2) translateY(-0.01%);
 }
-.scrolled nav a> .pfp {
+.scrolled nav a > .pfp {
 	top: 18%;
 	width: 50px;
 	height: 50px;
@@ -114,7 +114,7 @@ body {
 	margin-right: 2em;
 	transform: translateY(30%);
 }
-.scrolled a> .pfp:hover {
+.scrolled a > .pfp:hover {
 	transform: scale(1.1);
 }
 .missing-pfp {
