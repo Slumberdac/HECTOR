@@ -71,7 +71,7 @@ body {
 .nav-container nav ul li a h1 {
 	margin: 0;
 }
-.nav-container .pfp {
+.nav-container > .pfp {
 	position: absolute;
 	top: 14%;
 	right: 2%;
@@ -79,7 +79,7 @@ body {
 	height: 65px;
 	transition: all 0.15s ease-in-out;
 }
-.pfp:hover {
+.nav-container > .pfp:hover {
 	cursor: pointer;
 	transform: scale(1.1);
 }
@@ -105,7 +105,7 @@ body {
 .scrolled nav .logo:hover {
 	transform: scale(1.2) translateY(-0.01%);
 }
-.scrolled nav .pfp {
+.scrolled nav > .pfp {
 	top: 18%;
 	width: 50px;
 	height: 50px;
@@ -113,7 +113,7 @@ body {
 	margin-right: 2em;
 	transform: translateY(30%);
 }
-.scrolled .pfp:hover {
+.scrolled > .pfp:hover {
 	transform: scale(1.1);
 }
 .missing-pfp {
@@ -125,6 +125,7 @@ body {
 	transition: all 0.15s ease-in-out;
 }
 .missing-pfp:hover {
+	transform: scale(1.1);
 	cursor: pointer;
 }
 .missing-pfp > * {
@@ -145,6 +146,9 @@ body {
 	margin-top: -5px;
 	margin-right: 2em;
 	transform: translateY(30%);
+}
+.scrolled .missing-pfp:hover {
+	transform: scale(1.1);
 }
 .scrolled .question-mark {
 	width: 30px;
