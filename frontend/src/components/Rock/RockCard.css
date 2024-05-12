@@ -39,8 +39,9 @@ a {
 	box-shadow: 0 0 1em black;
 	transform: scale(1.05);
 }
-.svg-missing-image{
+.svg-missing-image {
 	width: 100%;
 	/* height: 30vh; */
+	height: 275px;
 	object-fit: cover;
 }
