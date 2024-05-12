@@ -78,6 +78,25 @@ const Rock = () => {
 				[rock.id, cookies.uuid]
 			);
 	};
+	const handleDelete = () => {
+		fetch(`http://localhost:5000/api/v1/rocks/${rock._id}`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((res) => {
+				if (res.ok) {
+					alert(`${rock.name} forever lost; the way home`);
+					window.location.href = "/rocks";
+				} else {
+					throw new Error("Failed to delete rock");
+				}
+			})
+			.catch((err) => {
+				alert(err.message);
+			});
+	};
 	return (
 		<div>
 			<div className="rock-container">
@@ -103,6 +122,14 @@ const Rock = () => {
 							onClick={handleAbandon}
 						>
 							abandon
+						</button>
+					)}
+					{rock.owner === cookies?.uuid && cookies.uuid && (
+						<button
+							className="delete-button"
+							onClick={handleDelete}
+						>
+							delete
 						</button>
 					)}
 				</div>
