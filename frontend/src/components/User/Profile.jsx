@@ -2,6 +2,7 @@ import React from "react";
 import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
 import Pfp from "./Pfp";
+import RockCard from "../Rock/RockCard";
 import "./Profile.css";
 
 export default function Profile() {
@@ -146,14 +147,11 @@ export default function Profile() {
 			{/* scrollable container of rockCards */}
 			<h2 id="your-rocks">Your Rocks</h2>
 			<div className="rock-card-container-profile">
-				{rocks.map((rock) => {
-					return (
-						<div className="rock-card" key={rock._id}>
-							<h3>{rock.name}</h3>
-							<p>{rock.description}</p>
-						</div>
-					);
-				})}
+				<lu>
+					{rocks.map((rock) => (
+						<RockCard key={rock.id} rock={rock} profile={true} />
+					))}
+				</lu>
 			</div>
 		</div>
 	);

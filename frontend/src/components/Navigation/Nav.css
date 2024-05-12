@@ -10,6 +10,7 @@ body {
 .nav-container{
 	position: absolute;
 	width: 100%;
+	backdrop-filter: blur(5px);
 }
 .nav-container nav {
 	position: sticky;
@@ -58,7 +59,7 @@ body {
 .nav-container nav ul li:hover {
 	cursor: pointer;
 	/* text-shadow: 0 0 5px black; */
-	transform: scale(1.1);
+	transform: scale(1.2);
 	background-color: var(--accent);
 	/* shadow to the boxes */
 	box-shadow: 0 0 10px black;
@@ -102,7 +103,7 @@ body {
 	transform: translateY(30%);
 }
 .scrolled nav .logo:hover {
-	transform: scale(1.2) translateY(30%);
+	transform: scale(1.2) translateY(-0.01%);
 }
 .scrolled nav .pfp {
 	top: 18%;
@@ -111,6 +112,9 @@ body {
 	margin-top: -5px;
 	margin-right: 2em;
 	transform: translateY(30%);
+}
+.scrolled .pfp:hover {
+	transform: scale(1.1);
 }
 .missing-pfp {
 	position: absolute;
@@ -150,7 +154,7 @@ body {
 .scrolled nav ul li:hover {
 	cursor: pointer;
 	/* text-shadow: 0 0 5px black; */
-	transform: scale(1.1) translateY(50%);
+	transform: scale(1.1) translateY(40%);
 	background-color: var(--accent);
 	/* shadow to the boxes */
 	box-shadow: 0 0 10px black;

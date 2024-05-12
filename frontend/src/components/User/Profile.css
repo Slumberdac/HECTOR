@@ -1,15 +1,8 @@
 .profile-container {
-	display: flex;
-	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: 100%;
-	width: 100%;
-	margin: 0 auto;
 	padding: 0;
 	color: var(--text);
-}
-.profile-container {
 	font-family: Omori;
 	display: flex;
 	flex-direction: column;
@@ -19,8 +12,9 @@
 	height: 100%;
 	padding-bottom: 25px;
 	width: 90%;
-	margin: 50px auto;
+	margin: 112px auto;
 	z-index: 1;
+	backdrop-filter: blur(5px);
 }
 .profile-container .profile-info > * {
 	position: relative;
@@ -57,10 +51,15 @@
 	padding: 10px;
 	font-size: 1.5em;
 	font-family: Omori;
-	background-color: var(--accent);
+	background-color: var(--secondary);
 	border: 3px solid black;
 	border-radius: 15px;
 	transition: all 0.15s ease-in-out;
+}
+.profile-info .buttons button:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+	background-color: var(--accent);
 }
 .profile-container > .pfp {
     position: absolute;
@@ -90,15 +89,24 @@
 	right: 20px;
 	width: 20%;
 	height: 70%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 
 	/* add an outline */
 	border: 2px solid black;
 	border-radius: 15px;
 	padding: 10px;
-	margin: 0 0 20px 0;
-	overflow-y: scroll;
+	overflow-y: auto;
+}
+.rock-card-container-profile .rock-card {
+    list-style-type: none;
+    width: 80%;
+    height: 50%;
+    margin: auto;
+    margin-bottom: 70px;
+}
+.rock-card-container-profile .rock-card img {
+    width: 80%;
+    height: 80%;
+}
+.rock-card-container-profile .rock-card #name {
+    font-size: 1.5em;
 }

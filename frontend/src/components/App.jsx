@@ -14,7 +14,7 @@ import NotFound from "../assets/404 NotFound.png";
 import "./App.css";
 const App = () => {
 	return (
-		<div>
+		<div className="App">
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<Nav />}>

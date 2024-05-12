@@ -18,11 +18,11 @@ export default function UsersRegistry() {
 		item["username"].toLowerCase().includes(searchTerm.toLowerCase())
 	);
 	return (
-		<div>
+		<div className="users-registry-container">
 			<h1>Users Registry</h1>
 			<input
 				type="text"
-				placeholder="Rechercher"
+				placeholder="Filter"
 				value={searchTerm}
 				onChange={(e) => setSearchTerm(e.target.value)}
 				className="search-bar"

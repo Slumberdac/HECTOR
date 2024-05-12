@@ -41,37 +41,34 @@ const User = () => {
 			});
 	}, [uid]);
 	return (
-		<div>
-			<div className="user-container">
-				<div className="user-info">
-					<Pfp
-						eyes={user.pfp_eyes ?? 1}
-						mouth={user.pfp_mouth ?? 1}
-						color={user.pfp_color ?? "#999"}
-						className="pfp"
-					/>
-					<h1 id="username">{user.username}</h1>
-				</div>
-				{filteredList?.length > 0 ? (
-					<div className="rock-list-container">
-						<input
-							type="text"
-							placeholder="Rechercher"
-							value={searchTerm}
-							onChange={(e) => setSearchTerm(e.target.value)}
-							className="search-bar"
-						/>
-						<ul className="rock-list">
-							{filteredList?.map((rock) => (
-								<RockCard key={rock._id} rock={rock} />
-							))}
-						</ul>
-					</div>
-				) : (
-					<h1>This user does not own any rocks</h1>
-				)}
+		<div className="user-container">
+			<div className="user-info">
+				<Pfp
+					eyes={user.pfp_eyes ?? 1}
+					mouth={user.pfp_mouth ?? 1}
+					color={user.pfp_color ?? "#999"}
+					className="pfp"
+				/>
+				<h1 id="username">{user.username}</h1>
 			</div>
-			<Link to="/users">Back to Users</Link>
+			{filteredList?.length > 0 ? (
+				<div className="rock-list-container">
+					<input
+						type="text"
+						placeholder="Rechercher"
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+						className="search-bar"
+					/>
+					<ul className="rock-list">
+						{filteredList?.map((rock) => (
+							<RockCard key={rock._id} rock={rock} />
+						))}
+					</ul>
+				</div>
+			) : (
+				<h1>This user does not own any rocks</h1>
+			)}
 		</div>
 	);
 };

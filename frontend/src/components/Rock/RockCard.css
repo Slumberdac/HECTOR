@@ -3,7 +3,7 @@
 	src: url("../../assets/fonts/OMORI_GAME2.ttf");
 }
 
-.rock-card {
+.rocks-registry-container .rock-card {
 	display: block;
 	width: 19%;
 	margin: 30px;

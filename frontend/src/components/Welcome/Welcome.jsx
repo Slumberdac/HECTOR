@@ -73,100 +73,52 @@ function Welcome() {
 			<div className="welcome-content">
 				<img src={Hector}></img>
 				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
-					sit amet sapien ut tortor pellentesque fringilla a et
-					sapien. Curabitur luctus orci a mattis hendrerit. Sed
-					porttitor ante nec libero vestibulum, ac varius ligula
-					suscipit. In maximus mauris odio, a aliquet dui euismod eu.
-					Pellentesque hendrerit eros eu imperdiet rutrum. Aliquam
-					vehicula posuere nisl, nec tempus turpis aliquet non.
-					Pellentesque ac accumsan tortor. Phasellus lobortis commodo
-					purus, auctor ullamcorper augue accumsan quis. Quisque et
-					viverra urna. Duis in elementum ante, non vehicula purus.
-					Aliquam vitae sapien a leo pulvinar maximus.
+					Hector Garvin always stood out for his unconventional
+					interests, but his passion for pet rocks catapulted him into
+					a unique niche of entrepreneurial success. From a young age,
+					Hector displayed an extraordinary fascination with geology,
+					spending countless hours in the rocky plains near his home,
+					collecting unusual stones that he believed carried their own
+					distinctive personalities and stories. It was during these
+					formative years that the seeds for HECTOR (Hector's
+					Extravagant Containment Terrain Of Rocks), the world's
+					premier pet rock registry, were sown.
 					<br />
 					<br />
-					Donec tristique viverra lorem at tincidunt. Integer gravida
-					tincidunt mauris interdum finibus. Donec gravida neque
-					auctor orci ornare, ut congue ipsum fringilla. Fusce
-					molestie risus quis fermentum consequat. Nullam vitae dui
-					sit amet quam maximus rhoncus. Phasellus euismod placerat
-					aliquam. Donec est nisl, suscipit ac commodo non, ultricies
-					quis nisl. Maecenas convallis justo porttitor leo luctus, at
-					dictum felis viverra. Sed sodales quis tortor vitae
-					vestibulum.
-				</p>
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
-					sit amet sapien ut tortor pellentesque fringilla a et
-					sapien. Curabitur luctus orci a mattis hendrerit. Sed
-					porttitor ante nec libero vestibulum, ac varius ligula
-					suscipit. In maximus mauris odio, a aliquet dui euismod eu.
-					Pellentesque hendrerit eros eu imperdiet rutrum. Aliquam
-					vehicula posuere nisl, nec tempus turpis aliquet non.
-					Pellentesque ac accumsan tortor. Phasellus lobortis commodo
-					purus, auctor ullamcorper augue accumsan quis. Quisque et
-					viverra urna. Duis in elementum ante, non vehicula purus.
-					Aliquam vitae sapien a leo pulvinar maximus.
+					The concept of HECTOR germinated from Hector's desire to
+					elevate the humble pet rock from a simple novelty item to a
+					treasured collectible. He recognized early on that every
+					rock could have a "pedigree" of sorts—unique characteristics
+					like origin, mineral content, and even an imagined history.
+					Hector's vision was to create a registry where these traits
+					could be cataloged and celebrated, fostering a community of
+					enthusiasts who shared his appreciation for these silent
+					companions.
 					<br />
 					<br />
-					Donec tristique viverra lorem at tincidunt. Integer gravida
-					tincidunt mauris interdum finibus. Donec gravida neque
-					auctor orci ornare, ut congue ipsum fringilla. Fusce
-					molestie risus quis fermentum consequat. Nullam vitae dui
-					sit amet quam maximus rhoncus. Phasellus euismod placerat
-					aliquam. Donec est nisl, suscipit ac commodo non, ultricies
-					quis nisl. Maecenas convallis justo porttitor leo luctus, at
-					dictum felis viverra. Sed sodales quis tortor vitae
-					vestibulum.
-				</p>
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
-					sit amet sapien ut tortor pellentesque fringilla a et
-					sapien. Curabitur luctus orci a mattis hendrerit. Sed
-					porttitor ante nec libero vestibulum, ac varius ligula
-					suscipit. In maximus mauris odio, a aliquet dui euismod eu.
-					Pellentesque hendrerit eros eu imperdiet rutrum. Aliquam
-					vehicula posuere nisl, nec tempus turpis aliquet non.
-					Pellentesque ac accumsan tortor. Phasellus lobortis commodo
-					purus, auctor ullamcorper augue accumsan quis. Quisque et
-					viverra urna. Duis in elementum ante, non vehicula purus.
-					Aliquam vitae sapien a leo pulvinar maximus.
+					The registry quickly gained momentum as it tapped into the
+					nostalgic charm of pet rocks, appealing to both older
+					generations who remembered the fad from their youth and
+					younger people attracted by the eco-friendly and
+					low-maintenance nature of rock pets. Hector's approach was
+					meticulous and imbued with his trademark flair for the
+					extravagant. Each registered rock received an official
+					certificate, complete with a detailed biography and
+					description.
 					<br />
 					<br />
-					Donec tristique viverra lorem at tincidunt. Integer gravida
-					tincidunt mauris interdum finibus. Donec gravida neque
-					auctor orci ornare, ut congue ipsum fringilla. Fusce
-					molestie risus quis fermentum consequat. Nullam vitae dui
-					sit amet quam maximus rhoncus. Phasellus euismod placerat
-					aliquam. Donec est nisl, suscipit ac commodo non, ultricies
-					quis nisl. Maecenas convallis justo porttitor leo luctus, at
-					dictum felis viverra. Sed sodales quis tortor vitae
-					vestibulum.
-				</p>
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
-					sit amet sapien ut tortor pellentesque fringilla a et
-					sapien. Curabitur luctus orci a mattis hendrerit. Sed
-					porttitor ante nec libero vestibulum, ac varius ligula
-					suscipit. In maximus mauris odio, a aliquet dui euismod eu.
-					Pellentesque hendrerit eros eu imperdiet rutrum. Aliquam
-					vehicula posuere nisl, nec tempus turpis aliquet non.
-					Pellentesque ac accumsan tortor. Phasellus lobortis commodo
-					purus, auctor ullamcorper augue accumsan quis. Quisque et
-					viverra urna. Duis in elementum ante, non vehicula purus.
-					Aliquam vitae sapien a leo pulvinar maximus.
-					<br />
-					<br />
-					Donec tristique viverra lorem at tincidunt. Integer gravida
-					tincidunt mauris interdum finibus. Donec gravida neque
-					auctor orci ornare, ut congue ipsum fringilla. Fusce
-					molestie risus quis fermentum consequat. Nullam vitae dui
-					sit amet quam maximus rhoncus. Phasellus euismod placerat
-					aliquam. Donec est nisl, suscipit ac commodo non, ultricies
-					quis nisl. Maecenas convallis justo porttitor leo luctus, at
-					dictum felis viverra. Sed sodales quis tortor vitae
-					vestibulum.
+					Hector's past, marked by his early isolation due to his
+					unusual hobbies, turned into a narrative of triumph as he
+					founded HECTOR. His enterprise not only provided him with a
+					sense of purpose but also connected him with people
+					worldwide, creating a community where quirks were
+					celebrated, and everyone had a rock to lean on, literally.
+					The success of HECTOR spoke volumes about the power of
+					embracing one's passions, no matter how unconventional they
+					might be. Hector had transformed a simple childhood
+					fascination into a thriving global registry, bringing joy
+					and a sense of belonging to people and their pet rocks
+					everywhere.
 				</p>
 			</div>
 		</div>

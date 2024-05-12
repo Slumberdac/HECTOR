@@ -43,26 +43,24 @@ export default function SignIn() {
 	};
 
 	return (
-		<div>
-			<div className="signin-container">
-				<h1>Sign In</h1>
-				<form className="signin-form" onSubmit={handleSubmit}>
-					<input
-						type="text"
-						placeholder="Username"
-						onChange={(e) => setUsername(e.target.value)}
-					/>
-					<input
-						type="password"
-						placeholder="Password"
-						onChange={(e) => setPassword(e.target.value)}
-					/>
-					<button>Sign In</button>
-				</form>
-				<p>
-					Don't have an account? <Link to="/signup">Sign Up</Link>
-				</p>
-			</div>
+		<div className="signin-container">
+			<h1>Sign In</h1>
+			<form className="signin-form" onSubmit={handleSubmit}>
+				<input
+					type="text"
+					placeholder="Username"
+					onChange={(e) => setUsername(e.target.value)}
+				/>
+				<input
+					type="password"
+					placeholder="Password"
+					onChange={(e) => setPassword(e.target.value)}
+				/>
+				<button>Sign In</button>
+			</form>
+			<p>
+				<Link to="/signup">Don't have an account? Sign Up</Link>
+			</p>
 		</div>
 	);
 }

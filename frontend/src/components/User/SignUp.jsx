@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import "./SignUp.css";
 
 export default function SignUp() {
 	const [name, setName] = useState("");
@@ -52,9 +53,9 @@ export default function SignUp() {
 	};
 
 	return (
-		<div>
+		<div className="signup-container">
 			<h1>Sign Up</h1>
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleSubmit} className="signup-form">
 				<input
 					type="text"
 					placeholder="Name"
@@ -73,6 +74,9 @@ export default function SignUp() {
 				/>
 				<button type="submit">Sign Up</button>
 			</form>
+			<p>
+				<Link to="/signin">Already have an account? Sign In</Link>
+			</p>
 		</div>
 	);
 }

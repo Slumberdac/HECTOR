@@ -22,7 +22,7 @@ export default function RocksRegistry() {
 			<h1>Rocks Registry</h1>
 			<input
 				type="text"
-				placeholder="Rechercher"
+				placeholder="Filter"
 				value={searchTerm}
 				onChange={(e) => setSearchTerm(e.target.value)}
 				className="search-bar"

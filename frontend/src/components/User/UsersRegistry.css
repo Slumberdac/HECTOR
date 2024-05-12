@@ -1,8 +1,22 @@
+.users-registry-container{
+    backdrop-filter: blur(5px);
+}
+.users-registry-container h1 {
+    font-family: Omori;
+    color: var(--background);
+    font-size: 8rem;
+    /* add black outline */
+    text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000,
+        3px 3px 0 #000;
+    text-align: center;
+    margin: -20px auto;
+}
+
 .search-bar {
 	display: flex;
 	padding: 10px;
 	width: 30%;
-	margin: 0 0 0 50px;
+	margin: 0 auto 0 auto;
 	background-color: var(--background);
 }
 

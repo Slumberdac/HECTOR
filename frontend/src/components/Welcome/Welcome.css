@@ -2,7 +2,6 @@
 	font-family: Omori;
 	src: url("../../assets/fonts/OMORI_GAME2.ttf");
 }
-
 .welcome-logo {
 	position: relative;
 	background-color: var(--background);
@@ -83,10 +82,14 @@
 	text-align: justify;
 }
 .welcome-content img {
-	width: 20vh;
-	height: 25vh;
+	width: 80vh;
+	height: 70vh;
 	margin: 2% 3%;
 }
 .welcome-content p {
 	margin-right: 3%;
+	/* put into columns */
+	column-count: 2;
+	column-gap: 2em;
+	overflow: hidden;
 }
