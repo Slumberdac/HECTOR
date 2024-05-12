@@ -27,7 +27,6 @@
 .rock-card-container #name {
 	font-family: Omori;
 	font-size: 2em;
-	position: relative;
 }
 
 a {
@@ -44,3 +43,23 @@ a {
 	/* height: 30vh; */
 	object-fit: cover;
 }
+
+.image-container {
+    position: relative;
+}
+
+.home {
+    position: absolute;
+    top: 0;
+    left: 0;
+	background-color: #C3C5AA;
+	padding: 10px 0px 10px 0px;
+	color: #000;
+	font-size: 18px;
+	font-weight: bold;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+

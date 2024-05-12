@@ -7,10 +7,15 @@ import Missing from "../../assets/MissingImage.js";
 const RockCard = ({ rock }) => {
 	return (
 		<li className="rock-card">
-			<Link to={`/rocks/${rock._id}`}>
+			<Link to={`/rocks/${rock._id}`} className="rock-link">
 				<Card className="rock-card-container">
 					{rock.image !== undefined ? (
-						<img src={rock.image} alt={rock.name} />
+						<div className="image-container">
+							{rock.owner && (
+								<div className="home">{rock.name} found; their way home</div>
+							)}
+							<img src={rock.image} alt={rock.name} />
+						</div>
 					) : (
 						<Missing />
 					)}
