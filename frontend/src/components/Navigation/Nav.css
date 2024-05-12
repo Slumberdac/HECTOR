@@ -71,7 +71,7 @@ body {
 .nav-container nav ul li a h1 {
 	margin: 0;
 }
-.nav-container .pfp {
+.nav-container a > .pfp {
 	position: absolute;
 	top: 14%;
 	right: 2%;
@@ -79,7 +79,7 @@ body {
 	height: 65px;
 	transition: all 0.15s ease-in-out;
 }
-.nav-container > .pfp:hover {
+.nav-container a > .pfp:hover {
 	cursor: pointer;
 	transform: scale(1.1);
 }
