@@ -5,6 +5,7 @@
 	"main": "app.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
+		"start-prod": "node index.js",
 		"backend": "nodemon backend/app.js",
 		"frontend": "cd frontend && react-scripts start",
 		"app": "concurrently \"npm run backend\" \"npm run frontend\""
