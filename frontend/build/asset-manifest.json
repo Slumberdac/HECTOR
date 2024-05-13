@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.3bea71c6.css",
+    "main.js": "/static/js/main.87e54bd7.js",
+    "static/media/bg_looped.jpg": "/static/media/bg_looped.5b08203d8a5d5cfc3675.jpg",
+    "static/media/hectorHimself.jpg": "/static/media/hectorHimself.f816974cc72c753af80e.jpg",
+    "static/media/404 NotFound.png": "/static/media/404 NotFound.2a8ff66094bd1aa79486.png",
+    "static/media/OMORI_GAME2.ttf": "/static/media/OMORI_GAME2.a2f0cea811aeb48e3ef4.ttf",
+    "index.html": "/index.html",
+    "main.3bea71c6.css.map": "/static/css/main.3bea71c6.css.map",
+    "main.87e54bd7.js.map": "/static/js/main.87e54bd7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3bea71c6.css",
+    "static/js/main.87e54bd7.js"
+  ]
+}
