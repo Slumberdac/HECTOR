@@ -67,11 +67,12 @@ const createRock = async (req, res, next) => {
 
 	const createdRock = new Rock({
 		name,
-		gender: gender ?? "N/A",
+		gender: gender ? gender : "N/A",
 		personality,
 		description,
-		image: image,
+		image: image ? image : undefined,
 	});
+	console.log(createdRock);
 
 	try {
 		await createdRock.save();

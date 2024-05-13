@@ -41,7 +41,9 @@ const Rock = () => {
 		)
 			.then((res) => {
 				if (res.ok) {
-					alert(`${rock.name}; found the way home`);
+					alert(`${rock.name} found; the way home`);
+					// refresh the page
+					window.location.reload();
 				} else {
 					throw new Error("Failed to adopt rock");
 				}
@@ -67,6 +69,8 @@ const Rock = () => {
 			.then((res) => {
 				if (res.ok) {
 					alert(`${rock.name} will find; another way home`);
+					// refresh the page
+					window.location.reload();
 				} else {
 					throw new Error("Failed to abandon rock");
 				}
@@ -79,23 +83,25 @@ const Rock = () => {
 			);
 	};
 	const handleDelete = () => {
-		fetch(`http://localhost:5000/api/v1/rocks/${rock._id}`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-			.then((res) => {
-				if (res.ok) {
-					alert(`${rock.name} forever lost; the way home`);
-					window.location.href = "/rocks";
-				} else {
-					throw new Error("Failed to delete rock");
-				}
+		if (window.confirm("Are you sure you want to delete this rock?")) {
+			fetch(`http://localhost:5000/api/v1/rocks/${rock._id}`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
 			})
-			.catch((err) => {
-				alert(err.message);
-			});
+				.then((res) => {
+					if (res.ok) {
+						alert(`${rock.name} forever lost; the way home`);
+						window.location.href = "/rocks";
+					} else {
+						throw new Error("Failed to delete rock");
+					}
+				})
+				.catch((err) => {
+					alert(err.message);
+				});
+		}
 	};
 	return (
 		<div>

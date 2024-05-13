@@ -9,16 +9,18 @@ const RockCard = ({ rock }) => {
 		<li className="rock-card">
 			<Link to={`/rocks/${rock._id}`} className="rock-link">
 				<Card className="rock-card-container">
-					{rock.image !== undefined ? (
-						<div className="image-container">
-							{rock.owner && (
-								<div className="home">{rock.name} found; their way home</div>
-							)}
+					<div className="image-container">
+						{rock.owner && (
+							<div className="home">
+								{rock.name} found; their way home
+							</div>
+						)}
+						{rock.image !== undefined ? (
 							<img src={rock.image} alt={rock.name} />
-						</div>
-					) : (
-						<Missing />
-					)}
+						) : (
+							<Missing />
+						)}
+					</div>
 					<h3 id="name">{rock.name}</h3>
 				</Card>
 			</Link>

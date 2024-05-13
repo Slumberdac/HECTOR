@@ -71,6 +71,11 @@ function Nav() {
 				</Link>
 				<ul>
 					<li>
+						<Link to="/">
+							<h1>Home</h1>
+						</Link>
+					</li>
+					<li>
 						<Link to="/users">
 							<h1>Users</h1>
 						</Link>
@@ -78,11 +83,6 @@ function Nav() {
 					<li>
 						<Link to="/rocks">
 							<h1>Companions</h1>
-						</Link>
-					</li>
-					<li>
-						<Link to="/blog">
-							<h1>Blog</h1>
 						</Link>
 					</li>
 					<li>

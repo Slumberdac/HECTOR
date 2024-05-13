@@ -6,7 +6,6 @@ import UsersRegistry from "./User/UsersRegistry";
 import User from ".//User/User";
 import RocksRegistry from "./Rock/RocksRegistry";
 import Rock from "./Rock/Rock";
-import Blog from "./Blog/Blog";
 import Profile from "./User/Profile";
 import SignUp from "./User/SignUp";
 import SignIn from "./User/SignIn";
@@ -31,9 +30,6 @@ const App = () => {
 					</Route>
 					<Route path="/rocks/:rid" element={<Nav />}>
 						<Route index element={<Rock />} />
-					</Route>
-					<Route path="/blog" element={<Nav />}>
-						<Route index element={<Blog />} />
 					</Route>
 					<Route path="/profile" element={<Nav />}>
 						<Route index element={<Profile />} />

@@ -3,7 +3,6 @@ body {
 	background-image: url("../../assets/bg_looped.jpg");
 	background-repeat: repeat;
 }
-
 .rocks-registry-container {
 	width: 100%;
 	backdrop-filter: blur(5px);
@@ -16,9 +15,74 @@ body {
 	text-align: center;
 	margin: -20px auto;
 }
-
 .rocks-registry {
 	display: flex;
 	flex-wrap: wrap;
 	margin-top: 20px;
+}
+/* Overlay over the entire page */
+.new-rock-form {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	padding-bottom: 16px;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1;
+}
+/* Form container */
+.new-rock-form form {
+	width: 50%;
+	background-color: var(--background);
+	padding: 20px;
+	border-radius: 10px;
+}
+.new-rock-form h1 {
+	font-family: Omori;
+	color: var(--background);
+	font-size: 8rem;
+	text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000;
+	text-align: center;
+	margin: -20px auto;
+}
+.new-rock-form input {
+	display: block;
+	width: 90%;
+	height: 50px;
+	margin: 20px auto;
+	padding: -10px;
+	font-size: 2rem;
+	font-family: Omori;
+	background-color: var(--background);
+	border: 2px solid black;
+	border-radius: 15px;
+}
+.new-rock-form .buttons {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 90%;
+	margin: 20px auto;
+}
+.new-rock-form .buttons button {
+	display: block;
+	margin: 0 10px;
+	width: 90%;
+	height: fit-content;
+	padding: -10px;
+	font-size: 3em;
+	font-family: Omori;
+	background-color: var(--secondary);
+	border: 3px solid black;
+	border-radius: 15px;
+	transition: all 0.15s ease-in-out;
+}
+.new-rock-form .buttons button:hover {
+	cursor: pointer;
+	transform: scale(1.1);
+	background-color: var(--accent);
 }

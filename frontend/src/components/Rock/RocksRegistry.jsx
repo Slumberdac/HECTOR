@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import RockCard from "./RockCard";
+import AddRockCard from "./AddRockCard";
 import "./RocksRegistry.css";
 
 export default function RocksRegistry() {
@@ -31,6 +32,7 @@ export default function RocksRegistry() {
 				{filteredList?.map((rock) => (
 					<RockCard key={rock._id} rock={rock} />
 				))}
+				<AddRockCard />
 			</ul>
 		</div>
 	);

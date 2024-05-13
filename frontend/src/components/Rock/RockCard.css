@@ -27,6 +27,7 @@
 .rock-card-container #name {
 	font-family: Omori;
 	font-size: 2em;
+	z-index: 1;
 }
 
 a {
@@ -38,10 +39,11 @@ a {
 	box-shadow: 0 0 1em black;
 	transform: scale(1.05);
 }
-.rock-card-container .svg-missing-image {
-	width: 100%;
+.rock-card-container .image-container .svg-missing-image {
+	width: 300px;
 	/* height: 30vh; */
 	height: 275px;
+	/* padding: 0 0 20px 0; */
 	object-fit: cover;
 }
 
@@ -63,4 +65,10 @@ a {
 	margin-right: auto;
 	text-align: center;
 }
-
+.add-rock {
+	font-family: Omori;
+	font-size: 24em;
+	position: relative;
+	width: 100%;
+	margin: 0 auto -.15em auto;
+}
