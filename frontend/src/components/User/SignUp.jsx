@@ -67,7 +67,7 @@ export default function SignUp() {
 				window.location.href = "/";
 			})
 			.catch((err) => {
-				alert(err); // TODO: display error message on the page
+				alert(err);
 			});
 	};
 
@@ -80,12 +80,12 @@ export default function SignUp() {
 					type="text"
 					placeholder="Name"
 					onChange={(e) => setName(e.target.value)}
-					maxLength={10}
 				/>
 				<input
 					type="text"
 					placeholder="Username"
 					onChange={(e) => setUsername(e.target.value)}
+					maxLength={10}
 				/>
 				<input
 					type="password"

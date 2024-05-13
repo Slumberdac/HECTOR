@@ -12,7 +12,7 @@ const RockCard = ({ rock }) => {
 					<div className="image-container">
 						{rock.owner && (
 							<div className="home">
-								{rock.name} found; their way home
+								{rock.name} found; the way home
 							</div>
 						)}
 						{rock.image !== undefined ? (

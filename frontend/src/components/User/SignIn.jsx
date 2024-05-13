@@ -14,16 +14,19 @@ export default function SignIn() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		// Send a PATCH request to the server
-		fetch("http://localhost:5000/api/v1/users/signin", {
-			method: "PATCH",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				username: username,
-				password: password,
-			}),
-		})
+		fetch(
+			"https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/signin",
+			{
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					username: username,
+					password: password,
+				}),
+			}
+		)
 			.then((res) => {
 				if (res.ok) {
 					return res.json();
