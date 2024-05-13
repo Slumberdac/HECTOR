@@ -45,7 +45,7 @@ const Rock = () => {
 				if (res.ok) {
 					alert(`${rock.name} found; the way home`);
 					// refresh the page
-					window.location.reload();
+					window.location.href = "/";
 				} else {
 					throw new Error("Failed to adopt rock");
 				}
@@ -72,7 +72,7 @@ const Rock = () => {
 				if (res.ok) {
 					alert(`${rock.name} will find; another way home`);
 					// refresh the page
-					window.location.reload();
+					window.location.href = "/";
 				} else {
 					throw new Error("Failed to abandon rock");
 				}

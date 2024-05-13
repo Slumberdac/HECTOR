@@ -32,7 +32,7 @@ const NewRockForm = () => {
 			.then((data) => {
 				console.log(data);
 				// refresh the page
-				window.location.reload();
+				window.location.href = "/";
 			});
 	};
 

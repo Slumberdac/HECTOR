@@ -25,7 +25,6 @@ export default function Profile() {
 				.then((res) => res.json())
 				.then((data) => {
 					setUser(data.user);
-					console.log(data.user);
 				})
 				.catch((err) => {});
 
@@ -93,7 +92,7 @@ export default function Profile() {
 							)
 								.then((res) => {
 									if (res.ok) {
-										window.location.reload();
+										window.location.href = "/";
 									} else {
 										throw new Error("Failed to reroll pfp");
 									}

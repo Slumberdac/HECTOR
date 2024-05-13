@@ -14446,7 +14446,8 @@
 													.then((e) => e.json())
 													.then((e) => {
 														console.log(e),
-															window.location.reload();
+															(window.location.href =
+																"/");
 													});
 											},
 											children: "Submit",
@@ -14626,7 +14627,8 @@
 																		" found; the way home"
 																	)
 																),
-																	window.location.reload();
+																	(window.location.href =
+																		"/");
 															})
 															.catch(
 																(e) => {
@@ -14673,7 +14675,8 @@
 																		" will find; another way home"
 																	)
 																),
-																	window.location.reload();
+																	(window.location.href =
+																		"/");
 															})
 															.catch(
 																(e) => {
@@ -14871,7 +14874,8 @@
 																throw new Error(
 																	"Failed to reroll pfp"
 																);
-															window.location.reload();
+															window.location.href =
+																"/";
 														})
 														.catch((e) => {
 															alert(e.message);
