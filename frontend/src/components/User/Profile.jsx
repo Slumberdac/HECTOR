@@ -13,12 +13,15 @@ export default function Profile() {
 
 	useEffect(() => {
 		if (cookies.uuid && cookies.uuid !== "undefined") {
-			fetch(`http://localhost:5000/api/v1/users/${cookies.uuid}`, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			})
+			fetch(
+				`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${cookies.uuid}`,
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			)
 				.then((res) => res.json())
 				.then((data) => {
 					setUser(data.user);
@@ -26,12 +29,15 @@ export default function Profile() {
 				})
 				.catch((err) => {});
 
-			fetch(`http://localhost:5000/api/v1/users/${cookies.uuid}/rocks`, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			})
+			fetch(
+				`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${cookies.uuid}/rocks`,
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			)
 				.then((res) => res.json())
 				.then((data) => {
 					setRocks(data.rocks);
@@ -72,7 +78,7 @@ export default function Profile() {
 								)
 								.join("")}`;
 							fetch(
-								`http://localhost:5000/api/v1/users/${cookies.uuid}`,
+								`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${cookies.uuid}`,
 								{
 									method: "PATCH",
 									headers: {
@@ -119,7 +125,7 @@ export default function Profile() {
 								)
 							) {
 								fetch(
-									`http://localhost:5000/api/v1/users/${cookies.uuid}`,
+									`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${cookies.uuid}`,
 									{
 										method: "DELETE",
 									}

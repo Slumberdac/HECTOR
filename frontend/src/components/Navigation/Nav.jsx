@@ -16,12 +16,15 @@ function Nav() {
 	React.useEffect(() => {
 		// if a uuid is stored in cookies, set isLoggedIn to true
 		if (cookies.uuid && cookies.uuid !== "undefined") {
-			fetch(`http://localhost:5000/api/v1/users/${cookies.uuid}`, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			})
+			fetch(
+				`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${cookies.uuid}`,
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			)
 				.then((res) => res.json())
 				.then((data) => {
 					setUser(data.user);

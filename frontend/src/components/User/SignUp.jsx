@@ -14,17 +14,20 @@ export default function SignUp() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		// Send a POST request to the server
-		fetch("http://localhost:5000/api/v1/users/register", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				name: name,
-				username: username,
-				password: password,
-			}),
-		})
+		fetch(
+			"https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/register",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					name: name,
+					username: username,
+					password: password,
+				}),
+			}
+		)
 			.then((res) => {
 				if (res.ok) {
 					return res.json();

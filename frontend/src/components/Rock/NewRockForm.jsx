@@ -18,13 +18,16 @@ const NewRockForm = () => {
 			description: description,
 			image: image,
 		};
-		fetch("http://localhost:5000/api/v1/rocks/", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		})
+		fetch(
+			"https://foura5-projet-synthese-gacoic.onrender.com/api/v1/rocks/",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data),
+			}
+		)
 			.then((res) => res.json())
 			.then((data) => {
 				console.log(data);

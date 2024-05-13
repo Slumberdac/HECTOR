@@ -8,7 +8,9 @@ export default function RocksRegistry() {
 	const [rockList, setRockList] = useState([]);
 
 	useEffect(() => {
-		fetch("http://localhost:5000/api/v1/rocks/")
+		fetch(
+			"https://foura5-projet-synthese-gacoic.onrender.com/api/v1/rocks/"
+		)
 			.then((res) => res.json())
 			.then((data) => {
 				setRockList(data.rocks);

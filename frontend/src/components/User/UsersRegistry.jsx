@@ -7,7 +7,9 @@ export default function UsersRegistry() {
 	const [userList, setUserList] = useState([]);
 
 	useEffect(() => {
-		fetch("http://localhost:5000/api/v1/users/")
+		fetch(
+			"https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/"
+		)
 			.then((res) => res.json())
 			.then((data) => {
 				setUserList(data.users);

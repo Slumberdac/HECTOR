@@ -12,7 +12,9 @@ const Rock = () => {
 	const [user, setUser] = useState({});
 	// fetch the rock data from the server and set the rock state
 	useEffect(() => {
-		fetch(`http://localhost:5000/api/v1/rocks/${rid}`)
+		fetch(
+			`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/rocks/${rid}`
+		)
 			.then((res) => {
 				if (res.ok) {
 					return res.json();
@@ -31,7 +33,7 @@ const Rock = () => {
 
 	const handleAdoption = () => {
 		fetch(
-			`http://localhost:5000/api/v1/users/${cookies.uuid}/rocks/${rock._id}`,
+			`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${cookies.uuid}/rocks/${rock._id}`,
 			{
 				method: "POST",
 				headers: {
@@ -58,7 +60,7 @@ const Rock = () => {
 
 	const handleAbandon = () => {
 		fetch(
-			`http://localhost:5000/api/v1/users/${cookies.uuid}/rocks/${rock._id}`,
+			`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${cookies.uuid}/rocks/${rock._id}`,
 			{
 				method: "DELETE",
 				headers: {
@@ -84,12 +86,15 @@ const Rock = () => {
 	};
 	const handleDelete = () => {
 		if (window.confirm("Are you sure you want to delete this rock?")) {
-			fetch(`http://localhost:5000/api/v1/rocks/${rock._id}`, {
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			})
+			fetch(
+				`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/rocks/${rock._id}`,
+				{
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			)
 				.then((res) => {
 					if (res.ok) {
 						alert(`${rock.name} forever lost; the way home`);

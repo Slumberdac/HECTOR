@@ -13,7 +13,9 @@ const User = () => {
 
 	// fetch the user data from the server and set the user state
 	useEffect(() => {
-		fetch(`http://localhost:5000/api/v1/users/${uid}`)
+		fetch(
+			`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${uid}`
+		)
 			.then((res) => {
 				if (res.ok) {
 					return res.json();
@@ -34,7 +36,9 @@ const User = () => {
 	);
 	// fetch the rocks data from the server and filters the list to the rocks the user owns
 	useEffect(() => {
-		fetch(`http://localhost:5000/api/v1/rocks/`)
+		fetch(
+			`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/rocks/`
+		)
 			.then((res) => res.json())
 			.then((data) => {
 				setRockList(data.rocks.filter((rock) => rock.owner === uid));
