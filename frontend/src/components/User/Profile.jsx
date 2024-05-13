@@ -62,7 +62,8 @@ export default function Profile() {
 				<div className="buttons">
 					{/* Button to reroll pfp features */}
 					<button
-						onClick={() => {
+						onClick={(e) => {
+							e.preventDefault();
 							const pfp_eyes = Math.floor(Math.random() * 16) + 1;
 							const pfp_mouth =
 								Math.floor(Math.random() * 14) + 1;
@@ -106,9 +107,9 @@ export default function Profile() {
 					</button>
 					{/* button to sign out which clears the cookies */}
 					<button
-						onClick={() => {
+						onClick={(e) => {
+							e.preventDefault();
 							removeCookie("uuid");
-
 							window.location.href = "/";
 						}}
 					>

@@ -14350,7 +14350,7 @@
 											children: [
 												(0, Ne.jsx)("input", {
 													type: "text",
-													placeholder: "Rechercher",
+													placeholder: "Filter",
 													value: u,
 													onChange: (e) =>
 														c(e.target.value),
@@ -14510,7 +14510,7 @@
 						(0, Ne.jsx)("h1", { children: "Rocks Registry" }),
 						(0, Ne.jsx)("input", {
 							type: "text",
-							placeholder: "Rechercher",
+							placeholder: "Filter",
 							value: r,
 							onChange: (e) => a(e.target.value),
 							className: "search-bar",

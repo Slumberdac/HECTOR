@@ -88,23 +88,23 @@
 	right: 20px;
 	width: 20%;
 	height: 70%;
-
 	/* add an outline */
 	border: 2px solid black;
 	border-radius: 15px;
 	padding: 10px;
 	overflow-y: auto;
 }
-.rock-card-container-profile .rock-card {
+.rock-card-container-profile .rock-link .rock-card-container {
     list-style-type: none;
     width: 80%;
-    height: 50%;
+	height: 200px;
     margin: auto;
-    margin-bottom: 70px;
+    /* margin-bottom: 70px; */
 }
 .rock-card-container-profile .rock-card img {
-    width: 80%;
-    height: 80%;
+    width: 250px;
+    height: 100px;
+	margin-top: 40px;
 }
 .rock-card-container-profile .rock-card #name {
     font-size: 1.5em;

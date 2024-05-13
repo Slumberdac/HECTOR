@@ -59,7 +59,7 @@ const User = () => {
 				<div className="rock-list-container">
 					<input
 						type="text"
-						placeholder="Rechercher"
+						placeholder="Filter"
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}
 						className="search-bar"
