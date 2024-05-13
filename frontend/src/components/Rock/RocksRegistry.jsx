@@ -22,7 +22,7 @@ export default function RocksRegistry() {
 	);
 	return (
 		<div className="rocks-registry-container">
-			<h1>Rocks Registry</h1>
+			<h1>Companion Registry</h1>
 			<input
 				type="text"
 				placeholder="Rechercher"

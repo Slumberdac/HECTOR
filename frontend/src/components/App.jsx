@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Nav from "./Navigation/Nav";
 import Welcome from "./Welcome/Welcome";
 import UsersRegistry from "./User/UsersRegistry";
-import User from ".//User/User";
+import User from "./User/User";
 import RocksRegistry from "./Rock/RocksRegistry";
 import Rock from "./Rock/Rock";
 import Profile from "./User/Profile";

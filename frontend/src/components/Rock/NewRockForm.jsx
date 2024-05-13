@@ -39,7 +39,7 @@ const NewRockForm = () => {
 	return (
 		<div className="new-rock-form">
 			<form>
-				<h1>New Rock</h1>
+				<h1>New Companion</h1>
 				<input
 					type="text"
 					placeholder="Name"
