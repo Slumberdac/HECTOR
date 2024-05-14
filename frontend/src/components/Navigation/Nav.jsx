@@ -10,10 +10,10 @@ import "./Nav.css";
 import { useCookies } from "react-cookie";
 function Nav() {
 	const [cookies, setCookie, removeCookie] = useCookies(["uuid"]);
-	const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-	const [user, setUser] = React.useState({});
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [user, setUser] = useState({});
 
-	React.useEffect(() => {
+	useEffect(() => {
 		// if a uuid is stored in cookies, set isLoggedIn to true
 		if (cookies.uuid && cookies.uuid !== "undefined") {
 			fetch(
@@ -35,7 +35,7 @@ function Nav() {
 	}, []);
 
 	/* if logo is hovered, set color prop to white, else black */
-	const [color, setColor] = React.useState("#050604");
+	const [color, setColor] = useState("#050604");
 	const handleHover = () => {
 		setColor("#222");
 	};

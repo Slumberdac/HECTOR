@@ -16,9 +16,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{basic_url}}/users/:userId",
+							"raw": "{{prod_url}}/users/:userId",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"users",
@@ -27,7 +27,7 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "{{user_id}}"
+									"value": ""
 								}
 							]
 						}
@@ -40,9 +40,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{basic_url}}/users",
+							"raw": "{{prod_url}}/users",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"users"
@@ -74,7 +74,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Loic\",\r\n\t\"username\": \"Pwel\",\r\n\t\"password\": \"Passw0rd!\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Loic\",\r\n\t\"username\": \"Pwel1\",\r\n\t\"password\": \"Passw0rd\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -82,9 +82,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{basic_url}}/users/register",
+							"raw": "{{prod_url}}/users/register",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"users",
@@ -109,9 +109,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{basic_url}}/users/signin",
+							"raw": "{{prod_url}}/users/signin",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"users",
@@ -136,9 +136,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{basic_url}}/users/:userId",
+							"raw": "{{prod_url}}/users/:userId",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"users",
@@ -147,7 +147,7 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "{{user_id}}"
+									"value": ""
 								}
 							]
 						}
@@ -178,9 +178,9 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{basic_url}}/users/:userId",
+							"raw": "{{prod_url}}/users/:userId",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"users",
@@ -202,9 +202,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{basic_url}}/users/:userId/rocks",
+							"raw": "{{prod_url}}/users/:userId/rocks",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"users",
@@ -227,9 +227,9 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{basic_url}}/users/:userId/rocks/:rockId",
+							"raw": "{{prod_url}}/users/:userId/rocks/:rockId",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"users",
@@ -257,9 +257,9 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{basic_url}}/users/:userId/rocks/:rockId",
+							"raw": "{{prod_url}}/users/:userId/rocks/:rockId",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"users",
@@ -292,9 +292,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{basic_url}}/rocks/:rockId",
+							"raw": "{{prod_url}}/rocks/:rockId",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"rocks",
@@ -316,9 +316,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{basic_url}}/rocks",
+							"raw": "{{prod_url}}/rocks",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"rocks"
@@ -350,7 +350,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"peter\",\r\n    \"gender\": \"rock\",\r\n    \"personality\": \"quite rocky\",\r\n    \"description\": \"stone type of rock\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Grant\",\r\n    \"gender\": \"Male\",\r\n    \"personality\": \"Theatrical, loves to climb\",\r\n    \"description\": \"Has a lot of colorful highlights\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -358,9 +358,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{basic_url}}/rocks",
+							"raw": "{{prod_url}}/rocks",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"rocks"
@@ -376,7 +376,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"image\": \"https://mcusercontent.com/0433afe635fdac757a8565904/images/245832a8-e43a-401c-b888-9c187e687633.png\"\r\n}",
+							"raw": "{\r\n    \"owner\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -384,9 +384,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{basic_url}}/rocks/:rockId",
+							"raw": "{{prod_url}}/rocks/:rockId",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"rocks",
@@ -395,7 +395,7 @@
 							"variable": [
 								{
 									"key": "rockId",
-									"value": "{{rock_id}}"
+									"value": ""
 								}
 							]
 						}
@@ -427,9 +427,9 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{basic_url}}/rocks/:rockId",
+							"raw": "{{prod_url}}/rocks/:rockId",
 							"host": [
-								"{{basic_url}}"
+								"{{prod_url}}"
 							],
 							"path": [
 								"rocks",
@@ -438,7 +438,7 @@
 							"variable": [
 								{
 									"key": "rockId",
-									"value": "{{rock_id}}"
+									"value": ""
 								}
 							]
 						}
@@ -482,6 +482,11 @@
 		{
 			"key": "basic_url",
 			"value": "localhost:5000/api/v1"
+		},
+		{
+			"key": "prod_url",
+			"value": "https://foura5-projet-synthese-gacoic.onrender.com/api/v1",
+			"type": "string"
 		}
 	]
 }
