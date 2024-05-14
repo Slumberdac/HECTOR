@@ -64,7 +64,7 @@ export default function SignUp() {
 				setCookie("uuid", data.user);
 
 				// Redirect to the home page
-				window.location.href = "/";
+				window.location.reload();
 			})
 			.catch((err) => {
 				alert(err);

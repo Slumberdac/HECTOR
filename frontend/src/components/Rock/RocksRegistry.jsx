@@ -31,10 +31,10 @@ export default function RocksRegistry() {
 				className="search-bar"
 			/>
 			<ul className="rocks-registry">
+				<AddRockCard />
 				{filteredList?.map((rock) => (
 					<RockCard key={rock._id} rock={rock} />
 				))}
-				<AddRockCard />
 			</ul>
 		</div>
 	);

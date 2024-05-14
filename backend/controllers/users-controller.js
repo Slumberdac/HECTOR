@@ -165,7 +165,7 @@ const deleteUserById = async (req, res, next) => {
 		}
 		res.status(200).json({ message: "User deleted" });
 		// set all rocks owned by user to null
-		await Rock.updateMany({ owner: userId }, { owner: undefined }).exec();
+		await Rock.updateMany({ owner: userId }, { owner: null }).exec();
 	} catch (e) {
 		const err = new HttpError("A database error occured", 500);
 		return next(err);

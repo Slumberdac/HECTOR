@@ -24,40 +24,37 @@
 	font-size: 6em;
 	position: relative;
 	width: fit-content;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 0px;
-	margin-bottom: 0px;
+	margin: 0 auto;
+	text-align: center;
+	max-width: 100%;
+	word-wrap: break-word;
 }
 .rock-info h2 {
 	font-family: Omori;
 	font-size: 3em;
 	position: relative;
 	width: fit-content;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 0px;
-	margin-bottom: 0px;
+	margin: 0 auto;
+	max-width: 100%;
+	word-wrap: break-word;
 }
 .rock-info h3 {
 	font-family: Omori;
 	font-size: 2em;
 	position: relative;
 	width: fit-content;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 0px;
-	margin-bottom: 0px;
+	margin: 0 auto;
+	max-width: 100%;
+	word-wrap: break-word;
 }
 .rock-info p {
 	font-family: Omori;
 	font-size: 1.5em;
 	position: relative;
 	width: fit-content;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 0px;
-	margin-bottom: 0px;
+	margin: 0 auto;
+	max-width: 100%;
+	word-wrap: break-word;
 }
 
 .rock-info img {
@@ -68,6 +65,7 @@
 .rock-info .svg-missing-image {
 	width: 280px;
 	margin: 0 auto;
+	max-width: 80%;
 }
 .rock-info .buttons {
 	display: flex;

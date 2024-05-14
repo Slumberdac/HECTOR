@@ -49,7 +49,7 @@ export default function SignIn() {
 				setCookie("uuid", data.user);
 
 				// Redirect to the home page
-				window.location.href = "/";
+				window.location.reload();
 			})
 			.catch((err) => {
 				console.log(error);

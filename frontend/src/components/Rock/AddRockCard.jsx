@@ -7,16 +7,15 @@ const AddRockCard = () => {
 	const [showForm, setShowForm] = useState(false);
 
 	const handleAddRockClick = () => {
+		console.log("Add rock clicked");
 		setShowForm(true);
 	};
 
 	return (
-		<li className="rock-card">
+		<li className="rock-card" onClick={handleAddRockClick}>
 			<Card className="rock-card-container">
 				<div className="image-container">
-					<div className="add-rock" onClick={handleAddRockClick}>
-						+
-					</div>
+					<div className="add-rock">+</div>
 				</div>
 			</Card>
 			{showForm && <NewRockForm />}

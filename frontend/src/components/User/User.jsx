@@ -55,15 +55,16 @@ const User = () => {
 				/>
 				<h1 id="username">{user.username}</h1>
 			</div>
+
+			<input
+				type="text"
+				placeholder="Filter"
+				value={searchTerm}
+				onChange={(e) => setSearchTerm(e.target.value)}
+				className="search-bar"
+			/>
 			{filteredList?.length > 0 ? (
 				<div className="rock-list-container">
-					<input
-						type="text"
-						placeholder="Filter"
-						value={searchTerm}
-						onChange={(e) => setSearchTerm(e.target.value)}
-						className="search-bar"
-					/>
 					<ul className="rock-list">
 						{filteredList?.map((rock) => (
 							<RockCard key={rock._id} rock={rock} />

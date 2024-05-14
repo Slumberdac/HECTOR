@@ -93,7 +93,7 @@ export default function Profile() {
 							)
 								.then((res) => {
 									if (res.ok) {
-										window.location.href = "/";
+										window.location.reload();
 									} else {
 										throw new Error("Failed to reroll pfp");
 									}
@@ -110,7 +110,7 @@ export default function Profile() {
 						onClick={(e) => {
 							e.preventDefault();
 							removeCookie("uuid");
-							window.location.href = "/";
+							window.location.reload();
 						}}
 					>
 						Sign Out
@@ -133,7 +133,7 @@ export default function Profile() {
 									.then((res) => {
 										if (res.ok) {
 											removeCookie("uuid");
-											window.location.href = "/";
+											window.location.reload();
 										} else {
 											throw new Error(
 												"Failed to delete account"
