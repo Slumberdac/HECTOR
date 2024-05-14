@@ -33,7 +33,14 @@ export default function RocksRegistry() {
 			<ul className="rocks-registry">
 				<AddRockCard />
 				{filteredList?.map((rock) => (
-					<RockCard key={rock._id} rock={rock} />
+					!rock.owner && (
+						<RockCard key={rock._id} rock={rock} />
+					)
+				))}
+				{filteredList?.map((rock) => (
+					rock.owner && (
+						<RockCard key={rock._id} rock={rock} />
+					)
 				))}
 			</ul>
 		</div>
