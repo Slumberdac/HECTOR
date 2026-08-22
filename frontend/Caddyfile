@@ -23,17 +23,35 @@
 		# links.
 		Content-Security-Policy "default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
 
-		# Hashed asset filenames are immutable; index.html must never be cached
-		# or a deploy would not reach anyone.
-		?Cache-Control "public, max-age=3600"
 		-Server
 	}
 
+	# Caching, and the reason it is three rules rather than a default plus
+	# exceptions. This block used to end with `?Cache-Control "public,
+	# max-age=3600"`, which applies to every response the site produces, the
+	# proxied API included. That put a one hour public cache on API replies:
+	# a browser that had loaded the page kept serving its own stale JSON, so
+	# adopting a companion on one machine was invisible on every other until
+	# the hour was up, while the write itself went through and answered that
+	# the companion was already taken. `public` was the worse half, since it
+	# permits a shared cache to store an authenticated reply and hand it to
+	# somebody else.
+	#
+	# Only the hashed asset filenames are safe to cache, and they are safe
+	# forever. Everything else is either the shell, which has to be revalidated
+	# or a deploy never reaches anyone, or the API, which must not be stored at
+	# all. The API sets its own no-store as well; this is the belt to that
+	# pair of braces.
 	@immutable path /assets/*
 	header @immutable Cache-Control "public, max-age=31536000, immutable"
 
-	@html path / /index.html
-	header @html Cache-Control "no-cache"
+	@api path /api/*
+	header @api Cache-Control "no-store"
+
+	# Deep links such as /rocks/<id> are served the shell too, and the old rule
+	# matched only / and /index.html, so those were the ones cached for an hour.
+	@shell not path /assets/* /api/*
+	header @shell Cache-Control "no-cache"
 
 	# Same-origin API. This is what lets the session cookie be SameSite=strict
 	# and removes CORS from the picture entirely.

@@ -60,6 +60,18 @@ function createApp() {
 		app.use(pinoHttp({ logger }));
 	}
 
+	// Nothing this API returns may be stored, by a browser or by anything in
+	// between. Every response is either personal (who am I, which companions
+	// are mine) or live state another visitor can change a second later. The
+	// API used to emit no caching directive at all, which left the decision to
+	// whatever the proxy in front stamped on and to browser heuristics: two
+	// browsers would then disagree about who owns what, and only the one that
+	// made the change saw the truth.
+	app.use(["/api", "/healthz"], (req, res, next) => {
+		res.set("Cache-Control", "no-store");
+		next();
+	});
+
 	// Liveness/readiness probe for Docker and for uptime monitoring.
 	app.get("/healthz", (req, res) => {
 		const dbUp = mongoose.connection.readyState === 1;

@@ -110,3 +110,28 @@ test("oversized JSON bodies are rejected", async () => {
 		.send(JSON.stringify({ name: "x".repeat(20000) }));
 	assert.equal(res.status, 413);
 });
+
+test("every API response forbids caching", async () => {
+	// A cached API response is a wrong answer with a long life: one browser
+	// keeps serving its stale copy of who owns what while another has already
+	// changed it, and `public` would let a shared cache hand one visitor's
+	// /auth/me to somebody else.
+	// These four answer without a query, which is what keeps the file's
+	// no-database rule intact: a route that reached mongoose here would sit
+	// out the buffer timeout before replying.
+	const cases = [
+		["get", "/api/v1/auth/me"],
+		["post", "/api/v1/rocks"],
+		["get", "/api/v1/no-such-route"],
+		["get", "/healthz"],
+	];
+
+	for (const [method, path] of cases) {
+		const res = await request(app)[method](path).send({});
+		assert.equal(
+			res.headers["cache-control"],
+			"no-store",
+			`${method.toUpperCase()} ${path} (status ${res.status})`
+		);
+	}
+});
