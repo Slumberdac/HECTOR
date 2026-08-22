@@ -1,114 +1,175 @@
+/* Every part of this panel used to be absolutely positioned: the avatar pinned
+   left, the heading pinned right, the rock list pinned right at 20% wide and
+   70% tall. Nothing could reflow, so below about 1100px the three overlapped.
+   It is a grid now, one column on small screens and three on large. */
+
 .profile-container {
-	justify-content: center;
-	align-items: center;
-	padding: 0;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-areas:
+		"pfp"
+		"info"
+		"rockstitle"
+		"rocks";
+	justify-items: center;
+	gap: clamp(12px, 2vw, 24px);
+
 	color: var(--text);
 	font-family: Omori;
-	display: flex;
-	flex-direction: column;
 	position: relative;
 	background-color: var(--background);
 	box-shadow: 0 0 2em 0.5em rgba(0, 0, 0, 1);
-	height: 100%;
-	padding-bottom: 25px;
-	width: 90%;
-	margin: 112px auto;
+	padding: clamp(16px, 3vw, 32px);
+	width: min(90%, 1400px);
+	margin: clamp(24px, 6vw, 112px) auto;
 	z-index: 1;
 	backdrop-filter: blur(5px);
 }
+
+.profile-container > .pfp {
+	grid-area: pfp;
+	position: relative;
+	top: auto;
+	left: auto;
+	transform: none;
+	margin: 0;
+	width: clamp(120px, 30vw, 200px);
+	height: auto;
+}
+
+.profile-container .profile-info {
+	grid-area: info;
+	width: 100%;
+	min-width: 0;
+}
+
 .profile-container .profile-info > * {
 	position: relative;
 	width: 100%;
 	display: flex;
 	justify-content: center;
 }
-.profile-container .profile-info h1 {
-	color: var(--background);
-	font-size: 8rem;
-	/* add black outline */
-	text-shadow:
-		-3px -3px 0 #000,
-		3px -3px 0 #000,
-		-3px 3px 0 #000,
-		3px 3px 0 #000;
-	text-align: center;
-	margin: -20px auto;
-}
+
 .profile-container .profile-info h2 {
 	color: var(--text);
-	font-size: 3rem;
+	font-size: var(--heading);
 	text-align: center;
 	margin: 0 auto;
+	overflow-wrap: anywhere;
 }
+
 .profile-info .buttons {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: center;
-	align-items: center;
+	gap: 12px;
 	width: 100%;
+	margin-top: 16px;
 }
+
 .profile-info .buttons button {
-	display: inline-block;
-	margin: 0 10px;
-	width: 150px;
-	height: fit-content;
+	flex: 0 1 auto;
+	min-width: 140px;
+	min-height: var(--tap);
 	padding: 10px;
-	font-size: 1.5em;
+	font-size: clamp(1rem, 2.6vw, 1.5em);
 	font-family: Omori;
 	background-color: var(--secondary);
 	border: 3px solid black;
 	border-radius: 15px;
 	transition: all 0.15s ease-in-out;
 }
-.profile-info .buttons button:hover {
+
+.profile-info .buttons button:hover:not(:disabled) {
 	cursor: pointer;
 	transform: scale(1.1);
 	background-color: var(--accent);
 }
-.profile-container > .pfp {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	left: 20px;
-	margin: 0;
-	width: 200px;
-	height: 200px;
+
+.profile-info .buttons button:disabled {
+	opacity: 0.6;
+	cursor: progress;
 }
+
 #your-rocks {
-	z-index: 1;
-	position: absolute;
-	top: 0;
-	right: 60px;
+	grid-area: rockstitle;
+	position: relative;
+	top: auto;
+	right: auto;
 	font-family: Omori;
-	font-size: 3rem;
+	font-size: var(--heading);
 	text-align: center;
-	margin: 0 auto;
+	margin: 0;
 	color: var(--text);
 }
+
 .rock-card-container-profile {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-45%);
-	right: 20px;
-	width: 20%;
-	height: 70%;
-	/* add an outline */
+	grid-area: rocks;
+	position: relative;
+	top: auto;
+	right: auto;
+	transform: none;
+	width: 100%;
+	max-height: min(60vh, 460px);
 	border: 2px solid black;
 	border-radius: 15px;
 	padding: 10px;
 	overflow-y: auto;
 }
+
+.rock-card-container-profile ul {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(160px, 100%), 1fr));
+	gap: 12px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.rock-card-container-profile .rock-card {
+	width: 100%;
+	margin: 0;
+}
+
 .rock-card-container-profile .rock-link .rock-card-container {
 	list-style-type: none;
-	width: 80%;
-	height: 200px;
-	margin: auto;
-	/* margin-bottom: 70px; */
+	width: 100%;
+	height: auto;
+	margin: 0;
 }
+
+.rock-card-container-profile .rock-card .image-container {
+	aspect-ratio: 4 / 3;
+}
+
 .rock-card-container-profile .rock-card img {
-	width: 250px;
-	height: 100px;
-	margin-top: 40px;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	object-fit: cover;
 }
+
 .rock-card-container-profile .rock-card #name {
-	font-size: 1.5em;
+	font-size: clamp(0.95rem, 2.4vw, 1.5em);
+}
+
+/* Wide enough for the three-column arrangement the design was drawn for. */
+@media (min-width: 900px) {
+	.profile-container {
+		grid-template-columns: auto minmax(0, 1fr) minmax(220px, 26%);
+		grid-template-areas:
+			"pfp info rockstitle"
+			"pfp info rocks";
+		align-items: center;
+		justify-items: stretch;
+		column-gap: clamp(20px, 3vw, 40px);
+	}
+
+	.profile-container > .pfp {
+		justify-self: center;
+	}
+
+	#your-rocks {
+		align-self: end;
+	}
 }

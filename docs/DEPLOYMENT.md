@@ -398,16 +398,23 @@ docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/out" mongo:8 mongodump \
   --uri "mongodb+srv://tmp_export:PASSWORD@hector.lnv1yey.mongodb.net/test" \
   --gzip --archive=/out/hector-v1.archive.gz
 
-# Restore straight into FerretDB over the wire protocol.
+# Restore straight into FerretDB over the wire protocol. Note there is no
+# database in the connection: mongorestore reads one as --db, which filters an
+# archive restore and would silently match nothing.
 set -a && source .env && set +a
-docker compose run --rm --entrypoint mongorestore -v "$PWD:/in" mongo:8 \
-  --uri "mongodb://$POSTGRES_USER:$POSTGRES_PASSWORD@ferretdb:27017/hector" \
-  --gzip --archive=/in/hector-v1.archive.gz --nsFrom 'test.*' --nsTo 'hector.*'
+docker run --rm --network hector_internal -v "$PWD:/in" \
+  --entrypoint mongorestore mongo:8 \
+  --host ferretdb:27017 \
+  --username "$POSTGRES_USER" --password "$POSTGRES_PASSWORD" \
+  --authenticationDatabase admin \
+  --gzip --archive=/in/hector-v1.archive.gz \
+  --nsInclude 'test.*' --nsFrom 'test.*' --nsTo 'hector.*'
 
 # Convert v1 documents to the v2 shape: bcrypt the plaintext passwords,
 # normalise owners, build the unique index.
-npm run migrate:v1 -- --dry-run     # reports what it would change
-npm run migrate:v1
+docker compose exec api node backend/scripts/migrate-from-v1.js --dry-run
+docker compose exec api node backend/scripts/migrate-from-v1.js
+docker compose exec api node backend/scripts/check-database.js
 docker compose restart api
 ```
 

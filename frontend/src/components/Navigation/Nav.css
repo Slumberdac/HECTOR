@@ -1,166 +1,180 @@
 @font-face {
 	font-family: Omori;
 	src: url("../../assets/fonts/OMORI_GAME2.ttf");
-}
-
-body {
-	margin: 0;
+	font-display: swap;
 }
 
 .nav-container {
-	position: absolute;
+	/* Was position: absolute with width: 100%, which took the bar out of flow
+	   and left it unable to react to anything. It is an ordinary block now. */
+	position: relative;
 	width: 100%;
-	min-height: 100%;
+	min-height: 100vh;
 	backdrop-filter: blur(5px);
 }
+
+/* The bar is a three-part flex row: logo, links, avatar. Previously the logo
+   and avatar were absolutely positioned on top of the links, so on any narrow
+   screen they sat over the first and last nav item. */
 .nav-container nav {
 	position: sticky;
 	top: 0;
-	width: 100%;
-	height: 6em;
-	background-color: var(--secondary);
-	transition: all 0.15s ease-in-out;
 	z-index: 1000;
+	display: flex;
+	align-items: center;
+	gap: clamp(6px, 2vw, 24px);
+	padding: clamp(6px, 1.5vw, 12px) clamp(8px, 3vw, 32px);
+	min-height: clamp(56px, 11vw, 6em);
+	background-color: var(--secondary);
+	transition:
+		min-height 0.15s ease-in-out,
+		padding 0.15s ease-in-out;
 }
+
 .nav-container nav .logo {
-	position: absolute;
-	top: 7%;
-	left: 3%;
-	width: 90px;
-	transition: all 0.15s ease-in-out;
+	position: static;
+	flex: none;
+	width: clamp(40px, 8vw, 90px);
+	transition: transform 0.15s ease-in-out;
 }
+
 .nav-container nav .logo:hover {
 	cursor: pointer;
 	transform: scale(1.1);
 }
+
 .nav-container nav ul {
+	flex: 1 1 auto;
+	min-width: 0;
 	list-style-type: none;
-	/* list items side by side justified */
 	display: flex;
-	justify-content: space-evenly;
-	margin: 0;
-	/* remove default underline */
-	text-decoration: none;
-	border-radius: 5px;
-	/* center items vertically */
+	flex-wrap: wrap;
+	justify-content: center;
 	align-items: center;
+	gap: clamp(4px, 1.5vw, 18px);
+	margin: 0;
+	padding: 0;
 }
+
 .nav-container nav ul li {
-	margin-top: 20px;
 	font-family: omori;
-	font-size: 2em;
-	/* remove default underline */
-	text-decoration: none;
+	/* Four items with 3px borders at a flat 2em overflowed a phone by 300px. */
+	font-size: clamp(0.85rem, 3.4vw, 2em);
 	transition: all 0.15s ease-in-out;
-	/* add a box around */
-	border: 3px solid black;
-	border-radius: 15px;
-	padding: 0 10px;
+	border: clamp(2px, 0.4vw, 3px) solid black;
+	border-radius: clamp(8px, 1.5vw, 15px);
+	padding: clamp(2px, 0.6vw, 4px) clamp(5px, 1.4vw, 10px);
+	white-space: nowrap;
 }
+
 .nav-container nav ul li:hover {
 	cursor: pointer;
-	/* text-shadow: 0 0 5px black; */
-	transform: scale(1.2);
+	transform: scale(1.15);
 	background-color: var(--accent);
-	/* shadow to the boxes */
 	box-shadow: 0 0 10px black;
 }
+
 .nav-container nav ul li a {
 	text-decoration: none;
 	color: white;
 }
+
 .nav-container nav ul li a h1 {
 	margin: 0;
+	font-size: inherit;
+	font-weight: inherit;
 }
-.nav-container a > .pfp {
-	position: absolute;
-	top: 14%;
-	right: 2%;
-	width: 65px;
-	height: 65px;
-	transition: all 0.15s ease-in-out;
+
+/* Avatar, and the placeholder shown when signed out. Both are flow items now,
+   sized off one custom property so the two stay in step. */
+.nav-container nav .nav-button {
+	--avatar: clamp(38px, 8vw, 65px);
+	flex: none;
+	display: block;
+	width: var(--avatar);
+	height: var(--avatar);
 }
-.nav-container a > .pfp:hover {
+
+.nav-container nav .nav-button > .pfp,
+.nav-container nav .nav-button .missing-pfp {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.nav-container nav .nav-button:hover .pfp,
+.nav-container nav .nav-button:hover .missing-pfp {
 	cursor: pointer;
 	transform: scale(1.1);
 }
 
-/* minimize navbar */
-.scrolled nav {
-	position: sticky;
-	top: 0;
-	width: 100%;
-	transform: scaleZ(0.75) translateY(-10%);
-}
-.scrolled nav ul li {
-	font-size: 1.5em;
-	margin-top: 10px;
-	transform: translateY(50%);
-}
-.scrolled nav .logo {
-	width: 60px;
-	top: 10%;
-	margin-left: 2em;
-	transform: translateY(30%);
-}
-.scrolled nav .logo:hover {
-	transform: scale(1.2) translateY(-0.01%);
-}
-.scrolled nav a > .pfp {
-	top: 18%;
-	width: 50px;
-	height: 50px;
-	margin-top: -5px;
-	margin-right: 2em;
-	transform: translateY(30%);
-}
-.scrolled a > .pfp:hover {
-	transform: scale(1.1);
-}
 .missing-pfp {
-	position: absolute;
-	top: 14%;
-	right: 2%;
-	width: 65px;
-	height: 65px;
-	transition: all 0.15s ease-in-out;
+	position: relative;
+	transition: transform 0.15s ease-in-out;
 }
-.missing-pfp:hover {
-	transform: scale(1.1);
-	cursor: pointer;
-}
+
 .missing-pfp > * {
 	position: absolute;
+	inset: 0;
 	z-index: 2;
 }
-.question-mark {
-	position: absolute;
-	top: 23%;
-	left: 20%;
-	width: 40px;
-	height: 40px;
-}
-.scrolled .missing-pfp {
-	top: 18%;
-	width: 50px;
-	height: 50px;
-	margin-top: -5px;
-	margin-right: 2em;
-	transform: translateY(30%);
-}
-.scrolled .missing-pfp:hover {
-	transform: scale(1.1);
-}
-.scrolled .question-mark {
-	width: 30px;
-	height: 30px;
+
+.missing-pfp svg {
+	width: 100%;
+	height: 100%;
 }
 
-.scrolled nav ul li:hover {
-	cursor: pointer;
-	/* text-shadow: 0 0 5px black; */
-	transform: scale(1.1) translateY(40%);
-	background-color: var(--accent);
-	/* shadow to the boxes */
-	box-shadow: 0 0 10px black;
+/* Percentages rather than a fixed 40px, so the mark tracks the head it sits
+   inside at every size. */
+.question-mark {
+	position: absolute;
+	top: 22%;
+	left: 20%;
+	width: 60%;
+	height: 60%;
+}
+
+/* Scrolled state: the bar shrinks. The old version did it with translateY and
+   scaleZ hacks that fought the absolute positioning; now it is just a smaller
+   bar and smaller type. */
+.scrolled nav {
+	min-height: clamp(48px, 8vw, 4.5em);
+	padding-top: clamp(4px, 1vw, 8px);
+	padding-bottom: clamp(4px, 1vw, 8px);
+}
+
+.scrolled nav ul li {
+	font-size: clamp(0.8rem, 2.8vw, 1.5em);
+}
+
+.scrolled nav .logo {
+	width: clamp(34px, 6vw, 60px);
+}
+
+.scrolled nav .nav-button {
+	--avatar: clamp(32px, 6vw, 50px);
+}
+
+/* Below this the four links no longer fit beside the logo and avatar on one
+   line, so they get their own row underneath. */
+@media (max-width: 560px) {
+	.nav-container nav {
+		flex-wrap: wrap;
+		justify-content: space-between;
+		row-gap: 6px;
+	}
+
+	.nav-container nav ul {
+		order: 3;
+		flex-basis: 100%;
+		justify-content: space-evenly;
+	}
+
+	/* With a row to themselves they no longer need to be tiny, and they get
+	   enough padding to be a real tap target. */
+	.nav-container nav ul li,
+	.scrolled nav ul li {
+		font-size: clamp(1rem, 4.4vw, 1.4rem);
+		padding: 6px 10px;
+	}
 }

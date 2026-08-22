@@ -1,35 +1,47 @@
 @font-face {
 	font-family: Omori;
 	src: url("../../assets/fonts/OMORI_GAME2.ttf");
+	font-display: swap;
 }
 
 .user-card {
 	display: block;
-	margin: 10px;
-	transition: all 0.15s ease-in-out;
+	margin: 0;
+	transition: transform 0.15s ease-in-out;
 }
+
 .user-card-container {
-	overflow: auto;
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	/* Was overflow: auto, which gave each card its own scrollbar once the name
+	   was longer than the card. The name wraps instead now. */
+	overflow: hidden;
+	height: 100%;
 }
+
 .user-card-container > .pfp {
 	position: relative;
-	left: 0;
-	min-width: 90px;
-	height: 100px;
-	margin-right: 15px;
+	left: auto;
+	width: clamp(70px, 18vw, 90px);
+	height: auto;
+	margin: 0;
 }
 
 .user-card-container #username {
 	font-family: Omori;
-	font-size: 1.75em;
+	font-size: clamp(1.2rem, 4vw, 1.75em);
 	position: relative;
-	width: fit-content;
+	min-width: 0;
+	margin: 0;
+	overflow-wrap: anywhere;
 }
 
 a {
 	text-decoration: none;
 	color: var(--text);
 }
+
 .user-card:hover {
 	cursor: pointer;
 	box-shadow: 0 0 1em 0 black;

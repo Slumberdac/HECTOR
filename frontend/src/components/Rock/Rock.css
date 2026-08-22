@@ -1,100 +1,125 @@
 @font-face {
 	font-family: Omori;
 	src: url("../../assets/fonts/OMORI_GAME2.ttf");
+	font-display: swap;
 }
+
 .rock-container {
 	background-color: var(--background);
-	width: 80vw;
-	margin: 5vh 10vw;
-	padding: 20px;
+	width: min(90%, 1100px);
+	margin: clamp(20px, 5vh, 60px) auto;
+	padding: clamp(14px, 3vw, 24px);
 	border-radius: 6px;
 	box-shadow: 0 0 10px 0 black;
 }
+
 .rock-info {
-	display: flex;
-	width: max-content;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	max-width: 80%;
+	/* Was `width: max-content` with `display` declared twice, which made the
+	   panel as wide as its longest unbroken line and pushed the page sideways. */
+	width: 100%;
+	max-width: 700px;
+	margin: 0 auto;
 }
 
 .rock-info #name {
 	font-family: Omori;
-	font-size: 6em;
-	position: relative;
-	width: fit-content;
-	margin: 0 auto;
+	font-size: clamp(2rem, 9vw, 6em);
+	line-height: 1.05;
+	width: auto;
+	margin: 0 auto 0.2em;
 	text-align: center;
-	max-width: 100%;
-	word-wrap: break-word;
+	overflow-wrap: anywhere;
 }
+
 .rock-info h2 {
 	font-family: Omori;
-	font-size: 3em;
-	position: relative;
-	width: fit-content;
-	margin: 0 auto;
-	max-width: 100%;
-	word-wrap: break-word;
+	font-size: var(--heading);
+	width: auto;
+	margin: 0.3em auto;
+	text-align: center;
+	overflow-wrap: anywhere;
 }
+
 .rock-info h3 {
 	font-family: Omori;
-	font-size: 2em;
-	position: relative;
-	width: fit-content;
-	margin: 0 auto;
-	max-width: 100%;
-	word-wrap: break-word;
+	font-size: var(--subheading);
+	width: auto;
+	margin: 0.3em auto;
+	text-align: center;
+	overflow-wrap: anywhere;
 }
+
 .rock-info p {
 	font-family: Omori;
-	font-size: 1.5em;
-	position: relative;
-	width: fit-content;
-	margin: 0 auto;
-	max-width: 100%;
-	word-wrap: break-word;
+	font-size: clamp(1rem, 2.6vw, 1.5em);
+	width: auto;
+	margin: 0.5em auto;
+	text-align: center;
+	overflow-wrap: anywhere;
 }
 
 .rock-info img {
 	width: 100%;
-	height: 350px;
+	height: auto;
+	/* Was a fixed 350px tall, so a narrow screen cropped the photo to a strip. */
+	aspect-ratio: 3 / 2;
 	object-fit: cover;
+	border-radius: 4px;
 }
+
 .rock-info .svg-missing-image {
-	width: 280px;
+	width: min(280px, 80%);
 	margin: 0 auto;
-	max-width: 80%;
 }
+
+.rock-info .notice {
+	font-family: Omori;
+	text-align: center;
+	color: var(--text);
+}
+
 .rock-info .buttons {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: center;
+	gap: 12px;
+	margin-top: 16px;
 }
+
 .rock-info .buttons button {
-	display: inline-block;
-	margin: 10px 10px;
-	width: 150px;
-	height: 70px;
-	padding: 10px;
-	font-size: 2em;
+	flex: 0 1 auto;
+	min-width: 120px;
+	min-height: var(--tap);
+	padding: 10px 16px;
+	font-size: clamp(1.1rem, 3.5vw, 2em);
 	font-family: Omori;
-	/* background-color: var(--secondary); */
 	border: 3px solid black;
 	border-radius: 15px;
 	transition: all 0.15s ease-in-out;
 }
 
-.rock-info .buttons button:hover {
+.rock-info .buttons button:hover:not(:disabled) {
 	cursor: pointer;
 	transform: scale(1.1);
 	background-color: var(--accent);
 }
+
+.rock-info .buttons button:disabled {
+	opacity: 0.6;
+	cursor: progress;
+}
+
 .delete-button {
 	background-color: red;
 }
+
 .hammer {
-	width: 50px;
-	height: 47px;
-	margin: -5px auto 0 auto;
+	width: clamp(32px, 8vw, 50px);
+	margin: 0 auto;
+}
+
+.hammer svg {
+	width: 100%;
+	height: auto;
+	display: block;
 }

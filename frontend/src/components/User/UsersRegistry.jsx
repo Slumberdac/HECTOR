@@ -38,7 +38,7 @@ export default function UsersRegistry() {
 			/>
 			{loading && <p>Loading…</p>}
 			{error && <p className="error">{error}</p>}
-			<div className="users-registry">
+			<ul className="users-registry">
 				{filteredList.map((user) => (
 					<UserCard
 						key={user._id}
@@ -46,7 +46,7 @@ export default function UsersRegistry() {
 						className="user-card"
 					/>
 				))}
-			</div>
+			</ul>
 		</div>
 	);
 }

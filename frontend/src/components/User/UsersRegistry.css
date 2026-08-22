@@ -1,36 +1,21 @@
 .users-registry-container {
 	backdrop-filter: blur(5px);
-}
-.users-registry-container h1 {
-	font-family: Omori;
-	color: var(--background);
-	font-size: 8rem;
-	/* add black outline */
-	text-shadow:
-		-3px -3px 0 #000,
-		3px -3px 0 #000,
-		-3px 3px 0 #000,
-		3px 3px 0 #000;
-	text-align: center;
-	margin: -20px auto;
+	padding: clamp(12px, 3vw, 24px) var(--gutter) 50px;
 }
 
-.search-bar {
-	display: flex;
-	padding: 10px;
-	width: 30%;
-	margin: 0 auto 0 auto;
-	background-color: var(--background);
-}
-
+/* Same auto-fill grid as the companion registry. User cards are wider than
+   they are tall, so the track minimum is a little larger. */
 .users-registry {
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+	gap: var(--gutter);
 	margin-top: 20px;
+	padding: 0;
+	list-style: none;
 }
 
 .users-registry .user-card {
 	display: block;
-	width: 20.5%;
-	margin: 30px;
+	width: 100%;
+	margin: 0;
 }

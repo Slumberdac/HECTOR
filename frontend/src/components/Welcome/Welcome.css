@@ -1,101 +1,138 @@
 @font-face {
 	font-family: Omori;
 	src: url("../../assets/fonts/OMORI_GAME2.ttf");
+	font-display: swap;
 }
+
 .welcome-logo {
 	position: relative;
 	background-color: var(--background);
 	box-shadow: 0 0 2em 0.5em rgba(0, 0, 0, 1);
-	height: 600px;
-	padding-bottom: 25px;
-	width: 90%;
-	margin: 50px auto 0 auto;
+	/* Was a flat 600px, which left the logo floating in dead space on a phone
+	   and clipped the tagline on a short laptop. */
+	min-height: clamp(320px, 62vh, 600px);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: clamp(4px, 1vh, 16px);
+	padding: clamp(16px, 4vw, 32px) clamp(12px, 3vw, 24px) 25px;
+	width: min(90%, 1200px);
+	margin: clamp(20px, 5vw, 50px) auto 0 auto;
 	z-index: 1;
+	overflow: hidden;
 }
+
 .welcome-logo h1 {
 	position: relative;
 	font-family: Omori;
 	color: #fff;
-	font-size: 8rem;
-	/* add black outline */
-	text-shadow:
-		-3px -3px 0 #000,
-		3px -3px 0 #000,
-		-3px 3px 0 #000,
-		3px 3px 0 #000;
+	font-size: var(--title);
+	line-height: 1.05;
+	text-shadow: var(--outline);
 	text-align: center;
-	margin-bottom: -100px;
+	margin: 0;
 }
+
 .welcome-logo h2 {
 	position: relative;
 	font-family: Omori;
+	font-size: var(--subheading);
 	text-align: center;
+	margin: 0;
 }
 
 .welcome-logo .logo {
 	position: relative;
-	width: 350px;
-	height: 350px;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -46%);
+	width: clamp(150px, 40vw, 350px);
+	height: clamp(150px, 40vw, 350px);
+	transform: none;
+	top: auto;
+	left: auto;
 }
+
 .logo-text {
 	position: relative;
-	top: 10%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: fit-content;
 	font-family: Omori;
-	font-size: 3rem;
+	/* Was 3rem with 6rem drop caps and a translate that pushed it off-canvas;
+	   at 768px it hung 90px past both edges. */
+	font-size: clamp(1.1rem, 4.2vw, 3rem);
 	font-weight: bold;
-	margin-bottom: 0;
+	text-align: center;
+	margin: 0;
+	max-width: 100%;
+	overflow-wrap: break-word;
 }
+
 .logo-text .cap {
-	margin-left: 10px;
-	font-size: 6rem;
+	margin-left: clamp(2px, 0.5vw, 10px);
+	font-size: clamp(1.6rem, 7vw, 6rem);
 	font-weight: bold;
 	color: #fff;
 	text-shadow:
-		-2px -2px 0 #000,
-		2px -2px 0 #000,
-		-2px 2px 0 #000,
-		2px 2px 0 #000;
+		-0.022em -0.022em 0 #000,
+		0.022em -0.022em 0 #000,
+		-0.022em 0.022em 0 #000,
+		0.022em 0.022em 0 #000;
 }
+
 #number-1 {
 	position: relative;
-	top: 2%;
-	left: 50%;
-	transform: translate(-50%, -50%);
 	margin: 0;
-	font-size: 2.5em;
+	font-size: clamp(1.2rem, 4vw, 2.5em);
 	font-weight: bold;
 	font-family: Omori;
-	width: fit-content;
+	text-align: center;
 }
+
 .welcome-content {
 	display: flex;
+	align-items: center;
+	gap: clamp(16px, 3vw, 32px);
 	position: relative;
 	background-color: var(--background);
 	box-shadow: 0 0 2em 0.5em rgba(0, 0, 0, 1);
-	height: fit-content;
-	padding: 25px 0;
-	width: 90%;
-	margin: 0 auto 50px auto;
+	padding: 25px clamp(16px, 3vw, 32px);
+	width: min(90%, 1200px);
+	margin: 0 auto clamp(20px, 5vw, 50px) auto;
 	z-index: 1;
 	color: var(--text);
-	font: 1.2em Courier New;
+	font-family: "Courier New", monospace;
+	font-size: var(--body-size);
 	text-align: justify;
 }
+
 .welcome-content img {
-	width: 80vh;
-	height: 70vh;
-	margin: 2% 3%;
+	/* The width was set in vh, so a short wide window made the portrait wider
+	   than the panel holding it. */
+	width: min(40%, 420px);
+	height: auto;
+	aspect-ratio: 3 / 4;
+	object-fit: cover;
+	flex: none;
 }
+
 .welcome-content p {
-	margin-right: 3%;
-	/* put into columns */
+	margin: 0;
 	column-count: 2;
 	column-gap: 2em;
-	overflow: hidden;
+}
+
+/* One column of text beside the portrait stops being readable well before the
+   portrait stops fitting, so the text goes single-column first. */
+@media (max-width: 1000px) {
+	.welcome-content p {
+		column-count: 1;
+	}
+}
+
+@media (max-width: 700px) {
+	.welcome-content {
+		flex-direction: column;
+		text-align: left;
+	}
+
+	.welcome-content img {
+		width: min(70%, 320px);
+	}
 }

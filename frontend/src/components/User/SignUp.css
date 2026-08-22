@@ -1,17 +1,5 @@
 .signup-container {
-	padding: 20px 20px 23px 20px;
-}
-.signup-container h1 {
-	font-family: Omori;
-	color: var(--background);
-	font-size: 8rem;
-	text-shadow:
-		-3px -3px 0 #000,
-		3px -3px 0 #000,
-		-3px 3px 0 #000,
-		3px 3px 0 #000;
-	text-align: center;
-	margin: -30px auto 20px auto;
+	padding: clamp(16px, 4vw, 20px) var(--gutter) clamp(24px, 6vw, 23px);
 }
 
 .signup-container .signup-form {
@@ -19,34 +7,39 @@
 	flex-direction: column;
 	align-items: center;
 	background-color: var(--background);
-	padding: 20px;
+	padding: clamp(16px, 3vw, 24px);
 	border: 3px solid black;
 	border-radius: 15px;
-	width: 50%;
+	width: min(100%, 520px);
 	margin: 20px auto;
 }
+
 .signup-container .signup-form label {
 	font-family: Omori;
-	font-size: 1.5em;
+	font-size: clamp(1rem, 3vw, 1.5em);
 	margin: 10px;
 	text-align: center;
-	width: 70%;
+	max-width: 100%;
 }
+
 .signup-container .signup-form input {
-	width: 50%;
+	width: min(100%, 340px);
+	min-height: var(--tap);
 	padding: 10px;
 	margin: 10px;
-	font-size: 1.5em;
+	/* 16px is the threshold below which iOS Safari zooms the page on focus. */
+	font-size: max(16px, clamp(1rem, 3vw, 1.5em));
 	font-family: Omori;
 	border: 3px solid black;
 	border-radius: 15px;
 }
 
 .signup-container .signup-form button {
-	width: 50%;
+	width: min(100%, 340px);
+	min-height: var(--tap);
 	padding: 10px;
 	margin: 10px;
-	font-size: 1.5em;
+	font-size: clamp(1rem, 3vw, 1.5em);
 	font-family: Omori;
 	background-color: var(--secondary);
 	border: 3px solid black;
@@ -54,30 +47,36 @@
 	transition: all 0.15s ease-in-out;
 }
 
-.signup-container .signup-form button:hover {
+.signup-container .signup-form button:hover:not(:disabled) {
 	cursor: pointer;
-	transform: scale(1.1);
+	transform: scale(1.05);
+}
+
+.signup-container .signup-form button:disabled {
+	opacity: 0.6;
+	cursor: progress;
 }
 
 .signup-container .signup-form .error {
 	color: red;
-	font-size: 1.5em;
+	font-size: clamp(1rem, 3vw, 1.5em);
 	font-family: Omori;
 	margin: 10px;
+	text-align: center;
+	overflow-wrap: anywhere;
 }
 
 .signup-container p {
 	background-color: var(--background);
 	font-family: Omori;
-	font-size: 1.5em;
-	margin: 10px;
+	font-size: clamp(1rem, 3vw, 1.5em);
 	padding: 10px;
 	border: 3px solid black;
 	border-radius: 15px;
-	width: 50%;
+	width: min(100%, 520px);
 	text-align: center;
-	/* center */
 	margin: 0 auto;
+	overflow-wrap: anywhere;
 }
 
 .signup-container p a {
