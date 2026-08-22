@@ -1391,14 +1391,50 @@ docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/out" mongo:8 mongodump \
 						<button class="copy" type="button">Copy</button>
 					</div>
 					<pre><span class="c"># straight into FerretDB over the wire protocol</span>
-docker compose run --rm --entrypoint mongorestore -v "$PWD:/in" mongo:8 \
-  --uri "mongodb://$POSTGRES_USER:$POSTGRES_PASSWORD@ferretdb:27017/hector" \
-  --gzip --archive=/in/hector-v1.archive.gz --nsFrom 'test.*' --nsTo 'hector.*'
+docker run --rm --network hector_internal -v "$PWD:/in" \
+  --entrypoint mongorestore mongo:8 \
+  --host ferretdb:27017 \
+  --username "$POSTGRES_USER" --password "$POSTGRES_PASSWORD" \
+  --authenticationDatabase admin \
+  --gzip --archive=/in/hector-v1.archive.gz \
+  --nsInclude 'test.*' --nsFrom 'test.*' --nsTo 'hector.*'
 
 <span class="c"># bcrypt the plaintext passwords, normalise owners, build the index</span>
-npm run migrate:v1 -- --dry-run
-npm run migrate:v1
+docker compose exec api node backend/scripts/migrate-from-v1.js --dry-run
+docker compose exec api node backend/scripts/migrate-from-v1.js
+docker compose exec api node backend/scripts/check-database.js
 docker compose restart api</pre>
+				</div>
+
+				<div class="note stop">
+					<span class="note-label"
+						>No database in the restore connection</span
+					>
+					<p>
+						<code>mongorestore</code> reads a database in the
+						connection as <code>--db</code>, and
+						<code>--db</code> filters an archive restore to that
+						database. The archive holds <code>test.users</code> and
+						<code>test.rocks</code>, so a URI ending
+						<code>/hector</code> matches nothing and you get
+						<code>0 document(s) restored successfully</code> with no
+						error at all. The giveaway is mongorestore warning that
+						<code>--db and --collection flags are deprecated</code>
+						when you passed neither: that is the URI talking. Keep
+						<code>--host</code> and the credentials as separate
+						flags.
+					</p>
+					<p>
+						Also <code>docker run</code>, not
+						<code>docker compose run</code>: the latter takes a
+						service name from the compose file and answers
+						<code>no such service: mongo:8</code> when given an
+						image. Plain <code>docker run</code> needs
+						<code>--network hector_internal</code> to reach
+						<code>ferretdb</code>, and needs
+						<code>source .env</code> first because it does not
+						interpolate <code>.env</code> the way compose does.
+					</p>
 				</div>
 
 				<div class="note">

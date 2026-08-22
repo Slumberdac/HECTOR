@@ -145,11 +145,15 @@ the site stays empty, which is a confusing five minutes.
 Verify:
 
 ```bash
-docker compose run --rm --entrypoint mongosh mongo:8 \
+docker run --rm --network hector_internal --entrypoint mongosh mongo:8 \
   "mongodb://$POSTGRES_USER:$POSTGRES_PASSWORD@ferretdb:27017/hector" --quiet \
   --eval 'print("users:", db.users.countDocuments({}))' \
   --eval 'print("rocks:", db.rocks.countDocuments({}))'
 ```
+
+A database in the URI is fine here: `mongosh` uses it as the shell's starting
+`db`, which is what the two `countDocuments` calls want. It is only
+`mongorestore` that reads it as a namespace filter.
 
 ---
 
@@ -232,11 +236,15 @@ Rehearsing on a copy first is cheap:
 
 ```bash
 # restore into a scratch database, migrate, poke at it, drop it
-docker compose run --rm --entrypoint mongorestore -v "$PWD:/in" mongo:8 \
-  --uri "mongodb://$POSTGRES_USER:$POSTGRES_PASSWORD@ferretdb:27017/rehearsal" \
+docker run --rm --network hector_internal -v "$PWD:/in" \
+  --entrypoint mongorestore mongo:8 \
+  --host ferretdb:27017 \
+  --username "$POSTGRES_USER" --password "$POSTGRES_PASSWORD" \
+  --authenticationDatabase admin \
   --gzip --archive=/in/hector-v1.archive.gz \
-  --nsFrom 'test.*' --nsTo 'rehearsal.*'
+  --nsInclude 'test.*' --nsFrom 'test.*' --nsTo 'rehearsal.*'
 
-MONGODB_URI="mongodb://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:27017/rehearsal" \
-  npm run migrate:v1 -- --dry-run
+docker compose exec \
+  -e MONGODB_URI="mongodb://$POSTGRES_USER:$POSTGRES_PASSWORD@ferretdb:27017/rehearsal" \
+  api node backend/scripts/migrate-from-v1.js --dry-run
 ```
