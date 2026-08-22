@@ -1,0 +1,6 @@
+node_modules
+frontend/build
+frontend/src/assets
+package-lock.json
+*.excalidraw
+*.pdf
