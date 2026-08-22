@@ -1621,6 +1621,80 @@ docker compose up -d</pre>
 				</details>
 
 				<details class="symptom">
+					<summary>
+						<code
+							>dependency failed to start: container
+							hector-mongo-1 is unhealthy</code
+						>
+					</summary>
+					<div class="symptom-body">
+						<p>
+							The other three containers are fine; mongo did not
+							come up. The message says nothing useful on its own,
+							so read the log.
+						</p>
+
+						<div class="cmd">
+							<div class="cmd-bar">
+								<span class="cmd-where">pi · ~/HECTOR</span>
+								<button class="copy" type="button">Copy</button>
+							</div>
+							<pre>
+docker compose logs mongo | tail -40
+docker inspect --format '{{json .State.Health}}' hector-mongo-1</pre>
+						</div>
+
+						<p>Common causes, roughly in order:</p>
+						<ul>
+							<li>
+								Something in <code>ops/mongo-init/</code> threw,
+								which aborts initialisation and exits the
+								container. The log names it.
+							</li>
+							<li>
+								<code>Illegal instruction</code> means the CPU
+								is pre-ARMv8.2-A. See step 00.
+							</li>
+							<li>
+								The first boot on an SD card was simply slow and
+								the healthcheck ran out of grace. Just run
+								<code>docker compose up -d</code> again.
+							</li>
+						</ul>
+
+						<div class="note warn">
+							<span class="note-label"
+								>Discard the volume before retrying</span
+							>
+							<p>
+								Everything in
+								<code>docker-entrypoint-initdb.d</code> runs
+								only against an empty data directory. A
+								half-initialised volume will never create the
+								application user, however many times you
+								restart.
+							</p>
+						</div>
+
+						<div class="cmd">
+							<div class="cmd-bar">
+								<span class="cmd-where">pi · ~/HECTOR</span>
+								<button class="copy" type="button">Copy</button>
+							</div>
+							<pre>
+docker compose down -v        <span class="c"># -v destroys hector_mongo-data</span>
+docker compose up -d</pre>
+						</div>
+
+						<p>
+							<code>-v</code> is safe here and only here: at this
+							point the database has nothing in it. Once you have
+							real data, <code>down -v</code> throws it away.
+						</p>
+					</div>
+				</details>
+
+				<details class="symptom">
 					<summary>The site loads but every API call 502s</summary>
 					<div class="symptom-body">
 						<p>

@@ -495,10 +495,43 @@ container.
 The tunnel connector is not running. `docker compose logs cloudflared`; usually
 a bad or revoked token.
 
+**`dependency failed to start: container hector-mongo-1 is unhealthy`.**
+The other three containers are fine; mongo did not come up. The message says
+nothing useful on its own, so read the log:
+
+```bash
+docker compose logs mongo | tail -40
+docker inspect --format '{{json .State.Health}}' hector-mongo-1
+```
+
+Common causes, in rough order of likelihood:
+
+- Something in `ops/mongo-init/` threw. That aborts initialisation and the
+  container exits. The log names the failure.
+- `Illegal instruction` means the CPU is pre-ARMv8.2-A. See step 0.
+- The first boot on an SD card is simply slow and the healthcheck ran out of
+  grace. Rare with `start_period: 90s`, but `docker compose up -d` again costs
+  nothing.
+
+**After a failed first boot, discard the volume before retrying.** Everything in
+`docker-entrypoint-initdb.d` runs only against an empty data directory, so a
+half-initialised volume will never create the application user no matter how
+many times you restart:
+
+```bash
+docker compose down -v        # -v destroys hector_mongo-data
+docker compose up -d
+```
+
+`-v` is safe here and only here: at this point the database has nothing in it.
+Once you have real data, `down -v` throws it away.
+
 **The site loads but every API call 502s.**
 The `api` container is unhealthy. `docker compose logs api`. Most often the
 config validator rejected an environment variable and the process exited; the
-message names the variable.
+message names the variable. `MongoServerError: Authentication failed` instead
+means the application user was never created, which is the failed-first-boot
+case above.
 
 **Sign-in appears to work but you are immediately signed out.**
 The session cookie is `Secure`, so it is only sent over HTTPS. Reaching the site

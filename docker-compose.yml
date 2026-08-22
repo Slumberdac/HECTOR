@@ -29,10 +29,15 @@ services:
       - "27017"
     healthcheck:
       test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
-      interval: 30s
+      # During initialisation mongod listens on a unix socket only, so this
+      # cannot pass until the entrypoint has finished creating the root user and
+      # run everything in docker-entrypoint-initdb.d. On a Pi writing to an SD
+      # card that first boot is slow, hence the generous start_period; failures
+      # inside it do not count against retries.
+      interval: 10s
       timeout: 10s
-      retries: 5
-      start_period: 40s
+      retries: 6
+      start_period: 90s
     networks:
       - internal
 
