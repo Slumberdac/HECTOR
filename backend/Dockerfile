@@ -29,6 +29,11 @@ WORKDIR /app
 # root would silently drop them.
 COPY --from=deps /app ./
 COPY backend/src ./backend/src
+# Operational scripts ship with the image so they can be run without a Node
+# toolchain on the host:
+#   docker compose exec api node backend/scripts/check-database.js
+#   docker compose exec api node backend/scripts/migrate-from-v1.js --dry-run
+COPY backend/scripts ./backend/scripts
 
 # The base image ships an unprivileged `node` user; use it rather than root.
 USER node
