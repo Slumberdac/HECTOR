@@ -9,7 +9,7 @@ const {
 
 const router = express.Router();
 
-// Public reads — the registry is meant to be browsable by anyone.
+// Public reads: the registry is meant to be browsable by anyone.
 router.get("/", usersController.getUsers);
 router.get("/:uid", usersController.getUserById);
 router.get("/:uid/rocks", usersController.getRocksByUser);

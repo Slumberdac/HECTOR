@@ -10,7 +10,7 @@ function notFoundHandler(req, res, next) {
 /**
  * Terminal error handler.
  *
- * The previous version read `error.code`, while HttpError set `statusCode` —
+ * The previous version read `error.code`, while HttpError set `statusCode`,
  * so every deliberate 4xx was reported to the client as a 500. This reads the
  * right property and refuses to echo unexpected internal errors.
  */

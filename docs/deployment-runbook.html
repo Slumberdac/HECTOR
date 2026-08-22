@@ -99,7 +99,7 @@
 	}
 
 	/* Both, so the ground holds whether or not the document fills the
-	   viewport — the viewer paints its own background behind the page. */
+	   viewport. The viewer paints its own background behind the page. */
 	html {
 		background: var(--ground);
 	}
@@ -248,7 +248,7 @@
 	}
 
 	/* Numbers come from the markup rather than a CSS counter, so they stay
-	   pinned to the section headings they point at — including 05b. */
+	   pinned to the section headings they point at, including 05b. */
 	nav.spine a > .n {
 		font-family: var(--mono);
 		font-size: 0.75rem;
@@ -681,7 +681,7 @@
 						The repository's git history contains a live MongoDB
 						Atlas connection string. Delete that database user in
 						Atlas now, under <strong>Database Access</strong>.
-						Rewriting history does not help — the repo has been
+						Rewriting history does not help: the repo has been
 						public, so every clone and fork already has the
 						credential. It has to be rotated, not hidden.
 					</p>
@@ -693,9 +693,9 @@
 					runs MongoDB 8, which needs an ARMv8.2-A CPU. The Pi 5's
 					Cortex-A76 has it. A Pi 4's Cortex-A72 does not, and
 					<code>mongod</code> there dies on startup with
-					<code>Illegal instruction (core dumped)</code> — if this
-					ever moves to a Pi 4, you need MongoDB 4.4 or a
-					wire-compatible substitute such as FerretDB.
+					<code>Illegal instruction (core dumped)</code>. If this ever
+					moves to a Pi 4, you need MongoDB 4.4 or a wire-compatible
+					substitute such as FerretDB.
 				</p>
 
 				<h3>Storage</h3>
@@ -734,7 +734,7 @@
 					<pre>sudo apt update &amp;&amp; sudo apt full-upgrade -y
 sudo reboot
 
-<span class="c"># after it comes back — expect aarch64</span>
+<span class="c"># after it comes back, expect aarch64</span>
 uname -m</pre>
 				</div>
 
@@ -845,8 +845,8 @@ chmod 600 .env</pre>
 				<p>
 					Paste those three lines into <code>.env</code> and fill in
 					the two usernames. Leave
-					<code>CLOUDFLARE_TUNNEL_TOKEN</code> empty — step 04
-					produces it.
+					<code>CLOUDFLARE_TUNNEL_TOKEN</code> empty; step 04 produces
+					it.
 				</p>
 
 				<div class="note">
@@ -855,7 +855,7 @@ chmod 600 .env</pre>
 						<code>MONGO_APP_PASSWORD</code> is consumed once, on the
 						very first boot, by
 						<code>ops/mongo-init/01-create-app-user.js</code>.
-						Changing it later has no effect on an existing volume —
+						Changing it later has no effect on an existing volume;
 						you would have to change the password inside mongo, or
 						destroy the volume and restore from a backup.
 					</p>
@@ -878,8 +878,8 @@ chmod 600 .env</pre>
 				</p>
 				<p>
 					The install screen shows a <code>docker run</code> command.
-					You do not need to run it — copy only the token out of it
-					and put it in <code>.env</code>:
+					You do not need to run it. Copy only the token out of it and
+					put it in <code>.env</code>:
 				</p>
 
 				<div class="cmd">
@@ -939,7 +939,7 @@ chmod 600 .env</pre>
 
 				<p>
 					<code>web:8080</code> is the container name and port on the
-					compose network — cloudflared resolves it over Docker's
+					compose network; cloudflared resolves it over Docker's
 					internal DNS, so nothing is exposed to your LAN. The DNS
 					record is created for you, since the zone is already on
 					Cloudflare. For <code>www</code> as well, add a second
@@ -988,7 +988,7 @@ curl -fsS http://127.0.0.1:8080/api/v1/rocks</pre>
 					<pre><span class="c"># 1. no password material in the user registry</span>
 curl -s https://your-domain/api/v1/users | grep -i password || echo "clean"
 
-<span class="c"># 2. anonymous callers cannot create — expect 401</span>
+<span class="c"># 2. anonymous callers cannot create, expect 401</span>
 curl -s -o /dev/null -w '%{http_code}\n' -X POST https://your-domain/api/v1/rocks \
   -H 'Content-Type: application/json' -d '{"name":"x"}'
 
@@ -1024,7 +1024,7 @@ curl -si -X POST https://your-domain/api/v1/auth/login \
 
 				<h3>A temporary export user</h3>
 				<p>
-					Do not reuse <code>hector_admin</code> — that one needs
+					Do not reuse <code>hector_admin</code>; that one needs
 					deleting, not using. In Atlas:
 					<strong>Database Access → Add New Database User</strong>,
 					named <code>tmp_export</code>, role
@@ -1088,7 +1088,7 @@ docker compose restart api</pre>
 					Old passwords keep working: the v2 complexity rules are
 					enforced at registration, not at login. Then delete the
 					archive from both machines and remove the
-					<code>tmp_export</code> user — that file holds every
+					<code>tmp_export</code> user; that file holds every
 					account's password in the clear.
 				</p>
 
@@ -1120,7 +1120,7 @@ docker compose restart api</pre>
 					<code>ops/backup.sh</code> writes a compressed
 					<code>mongodump</code> archive per night and prunes anything
 					older than 30 days. Backups on the same card as the data are
-					not backups — pull them somewhere else:
+					not backups; pull them somewhere else:
 				</p>
 
 				<div class="cmd">
@@ -1266,7 +1266,7 @@ docker compose up -d</pre>
 							<tr>
 								<td><code>cloudflared</code></td>
 								<td>nothing inbound</td>
-								<td>—</td>
+								<td>nothing</td>
 							</tr>
 						</tbody>
 					</table>
@@ -1328,8 +1328,8 @@ docker compose up -d</pre>
 							volume was initialised. The init script only runs on
 							an empty data directory. Either set the password
 							inside mongo, or
-							<code>docker compose down -v</code> — which destroys
-							the data — and restore from backup.
+							<code>docker compose down -v</code>, which destroys
+							the data, and restore from backup.
 						</p>
 					</div>
 				</details>
@@ -1341,7 +1341,7 @@ docker compose up -d</pre>
 							cloudflared reached the tunnel but not the origin.
 							Check the public hostname is
 							<code>http://web:8080</code>.
-							<code>localhost:8080</code> will not work — from
+							<code>localhost:8080</code> will not work: from
 							inside the cloudflared container, localhost is the
 							cloudflared container.
 						</p>
@@ -1353,7 +1353,7 @@ docker compose up -d</pre>
 					<div class="symptom-body">
 						<p>
 							The connector is not running.
-							<code>docker compose logs cloudflared</code> —
+							<code>docker compose logs cloudflared</code>,
 							usually a bad or revoked token.
 						</p>
 					</div>
@@ -1366,7 +1366,7 @@ docker compose up -d</pre>
 							The <code>api</code> container is unhealthy.
 							<code>docker compose logs api</code>. Most often the
 							config validator rejected an environment variable
-							and the process exited — the message names the
+							and the process exited; the message names the
 							variable.
 						</p>
 					</div>
@@ -1380,8 +1380,8 @@ docker compose up -d</pre>
 						<p>
 							The session cookie is <code>Secure</code>, so it is
 							only sent over HTTPS. Reaching the site over plain
-							HTTP — for example directly at
-							<code>http://pi-ip:8080</code> — does exactly this.
+							HTTP, for example directly at
+							<code>http://pi-ip:8080</code>, does exactly this.
 							Use the real domain.
 						</p>
 					</div>
@@ -1415,7 +1415,7 @@ docker compose up -d</pre>
 </div>
 
 <script>
-	// Copy buttons: take the <pre> text, minus nothing — comments included, so
+	// Copy buttons: take the <pre> text, minus nothing, comments included, so
 	// what lands in the terminal is what is on screen.
 	document.querySelectorAll(".copy").forEach((button) => {
 		button.addEventListener("click", async () => {

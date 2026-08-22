@@ -1,6 +1,6 @@
 # Caddy runs *inside* the container on plain HTTP. TLS and the public hostname
 # are handled by Cloudflare at the edge, and cloudflared reaches this over the
-# private docker network — so nothing here needs a certificate.
+# private docker network, so nothing here needs a certificate.
 {
 	admin off
 	auto_https off

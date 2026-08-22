@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 #
-# Build context is the REPOSITORY ROOT, not backend/ — npm workspaces keep one
+# Build context is the REPOSITORY ROOT, not backend/. npm workspaces keep one
 # lockfile there, and `npm ci` needs it:
 #
 #   docker build -f backend/Dockerfile .

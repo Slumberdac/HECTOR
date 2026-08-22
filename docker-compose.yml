@@ -3,7 +3,7 @@
 #   docker compose up -d --build
 #
 # Nothing here publishes a port to the host except the web container on
-# 127.0.0.1, and even that is only for local debugging — the public entry point
+# 127.0.0.1, and even that is only for local debugging. The public entry point
 # is the Cloudflare tunnel, which dials out rather than accepting connections.
 
 name: hector

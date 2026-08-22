@@ -14,7 +14,7 @@ where the site goes live.
 **Hardware.** Pi 5 (any RAM size; 4 GB is comfortable). The compose file runs
 MongoDB 8, which requires an ARMv8.2-A CPU. The Pi 5's Cortex-A76 has it. A Pi
 4's Cortex-A72 does not, and `mongod` there dies immediately with `Illegal
-instruction (core dumped)` — if you ever move this to a Pi 4, you need
+instruction (core dumped)`. If you ever move this to a Pi 4, you need
 MongoDB 4.4 or a wire-compatible substitute like FerretDB.
 
 **Storage.** An SD card will work and will eventually wear out under a database
@@ -27,7 +27,7 @@ pointed at it.
 **Rotate the old credential first.** The repository's history contains a live
 MongoDB Atlas connection string. Delete that database user in Atlas (Database
 Access → `hector_admin` → Delete) before going any further. History rewriting
-does not help — the repo has been public, so the credential must be considered
+does not help: the repo has been public, so the credential must be considered
 burned.
 
 ---
@@ -114,7 +114,7 @@ done
 
 Paste those into `.env`. Fill in `MONGO_ROOT_USERNAME` and
 `MONGO_APP_USERNAME` (the defaults in the example file are fine). Leave
-`CLOUDFLARE_TUNNEL_TOKEN` empty for now — step 4 produces it.
+`CLOUDFLARE_TUNNEL_TOKEN` empty for now; step 4 produces it.
 
 ```bash
 chmod 600 .env
@@ -125,7 +125,7 @@ over SSH rather than committing it.
 
 > `MONGO_APP_PASSWORD` is consumed once, on the very first boot, by
 > `ops/mongo-init/01-create-app-user.js`. Changing it later has no effect on an
-> existing volume — you have to change the password inside mongo, or destroy the
+> existing volume; you have to change the password inside mongo, or destroy the
 > volume and restore from a backup.
 
 ---
@@ -136,7 +136,7 @@ In the Cloudflare dashboard: **Zero Trust → Networks → Tunnels → Create a
 tunnel → Cloudflared**. Name it `hector-pi`.
 
 The install screen shows a `docker run cloudflare/cloudflared … --token
-eyJhIjoi…` command. You do not need to run it — copy just the token and put it
+eyJhIjoi…` command. You do not need to run it. Copy just the token and put it
 in `.env`:
 
 ```
@@ -156,7 +156,7 @@ Then, on the tunnel's **Public Hostname** tab, add a route:
 | Type      | `HTTP`                   |
 | URL       | `web:8080`               |
 
-`web:8080` is the container name and port on the compose network — cloudflared
+`web:8080` is the container name and port on the compose network; cloudflared
 resolves it over Docker's internal DNS, so nothing is exposed to the LAN. The
 DNS record is created for you because the zone is already on Cloudflare.
 
@@ -208,7 +208,7 @@ rather than empty. See [MIGRATION.md](MIGRATION.md) for the whole procedure;
 the shape of it is:
 
 ```bash
-# On your laptop — dump from Atlas with a NEW temporary user, not the leaked one.
+# On your laptop: dump from Atlas with a NEW temporary user, not the leaked one.
 docker run --rm -v "$PWD:/out" mongo:8 mongodump \
   --uri "mongodb+srv://tmp_export:PASSWORD@hector.lnv1yey.mongodb.net/test" \
   --gzip --archive=/out/hector-v1.archive.gz
@@ -228,7 +228,7 @@ npm run migrate:v1
 docker compose restart api
 ```
 
-Delete the temporary Atlas user and the archive file afterwards — that archive
+Delete the temporary Atlas user and the archive file afterwards; that archive
 contains every account's password in the clear.
 
 ---
@@ -249,7 +249,7 @@ crontab -e
 # 15 3 * * *  /home/YOUR_USER/HECTOR/ops/backup.sh >> /home/YOUR_USER/HECTOR/ops/backup.log 2>&1
 ```
 
-Backups on the same card as the data are not backups. Copy them somewhere else —
+Backups on the same card as the data are not backups. Copy them somewhere else:
 a cron'd `rclone`, `rsync` to another machine, or a scheduled pull from your
 laptop:
 
@@ -286,7 +286,7 @@ docker compose pull
 docker compose up -d
 ```
 
-Do a `mongo` major-version bump deliberately, not as a side effect of `pull` —
+Do a `mongo` major-version bump deliberately, not as a side effect of `pull`;
 read the release notes and take a backup first.
 
 ---
@@ -326,7 +326,7 @@ mongo, or `docker compose down -v` (destroys data) and restore from backup.
 
 **Cloudflare shows error 502.**
 cloudflared reached the tunnel but not the origin. Check the public hostname is
-`http://web:8080` — `localhost:8080` will not work from inside the cloudflared
+`http://web:8080`. `localhost:8080` will not work from inside the cloudflared
 container.
 
 **Cloudflare shows error 1033.**
@@ -335,7 +335,7 @@ a bad or revoked token.
 
 **The site loads but every API call 502s.**
 The `api` container is unhealthy. `docker compose logs api`. Most often the
-config validator rejected an environment variable and the process exited — the
+config validator rejected an environment variable and the process exited; the
 message names the variable.
 
 **Sign-in appears to work but you are immediately signed out.**
@@ -356,7 +356,7 @@ Increase swap (step 1), or build the images on your laptop with
 | `mongo`       | `mongo:8`                | 27017           | `api` only                             |
 | `api`         | built from `backend/`    | 5000            | `web` only                             |
 | `web`         | Caddy + built bundle     | 8080            | `cloudflared`, and 127.0.0.1 on the Pi |
-| `cloudflared` | `cloudflare/cloudflared` | nothing inbound | —                                      |
+| `cloudflared` | `cloudflare/cloudflared` | nothing inbound | nothing                                |     |
 
 Only `web` publishes a host port, and only on loopback, for debugging over SSH.
 Everything the public reaches arrives through the tunnel.

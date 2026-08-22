@@ -2,7 +2,7 @@
 //
 // By default the suite spins up an in-memory MongoDB, so `npm test` works on a
 // dev machine with nothing installed. Set TEST_MONGODB_URI to point at a real
-// server instead — that is what CI does (a mongo service container) and what
+// server instead. That is what CI does (a mongo service container) and what
 // you can do locally with `docker compose -f docker-compose.test.yml up -d`.
 process.env.NODE_ENV = "test";
 process.env.JWT_SECRET =

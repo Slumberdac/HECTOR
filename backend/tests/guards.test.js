@@ -2,7 +2,7 @@
 //
 // If any of them touched mongo the request would hang until mongoose's buffer
 // timeout, so passing here proves the auth and validation layers reject bad
-// requests *before* any query is issued — which is what keeps an unauthenticated
+// requests *before* any query is issued, which is what keeps an unauthenticated
 // flood cheap.
 process.env.NODE_ENV = "test";
 process.env.JWT_SECRET = "test-secret-value-at-least-32-characters-long";

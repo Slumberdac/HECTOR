@@ -14,7 +14,7 @@ gitignored.
 
 **Still outstanding:** the old credential remains in git history and will remain
 there for anyone who clones the repository. Rotating the credential is the only
-real remedy — rewriting history does not help once a repository has been public,
+real remedy; rewriting history does not help once a repository has been public,
 because clones and forks keep the old objects. That Atlas user must be deleted.
 
 ## 2. Passwords stored in plaintext
@@ -30,7 +30,7 @@ for it.
 ## 3. Every response leaked every password
 
 `getResponseUser()` included `password` in its output, and `GET /api/v1/users`
-mapped every user through it — so a single unauthenticated request returned the
+mapped every user through it, so a single unauthenticated request returned the
 credentials of every account on the service.
 
 **Fixed:** each model owns a `toPublicJSON()` method that is the single
@@ -75,7 +75,7 @@ need it and takes an explicit list, never a wildcard.
 ## 7. Error handling that always returned 500
 
 `HttpError` set `this.statusCode`; the error handler read `error.code`. Since
-those never matched, every deliberate 4xx reached the client as a 500 — and
+those never matched, every deliberate 4xx reached the client as a 500, and
 several controllers called `res.status().json()` _and_ `next(err)`, producing an
 "headers already sent" crash on the way.
 
@@ -113,5 +113,5 @@ promise reaches it instead of hanging the request.
   place, so old accounts keep working. That is a continuity decision, not a
   security one: those passwords sat in plaintext behind a public credential and
   should be assumed known. Anyone who cares about their account should change
-  it — and since there is no password-change endpoint yet, that currently means
+  it, and since there is no password-change endpoint yet, that currently means
   deleting the account and registering again.

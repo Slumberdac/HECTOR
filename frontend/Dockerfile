@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 #
-# Build context is the REPOSITORY ROOT — see backend/Dockerfile for why:
+# Build context is the REPOSITORY ROOT. See backend/Dockerfile for why:
 #
 #   docker build -f frontend/Dockerfile .
 

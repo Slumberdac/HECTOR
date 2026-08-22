@@ -15,7 +15,7 @@ never there.
 Atlas pauses a free M0 cluster after 60 days idle, and eventually deletes a
 paused one. This project has been dormant for a while, so check before planning
 around it: open the Atlas project and look at the cluster. If it says
-**Paused**, resume it — that takes a few minutes and the data is intact. If the
+**Paused**, resume it; that takes a few minutes and the data is intact. If the
 cluster is gone, so is the data, and there is nothing to recover.
 
 ---
@@ -110,7 +110,7 @@ docker compose exec mongo mongosh -u "$MONGO_ROOT_USERNAME" -p "$MONGO_ROOT_PASS
 
 The restored documents are still v1 shaped: plaintext `password` fields, no
 `createdBy` on rocks, no unique index on `username`. The API will not accept
-them as they stand — a v1 user has no `passwordHash`, so login fails for
+them as they stand: a v1 user has no `passwordHash`, so login fails for
 everyone.
 
 ```bash
@@ -129,7 +129,7 @@ What it does:
 | `rocks`    | `createdBy` backfilled from `owner` where there is one              |
 | both       | indexes synced, which is what builds the unique `username` index    |
 
-It is idempotent — running it twice does not re-hash anything.
+It is idempotent; running it twice does not re-hash anything.
 
 **Existing passwords keep working.** The v2 complexity rules are enforced at
 registration, not at login, so an old password that would be rejected by the
@@ -147,8 +147,8 @@ rm hector-v1.archive.gz          # on both machines
 docker compose exec mongo rm /tmp/v1.gz
 ```
 
-In Atlas: delete the `tmp_export` user, remove the IP allowlist entry, and — if
-you are done with the cluster entirely — terminate it.
+In Atlas: delete the `tmp_export` user, remove the IP allowlist entry, and, if
+you are done with the cluster entirely, terminate it.
 
 That archive holds every account's password in the clear. It should not sit in
 your Downloads folder or your shell history.

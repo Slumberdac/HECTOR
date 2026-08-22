@@ -10,7 +10,7 @@ const AddRockCard = ({ onCreated }) => {
 	const { isLoggedIn } = useAuth();
 	const [showForm, setShowForm] = useState(false);
 
-	// Only offer the affordance to someone who can actually use it — the API
+	// Only offer the affordance to someone who can actually use it: the API
 	// rejects anonymous creates.
 	if (!isLoggedIn) {
 		return (

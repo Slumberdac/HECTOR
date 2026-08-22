@@ -32,7 +32,7 @@ Every failure has the same shape:
 | 401    | No session, or an invalid/expired one                 |
 | 403    | Authenticated, but not allowed to touch this resource |
 | 404    | No such resource (also returned for a malformed id)   |
-| 409    | Conflict — username taken, rock already adopted       |
+| 409    | Conflict: username taken, rock already adopted        |
 | 413    | Body over 16 kB                                       |
 | 422    | Validation failed; see `details`                      |
 | 429    | Rate limited                                          |
@@ -94,7 +94,7 @@ Password: 8–128 characters, at least one letter, one digit and one of
 { "username": "slumberdac", "password": "…" }
 ```
 
-`200` with `{ "user": … }` and a session cookie. `401` on bad credentials — the
+`200` with `{ "user": … }` and a session cookie. `401` on bad credentials, with the
 same message whether the username exists or not.
 
 ### `POST /auth/logout`
@@ -109,23 +109,23 @@ Session required. `200` with `{ "user": … }`, or `401`.
 
 | Method   | Path                     | Auth | Notes                                                     |
 | -------- | ------------------------ | ---- | --------------------------------------------------------- |
-| `GET`    | `/users`                 | —    | `?limit=` (default 100, max 200)                          |
-| `GET`    | `/users/:uid`            | —    |                                                           |
+| `GET`    | `/users`                 | none | `?limit=` (default 100, max 200)                          |
+| `GET`    | `/users/:uid`            | none |                                                           |
 | `PATCH`  | `/users/:uid`            | self | Accepts only `name`, `pfp_eyes`, `pfp_mouth`, `pfp_color` |
 | `DELETE` | `/users/:uid`            | self | Releases the account's rocks first                        |
-| `GET`    | `/users/:uid/rocks`      | —    |                                                           |
+| `GET`    | `/users/:uid/rocks`      | none |                                                           |
 | `POST`   | `/users/:uid/rocks/:rid` | self | Adopt. `409` if already adopted                           |
 | `DELETE` | `/users/:uid/rocks/:rid` | self | Release                                                   |
 
-Fields outside the `PATCH` allow-list are ignored, not rejected — sending
+Fields outside the `PATCH` allow-list are ignored, not rejected; sending
 `username` or `passwordHash` has no effect.
 
 ## Rocks
 
 | Method   | Path          | Auth         | Notes                                                                  |
 | -------- | ------------- | ------------ | ---------------------------------------------------------------------- |
-| `GET`    | `/rocks`      | —            | `?available=true` for unadopted only; `?limit=` (default 200, max 500) |
-| `GET`    | `/rocks/:rid` | —            |                                                                        |
+| `GET`    | `/rocks`      | none         | `?available=true` for unadopted only; `?limit=` (default 200, max 500) |
+| `GET`    | `/rocks/:rid` | none         |                                                                        |
 | `POST`   | `/rocks`      | session      | Sets `createdBy` to the caller                                         |
 | `PATCH`  | `/rocks/:rid` | owner/author | Partial; `owner` and `createdBy` are not writable                      |
 | `DELETE` | `/rocks/:rid` | owner/author |                                                                        |

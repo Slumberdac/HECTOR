@@ -17,7 +17,7 @@
  *   both   indexes synced (this is what creates the unique username index)
  *
  * The imported passwords will not all satisfy the v2 complexity rules. That is
- * fine — those rules are enforced at registration, not at login, so migrated
+ * fine: those rules are enforced at registration, not at login, so migrated
  * accounts can still sign in with whatever they used before.
  */
 
@@ -114,7 +114,7 @@ async function migrateUsers(users) {
 async function migrateRocks(rocks) {
 	// v1 removed an owner with `rock.owner = undefined`, which deletes the key
 	// entirely. v2 queries on `owner: null`, and in MongoDB a missing key does
-	// match null — but being explicit keeps the documents uniform.
+	// match null, but being explicit keeps the documents uniform.
 	const unowned = await rocks.countDocuments({ owner: { $exists: false } });
 	log(`rocks with no owner key: ${unowned}`);
 	if (!DRY_RUN && unowned) {
@@ -127,7 +127,7 @@ async function migrateRocks(rocks) {
 	// Nobody recorded who added a rock in v1. Crediting the current owner is
 	// the only defensible guess, and it is what lets them edit their own
 	// entries. A rock with neither owner nor creator stays editable by nobody
-	// until somebody adopts it — at which point they become its owner and can
+	// until somebody adopts it, at which point they become its owner and can
 	// edit it. That is the intended behaviour, not a gap.
 	const orphaned = await rocks.countDocuments({
 		createdBy: { $exists: false },
@@ -158,7 +158,7 @@ async function migrateRocks(rocks) {
 
 async function reportDuplicateUsernames(users) {
 	// v2 puts a unique index on username. v1 only did a findOne() check, so a
-	// duplicate is possible — and syncIndexes() would fail on it with an
+	// duplicate is possible, and syncIndexes() would fail on it with an
 	// unhelpful error. Surface it here instead.
 	const duplicates = await users
 		.aggregate([
@@ -168,7 +168,7 @@ async function reportDuplicateUsernames(users) {
 		.toArray();
 
 	if (duplicates.length) {
-		log("! duplicate usernames found — the unique index cannot be built:");
+		log("! duplicate usernames found; the unique index cannot be built:");
 		for (const d of duplicates) {
 			log(`    ${d._id} appears ${d.n} times`);
 		}
@@ -220,7 +220,7 @@ async function migrate() {
 		log("migration complete");
 		return { ok: true, dryRun: false };
 	}
-	log("migration finished with issues — see above");
+	log("migration finished with issues, see above");
 	return { ok: false, dryRun: false };
 }
 

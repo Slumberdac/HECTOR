@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema(
 			unique: true,
 			index: true,
 		},
-		// bcrypt hash — never the password itself. `select: false` keeps it out
+		// bcrypt hash, never the password itself. `select: false` keeps it out
 		// of every query result unless a caller explicitly asks for it, so it
 		// cannot be leaked into a response by accident.
 		passwordHash: {

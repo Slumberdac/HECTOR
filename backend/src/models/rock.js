@@ -36,7 +36,7 @@ const rockSchema = new mongoose.Schema(
 			type: String,
 			validate: {
 				// Only http(s) URLs. The old validator accepted anything the
-				// URL constructor could parse, including `javascript:` — which
+				// URL constructor could parse, including `javascript:`, which
 				// the frontend then dropped straight into an <img src>.
 				validator: (url) => {
 					try {

@@ -17,7 +17,7 @@ self-hosted application running on a Raspberry Pi behind a Cloudflare tunnel.
 | Database      | MongoDB 8                                                            |
 | Auth          | bcrypt password hashing, JWT in an httpOnly `SameSite=strict` cookie |
 | Reverse proxy | Caddy (static files + `/api` proxy, one origin, no CORS)             |
-| Ingress       | Cloudflare Tunnel — outbound only, no ports forwarded                |
+| Ingress       | Cloudflare Tunnel (outbound only, no ports forwarded)                |
 | Runtime       | Docker Compose on a Raspberry Pi                                     |
 
 ## Architecture
@@ -88,14 +88,14 @@ curl -fsS http://127.0.0.1:8080/api/v1/rocks | head
 ## Configuration
 
 All configuration is environment variables, validated at boot by
-`backend/src/config/index.js` — the process refuses to start with a bad or
+`backend/src/config/index.js`. The process refuses to start with a bad or
 missing value rather than failing later with an obscure error.
 `.env.example` is the template; `.env` is gitignored and must stay that way.
 
 | Variable         | Required | Default       | Notes                                          |
 | ---------------- | -------- | ------------- | ---------------------------------------------- |
-| `MONGODB_URI`    | yes      | —             | `mongodb://` or `mongodb+srv://`               |
-| `JWT_SECRET`     | yes      | —             | 32+ characters; changing it signs everyone out |
+| `MONGODB_URI`    | yes      | none          | `mongodb://` or `mongodb+srv://`               |
+| `JWT_SECRET`     | yes      | none          | 32+ characters; changing it signs everyone out |
 | `PORT`           | no       | `5000`        |                                                |
 | `NODE_ENV`       | no       | `development` |                                                |
 | `JWT_EXPIRES_IN` | no       | `7d`          |                                                |
@@ -112,19 +112,19 @@ into Postman.
 
 | Method   | Path                     | Auth         |
 | -------- | ------------------------ | ------------ |
-| `POST`   | `/auth/register`         | —            |
-| `POST`   | `/auth/login`            | —            |
-| `POST`   | `/auth/logout`           | —            |
+| `POST`   | `/auth/register`         | none         |
+| `POST`   | `/auth/login`            | none         |
+| `POST`   | `/auth/logout`           | none         |
 | `GET`    | `/auth/me`               | session      |
-| `GET`    | `/users`                 | —            |
-| `GET`    | `/users/:uid`            | —            |
+| `GET`    | `/users`                 | none         |
+| `GET`    | `/users/:uid`            | none         |
 | `PATCH`  | `/users/:uid`            | self         |
 | `DELETE` | `/users/:uid`            | self         |
-| `GET`    | `/users/:uid/rocks`      | —            |
+| `GET`    | `/users/:uid/rocks`      | none         |
 | `POST`   | `/users/:uid/rocks/:rid` | self         |
 | `DELETE` | `/users/:uid/rocks/:rid` | self         |
-| `GET`    | `/rocks`                 | —            |
-| `GET`    | `/rocks/:rid`            | —            |
+| `GET`    | `/rocks`                 | none         |
+| `GET`    | `/rocks/:rid`            | none         |
 | `POST`   | `/rocks`                 | session      |
 | `PATCH`  | `/rocks/:rid`            | owner/author |
 | `DELETE` | `/rocks/:rid`            | owner/author |
@@ -149,7 +149,7 @@ backend/
 frontend/
   src/
     api/          the only place that knows API URLs
-    context/      AuthContext — one source of truth for the signed-in user
+    context/      AuthContext, one source of truth for the signed-in user
     components/   feature-grouped components with their CSS
     assets/       SVG components generated with @svgr/cli, images
   Caddyfile       production static serving and /api proxy
@@ -168,4 +168,4 @@ in API responses, and no authorisation on any mutating endpoint.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).

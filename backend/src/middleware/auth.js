@@ -79,7 +79,7 @@ function optionalAuth(req, res, next) {
 
 /**
  * Guard for routes shaped `/users/:uid/...`: the caller must be that user.
- * This is the check that was missing entirely — previously anyone could
+ * This is the check that was missing entirely; previously anyone could
  * `DELETE /api/v1/users/<anyone's id>`.
  */
 function requireSelf(paramName = "uid") {
