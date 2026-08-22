@@ -112,11 +112,31 @@ attached to the compose network, so it can reach `ferretdb` by name:
 ```bash
 set -a && source .env && set +a
 
-docker compose run --rm --entrypoint mongorestore -v "$PWD:/in" mongo:8 \
-  --uri "mongodb://$POSTGRES_USER:$POSTGRES_PASSWORD@ferretdb:27017/hector" \
+docker run --rm --network hector_internal -v "$PWD:/in" \
+  --entrypoint mongorestore mongo:8 \
+  --host ferretdb:27017 \
+  --username "$POSTGRES_USER" --password "$POSTGRES_PASSWORD" \
+  --authenticationDatabase admin \
   --gzip --archive=/in/hector-v1.archive.gz \
-  --nsFrom 'test.*' --nsTo 'hector.*'
+  --nsInclude 'test.*' --nsFrom 'test.*' --nsTo 'hector.*'
 ```
+
+Two traps in that command, both of which fail quietly:
+
+`docker run`, not `docker compose run`. The latter takes a **service name** from
+the compose file, so passing an image gives `no such service: mongo:8`. Plain
+`docker run` needs `--network hector_internal` to reach `ferretdb` by name, and
+needs `source .env` first because it does not interpolate `.env` the way compose
+does.
+
+**No database in the connection.** A database in the URI path acts as `--db`,
+and `--db` filters an archive restore to that database. The archive holds
+`test.users` and `test.rocks`, so a URI ending `/hector` matches nothing and you
+get `0 document(s) restored successfully` with no error. The giveaway is
+mongorestore warning that `--db and --collection flags are deprecated for this
+use-case` when you never passed either: that is the URI's database talking.
+Separate `--host` from the credentials and let `--nsFrom/--nsTo` do the
+renaming.
 
 `--nsFrom/--nsTo` is what moves the collections out of the old `test` database
 into `hector`, which is where the API looks. Without it the restore succeeds and
@@ -140,11 +160,17 @@ The restored documents are still v1 shaped: plaintext `password` fields, no
 them as they stand: a v1 user has no `passwordHash`, so login fails for
 everyone.
 
+Run it inside the api container, which already has the dependencies. The host
+needs no Node toolchain:
+
 ```bash
-npm run migrate:v1 -- --dry-run   # reports what it would change, writes nothing
-npm run migrate:v1
+docker compose exec api node backend/scripts/migrate-from-v1.js --dry-run
+docker compose exec api node backend/scripts/migrate-from-v1.js
 docker compose restart api
 ```
+
+From a checkout with `npm install` already done, `npm run migrate:v1 -- --dry-run`
+does the same thing.
 
 What it does:
 
@@ -199,7 +225,7 @@ probes the deployed database directly for the operations this codebase depends
 on, and is the thing to run after the import:
 
 ```bash
-npm run check:db
+docker compose exec api node backend/scripts/check-database.js
 ```
 
 Rehearsing on a copy first is cheap:
