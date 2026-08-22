@@ -1,0 +1,20 @@
+# Both images build from the repository root, because npm workspaces keep a
+# single lockfile there.
+.git
+.github
+node_modules
+**/node_modules
+frontend/build
+backend/coverage
+backend/tests
+.env
+.env.*
+!.env.example
+ops/backups
+docs
+*.md
+!README.md
+*.excalidraw
+*.pdf
+*.log
+.vscode
