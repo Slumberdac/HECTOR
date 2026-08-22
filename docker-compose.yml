@@ -5,36 +5,63 @@
 # Nothing here publishes a port to the host except the web container on
 # 127.0.0.1, and even that is only for local debugging. The public entry point
 # is the Cloudflare tunnel, which dials out rather than accepting connections.
+#
+# The database is FerretDB, which speaks the MongoDB wire protocol on top of
+# PostgreSQL. MongoDB itself is not an option here: every release from 5.0
+# onward requires an ARMv8.2-A CPU, and the Pi 4's Cortex-A72 is ARMv8.0-A, so
+# mongod dies on startup with "Illegal instruction". The application code does
+# not know the difference; it is still Mongoose talking to :27017.
 
 name: hector
 
 services:
-  mongo:
-    image: mongo:8
+  postgres:
+    # The two images below are released in lockstep and the DocumentDB tag
+    # encodes the FerretDB version it belongs to. Bump them together, in .env,
+    # or FerretDB will refuse the extension version it finds.
+    image: ghcr.io/ferretdb/postgres-documentdb:${DOCUMENTDB_TAG:-17-0.107.0-ferretdb-2.7.0}
     restart: unless-stopped
-    command: ["--bind_ip_all", "--wiredTigerCacheSizeGB", "0.5"]
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:?set MONGO_ROOT_USERNAME in .env}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:?set MONGO_ROOT_PASSWORD in .env}
-      MONGO_INITDB_DATABASE: hector
-      # Read by ops/mongo-init/01-create-app-user.js on first boot.
-      MONGO_APP_USERNAME: ${MONGO_APP_USERNAME:-hector_app}
-      MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:?set MONGO_APP_PASSWORD in .env}
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: postgres
     volumes:
-      - mongo-data:/data/db
-      - ./ops/mongo-init:/docker-entrypoint-initdb.d:ro
-    # Deliberately not published to the host: only the api container, on the
-    # internal network, can reach it.
+      - pg-data:/var/lib/postgresql/data
+    # Deliberately not published: only ferretdb, on the internal network, talks
+    # to it.
     expose:
-      - "27017"
+      - "5432"
     healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 40s
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 60s
     networks:
       - internal
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  ferretdb:
+    image: ghcr.io/ferretdb/ferretdb:${FERRETDB_TAG:-2.7.0}
+    restart: unless-stopped
+    environment:
+      FERRETDB_POSTGRESQL_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "27017"
+    networks:
+      - internal
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   api:
     build:
@@ -45,16 +72,21 @@ services:
     environment:
       NODE_ENV: production
       PORT: 5000
-      MONGODB_URI: mongodb://${MONGO_APP_USERNAME:-hector_app}:${MONGO_APP_PASSWORD:?set MONGO_APP_PASSWORD in .env}@mongo:27017/hector?authSource=hector
+      # Credentials are the PostgreSQL ones: FerretDB authenticates against
+      # Postgres rather than keeping its own user table, so there is no
+      # equivalent of mongo's createUser bootstrap.
+      MONGODB_URI: mongodb://${POSTGRES_USER}:${POSTGRES_PASSWORD}@ferretdb:27017/hector
       JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
       LOG_LEVEL: ${LOG_LEVEL:-info}
       # Caddy and cloudflared each add a hop.
       TRUST_PROXY: 2
       BCRYPT_ROUNDS: ${BCRYPT_ROUNDS:-12}
+      # FerretDB has no healthcheck the compose file can rely on, so the API
+      # retries the connection itself rather than depending on start order.
+      DB_CONNECT_RETRIES: 30
     depends_on:
-      mongo:
-        condition: service_healthy
+      - ferretdb
     expose:
       - "5000"
     networks:
@@ -102,7 +134,7 @@ services:
         max-file: "3"
 
 volumes:
-  mongo-data:
+  pg-data:
 
 networks:
   internal:

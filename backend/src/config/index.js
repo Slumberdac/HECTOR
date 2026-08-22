@@ -22,6 +22,11 @@ const schema = z.object({
 			message: "MONGODB_URI must start with mongodb:// or mongodb+srv://",
 		}),
 
+	// How many times to retry the initial database connection before giving up.
+	// The database container has no healthcheck compose can wait on, so the API
+	// may well start first on a cold boot.
+	DB_CONNECT_RETRIES: z.coerce.number().int().min(1).max(120).default(10),
+
 	// Secret used to sign session tokens. Generate with:
 	//   node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"
 	JWT_SECRET: z
