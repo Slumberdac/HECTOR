@@ -1315,6 +1315,21 @@ curl -si -X POST https://your-domain/api/v1/auth/login \
 					Remove both when you are finished.
 				</p>
 
+				<div class="note stop">
+					<span class="note-label">Use the autogenerate button</span>
+					<p>
+						Do not type a guessable password for this. An Atlas
+						cluster answers connections from the public internet,
+						and pairs like <code>admin</code>/<code>admin</code> are
+						the first thing scanners try; a cluster reachable with
+						one is usually found within hours. The account is
+						temporary, but it is temporarily exposed to everybody.
+						Take Atlas's
+						<strong>Autogenerate Secure Password</strong> and paste
+						it into the command below.
+					</p>
+				</div>
+
 				<h3>Dump</h3>
 				<p>
 					<code>mongodump</code> ships inside the official mongo
@@ -1327,15 +1342,45 @@ curl -si -X POST https://your-domain/api/v1/auth/login \
 
 				<div class="cmd">
 					<div class="cmd-bar">
-						<span class="cmd-where">laptop · shell</span>
+						<span class="cmd-where">pi · ~/HECTOR</span>
 						<button class="copy" type="button">Copy</button>
 					</div>
 					<pre><span class="c"># the old URI had no database in the path, so Mongoose used "test"</span>
-docker run --rm -v "$PWD:/out" mongo:8 mongodump \
+<span class="c"># --user is what makes the output file writable; see below</span>
+docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/out" mongo:8 mongodump \
   --uri "mongodb+srv://tmp_export:PASSWORD@hector.lnv1yey.mongodb.net/test" \
-  --gzip --archive=/out/hector-v1.archive.gz
+  --gzip --archive=/out/hector-v1.archive.gz</pre>
+				</div>
 
-scp hector-v1.archive.gz pi@raspberrypi.local:~/HECTOR/</pre>
+				<div class="note warn">
+					<span class="note-label">Two things that bite here</span>
+					<p>
+						Without <code>--user</code>, the dump appears to run and
+						then ends in
+						<code
+							>Failed: open /out/hector-v1.archive.gz: permission
+							denied</code
+						>. The mongo image runs as its own <code>mongodb</code>
+						user, which has no write access to your home directory.
+					</p>
+					<p>
+						The
+						<code
+							>WARNING: MongoDB requires ARMv8.2-A or higher</code
+						>
+						banner is printed by the image's entrypoint on every
+						invocation, whatever you run. It applies to
+						<code>mongod</code> alone. If the command produced
+						output, it worked.
+					</p>
+					<p>
+						Running this on the Pi rather than your laptop skips the
+						copy step; just add the Pi's public IP to the Atlas
+						network allowlist instead of your laptop's. If you do
+						dump from the laptop, copy it over with
+						<code>scp hector-v1.archive.gz pi:~/HECTOR/</code>
+						first.
+					</p>
 				</div>
 
 				<h3>Restore and convert</h3>
