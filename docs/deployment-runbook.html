@@ -741,28 +741,142 @@ uname -m</pre>
 				<h3>Close off password logins</h3>
 				<p>
 					You are about to run a service that talks to the internet.
-					The Pi itself should not accept password authentication.
+					The Pi itself should not accept password authentication: a
+					guessable password on a box that is up 24/7 is the single
+					most common way a home server gets taken over.
+				</p>
+				<p>
+					Do these four in order. Turning passwords off before
+					confirming the key works is how people lock themselves out.
+				</p>
+
+				<h3>1. Prove your key already works</h3>
+				<p>
+					The Imager's advanced options install it into
+					<code>~/.ssh/authorized_keys</code> for you, so this usually
+					passes first try. Run it from your laptop.
 				</p>
 
 				<div class="cmd">
 					<div class="cmd-bar">
-						<span class="cmd-where">pi · /etc/ssh/sshd_config</span>
+						<span class="cmd-where">laptop · shell</span>
 						<button class="copy" type="button">Copy</button>
 					</div>
 					<pre>
-sudo sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
-sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
-sudo systemctl restart ssh</pre>
+ssh -o PreferredAuthentications=publickey -o PasswordAuthentication=no pi@raspberrypi.local</pre>
+				</div>
+
+				<p>
+					A shell means the key is in place.
+					<code>Permission denied (publickey)</code> means stop and
+					fix it first with
+					<code>ssh-copy-id pi@raspberrypi.local</code>.
+				</p>
+
+				<h3>2. Write a drop-in, do not edit the main file</h3>
+
+				<div class="cmd">
+					<div class="cmd-bar">
+						<span class="cmd-where">pi · shell</span>
+						<button class="copy" type="button">Copy</button>
+					</div>
+					<pre>
+ls /etc/ssh/sshd_config.d/          <span class="c"># see what is already there</span>
+
+sudo tee /etc/ssh/sshd_config.d/10-hardening.conf >/dev/null &lt;&lt;'EOF'
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitRootLogin no
+PubkeyAuthentication yes
+EOF</pre>
 				</div>
 
 				<div class="note warn">
-					<span class="note-label">Check before you disconnect</span>
+					<span class="note-label"
+						>Why editing sshd_config often does nothing</span
+					>
 					<p>
-						Open a second SSH session and confirm your key still
-						works before closing the first one. Locking yourself out
-						means fetching a keyboard and a monitor.
+						Debian's <code>sshd_config</code> opens with
+						<code>Include /etc/ssh/sshd_config.d/*.conf</code>, and
+						sshd keeps the <strong>first</strong> value it parses
+						for any directive. Anything in that directory therefore
+						beats what you write further down in the main file.
+						Files there are read in lexical order, so something
+						sorting before <code>10-</code> would still win; step 3
+						is what tells you.
 					</p>
 				</div>
+
+				<p>
+					<code>KbdInteractiveAuthentication</code> matters as much as
+					<code>PasswordAuthentication</code>. With
+					<code>UsePAM yes</code>, the default, it opens a second,
+					PAM-driven prompt that also accepts a password, so turning
+					off only the first setting leaves the door open.
+				</p>
+
+				<h3>3. Check the syntax, then the effective result</h3>
+
+				<div class="cmd">
+					<div class="cmd-bar">
+						<span class="cmd-where">pi · shell</span>
+						<button class="copy" type="button">Copy</button>
+					</div>
+					<pre>
+sudo sshd -t          <span class="c"># syntax check; silence means valid</span>
+
+sudo sshd -T | grep -Ei '^(passwordauthentication|kbdinteractive|permitrootlogin|pubkeyauthentication)'
+
+<span class="c"># expect exactly:</span>
+<span class="c">#   passwordauthentication no</span>
+<span class="c">#   kbdinteractiveauthentication no</span>
+<span class="c">#   permitrootlogin no</span>
+<span class="c">#   pubkeyauthentication yes</span></pre>
+				</div>
+
+				<p>
+					<code>sshd -T</code> prints the configuration sshd will
+					actually use, after every include and override. It is the
+					only output worth trusting.
+				</p>
+
+				<h3>4. Restart, and test from a second terminal</h3>
+
+				<div class="cmd">
+					<div class="cmd-bar">
+						<span class="cmd-where">pi · shell</span>
+						<button class="copy" type="button">Copy</button>
+					</div>
+					<pre>
+sudo systemctl restart ssh
+
+<span class="c"># if that reports no such unit, the system uses socket activation:</span>
+<span class="c">#   sudo systemctl restart ssh.socket</span></pre>
+				</div>
+
+				<div class="note">
+					<span class="note-label">Keep the first session open</span>
+					<p>
+						An existing session survives an sshd restart, so it
+						stays as your way back in if the new config is wrong.
+						Open a new terminal, connect again, and only close the
+						first one once the second has worked.
+					</p>
+					<p>
+						If you do lock yourself out: attach a keyboard and
+						monitor, or shut the Pi down, put the card in another
+						Linux machine, mount the ext4 partition and delete
+						<code>10-hardening.conf</code>. Tedious, never fatal.
+					</p>
+				</div>
+
+				<p>
+					Optional, if you have a hardware key:
+					<code>ssh-keygen -t ed25519-sk</code> makes a key whose
+					private half cannot leave the token, so a copy of your
+					laptop's disk is not enough to log into the Pi. Needs
+					OpenSSH 8.2 or newer at both ends, which Pi OS has.
+				</p>
 
 				<h3>Patches and swap</h3>
 				<p>

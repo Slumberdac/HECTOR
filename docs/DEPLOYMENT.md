@@ -49,15 +49,90 @@ Confirm you are on 64-bit:
 uname -m          # expect aarch64
 ```
 
-**Lock down SSH.** You are about to run a service that talks to the internet;
-the Pi itself should not accept password logins.
+### Lock down SSH
+
+You are about to run a service that talks to the internet. The Pi itself should
+not accept password logins: a guessable password on a box that is up 24/7 is the
+single most common way a home server gets taken over.
+
+Do these in order. Turning passwords off before confirming your key works is how
+people lock themselves out.
+
+**1. Prove your key already works.** The Imager's advanced options install it
+into `~/.ssh/authorized_keys` for you, so this usually passes on the first try.
+Run it from your laptop:
 
 ```bash
-sudo nano /etc/ssh/sshd_config
-#   PasswordAuthentication no
-#   PermitRootLogin no
-sudo systemctl restart ssh
+ssh -o PreferredAuthentications=publickey -o PasswordAuthentication=no pi@raspberrypi.local
 ```
+
+If that gives you a shell, the key is in place. If it says
+`Permission denied (publickey)`, stop and fix that first with
+`ssh-copy-id pi@raspberrypi.local`.
+
+**2. Write a drop-in rather than editing the main file.** Debian's
+`sshd_config` begins with `Include /etc/ssh/sshd_config.d/*.conf`, and sshd
+keeps the _first_ value it parses for any directive. Anything in that directory
+therefore beats what you write further down in the main file, which is why
+editing `sshd_config` by hand so often appears to do nothing.
+
+```bash
+ls /etc/ssh/sshd_config.d/          # see what is already there
+
+sudo tee /etc/ssh/sshd_config.d/10-hardening.conf >/dev/null <<'EOF'
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitRootLogin no
+PubkeyAuthentication yes
+EOF
+```
+
+`KbdInteractiveAuthentication` matters as much as `PasswordAuthentication`.
+With `UsePAM yes` (the default) it opens a second, PAM-driven prompt that also
+accepts a password, so turning off only the first setting leaves the door open.
+
+Files in that directory are read in lexical order, so if something already there
+sorts before `10-` and sets these differently, it wins. Step 3 is what tells you.
+
+**3. Check the syntax, then the effective result.**
+
+```bash
+sudo sshd -t          # syntax check; silence means valid
+
+sudo sshd -T | grep -Ei '^(passwordauthentication|kbdinteractive|permitrootlogin|pubkeyauthentication)'
+```
+
+`sshd -T` prints the configuration sshd will actually use, after every include
+and override. This is the only output worth trusting. Expect:
+
+```
+passwordauthentication no
+kbdinteractiveauthentication no
+permitrootlogin no
+pubkeyauthentication yes
+```
+
+**4. Restart, and test from a second terminal.**
+
+```bash
+sudo systemctl restart ssh
+# if that reports no such unit, the system uses socket activation:
+#   sudo systemctl restart ssh.socket
+```
+
+Leave your current session open. Open a new terminal and connect again. Only
+close the first one once the second has worked. An existing session survives an
+sshd restart, so it stays as your way back in if the new config is wrong.
+
+Optional, if you have a hardware key: `ssh-keygen -t ed25519-sk` makes a key
+whose private half cannot leave the token, so a copy of your laptop's disk is
+not enough to log into the Pi. It needs OpenSSH 8.2 or newer at both ends, which
+Pi OS has.
+
+**If you do lock yourself out:** attach a keyboard and monitor, or shut the Pi
+down, put the card in your Arch machine, mount the ext4 partition and delete
+`/etc/ssh/sshd_config.d/10-hardening.conf`. Nothing is unrecoverable, it is just
+tedious.
 
 **Automatic security updates.** Nobody patches a Pi they cannot see.
 
