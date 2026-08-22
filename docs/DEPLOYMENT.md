@@ -1,0 +1,330 @@
+# Deploying HECTOR on a Raspberry Pi
+
+Target setup: a Raspberry Pi 5 running 64-bit Raspberry Pi OS, serving a domain
+whose DNS is on Cloudflare, reachable over a Cloudflare Tunnel with no ports
+forwarded on the home router.
+
+Work through it in order. Steps 0 through 3 take about half an hour; step 4 is
+where the site goes live.
+
+---
+
+## 0. Before you start
+
+**Hardware.** Pi 5 (any RAM size; 4 GB is comfortable). The compose file runs
+MongoDB 8, which requires an ARMv8.2-A CPU. The Pi 5's Cortex-A76 has it. A Pi
+4's Cortex-A72 does not, and `mongod` there dies immediately with `Illegal
+instruction (core dumped)` — if you ever move this to a Pi 4, you need
+MongoDB 4.4 or a wire-compatible substitute like FerretDB.
+
+**Storage.** An SD card will work and will eventually wear out under a database
+write load. A USB SSD is the better home for `/var/lib/docker`. If you stay on
+SD, take the backups in step 6 seriously.
+
+**Accounts.** A Cloudflare account with your domain's nameservers already
+pointed at it.
+
+**Rotate the old credential first.** The repository's history contains a live
+MongoDB Atlas connection string. Delete that database user in Atlas (Database
+Access → `hector_admin` → Delete) before going any further. History rewriting
+does not help — the repo has been public, so the credential must be considered
+burned.
+
+---
+
+## 1. Prepare the Pi
+
+Flash 64-bit Raspberry Pi OS Lite (no desktop needed) with Raspberry Pi Imager,
+setting hostname, user, and SSH key in the imager's advanced options. Then SSH
+in and:
+
+```bash
+sudo apt update && sudo apt full-upgrade -y
+sudo reboot
+```
+
+Confirm you are on 64-bit:
+
+```bash
+uname -m          # expect aarch64
+```
+
+**Lock down SSH.** You are about to run a service that talks to the internet;
+the Pi itself should not accept password logins.
+
+```bash
+sudo nano /etc/ssh/sshd_config
+#   PasswordAuthentication no
+#   PermitRootLogin no
+sudo systemctl restart ssh
+```
+
+**Automatic security updates.** Nobody patches a Pi they cannot see.
+
+```bash
+sudo apt install -y unattended-upgrades
+sudo dpkg-reconfigure -plow unattended-upgrades
+```
+
+**Give the database some headroom.** MongoDB dislikes running out of memory.
+
+```bash
+sudo dphys-swapfile swapoff
+sudo sed -i 's/^CONF_SWAPSIZE=.*/CONF_SWAPSIZE=2048/' /etc/dphys-swapfile
+sudo dphys-swapfile setup && sudo dphys-swapfile swapon
+```
+
+---
+
+## 2. Install Docker
+
+```bash
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker "$USER"
+newgrp docker            # or log out and back in
+docker run --rm hello-world
+```
+
+Cap the journal so logs cannot fill the card:
+
+```bash
+sudo mkdir -p /etc/docker
+echo '{"log-driver":"json-file","log-opts":{"max-size":"10m","max-file":"3"}}' \
+  | sudo tee /etc/docker/daemon.json
+sudo systemctl restart docker
+```
+
+---
+
+## 3. Get the code and generate secrets
+
+```bash
+git clone https://github.com/Slumberdac/HECTOR.git
+cd HECTOR
+cp .env.example .env
+```
+
+Generate three distinct secrets:
+
+```bash
+for n in MONGO_ROOT_PASSWORD MONGO_APP_PASSWORD JWT_SECRET; do
+  echo "$n=$(openssl rand -base64 36 | tr -d '/+=' | head -c 48)"
+done
+```
+
+Paste those into `.env`. Fill in `MONGO_ROOT_USERNAME` and
+`MONGO_APP_USERNAME` (the defaults in the example file are fine). Leave
+`CLOUDFLARE_TUNNEL_TOKEN` empty for now — step 4 produces it.
+
+```bash
+chmod 600 .env
+```
+
+`.env` is gitignored. Keep it that way; if you ever need it elsewhere, copy it
+over SSH rather than committing it.
+
+> `MONGO_APP_PASSWORD` is consumed once, on the very first boot, by
+> `ops/mongo-init/01-create-app-user.js`. Changing it later has no effect on an
+> existing volume — you have to change the password inside mongo, or destroy the
+> volume and restore from a backup.
+
+---
+
+## 4. Create the Cloudflare Tunnel
+
+In the Cloudflare dashboard: **Zero Trust → Networks → Tunnels → Create a
+tunnel → Cloudflared**. Name it `hector-pi`.
+
+The install screen shows a `docker run cloudflare/cloudflared … --token
+eyJhIjoi…` command. You do not need to run it — copy just the token and put it
+in `.env`:
+
+```
+CLOUDFLARE_TUNNEL_TOKEN=eyJhIjoi…
+```
+
+That token is a credential with the power to publish services from your network.
+Treat it like a password.
+
+Then, on the tunnel's **Public Hostname** tab, add a route:
+
+| Field     | Value                    |
+| --------- | ------------------------ |
+| Subdomain | leave blank, or `hector` |
+| Domain    | your domain              |
+| Path      | leave blank              |
+| Type      | `HTTP`                   |
+| URL       | `web:8080`               |
+
+`web:8080` is the container name and port on the compose network — cloudflared
+resolves it over Docker's internal DNS, so nothing is exposed to the LAN. The
+DNS record is created for you because the zone is already on Cloudflare.
+
+If you want the bare domain _and_ `www`, add a second public hostname with
+subdomain `www` pointing at the same `web:8080`.
+
+---
+
+## 5. First deploy
+
+```bash
+docker compose up -d --build
+```
+
+The first build takes a few minutes on a Pi. Then:
+
+```bash
+docker compose ps                    # all four services, api and web healthy
+docker compose logs -f api           # expect "Connected to MongoDB"
+curl -fsS http://127.0.0.1:8080/healthz
+curl -fsS http://127.0.0.1:8080/api/v1/rocks
+```
+
+Visit your domain. Register an account, add a companion, sign out, sign back in.
+
+**Check that the fixes are actually in effect:**
+
+```bash
+# No password material anywhere in the user registry.
+curl -s https://your-domain/api/v1/users | grep -i password || echo "clean"
+
+# Anonymous callers cannot create.
+curl -s -o /dev/null -w '%{http_code}\n' -X POST https://your-domain/api/v1/rocks \
+  -H 'Content-Type: application/json' -d '{"name":"x"}'      # expect 401
+
+# The session cookie is httpOnly and Secure.
+curl -si -X POST https://your-domain/api/v1/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"you","password":"…"}' | grep -i set-cookie
+# expect: HttpOnly; Secure; SameSite=Strict
+```
+
+---
+
+## 6. Backups
+
+A Pi's SD card will fail eventually. Assume it.
+
+```bash
+mkdir -p ~/HECTOR/ops/backups
+```
+
+`ops/backup.sh` in the repo does a `mongodump` into a timestamped archive and
+prunes anything older than 30 days. Schedule it:
+
+```bash
+crontab -e
+# 15 3 * * *  /home/YOUR_USER/HECTOR/ops/backup.sh >> /home/YOUR_USER/HECTOR/ops/backup.log 2>&1
+```
+
+Backups on the same card as the data are not backups. Copy them somewhere else —
+a cron'd `rclone`, `rsync` to another machine, or a scheduled pull from your
+laptop:
+
+```bash
+rsync -av pi@raspberrypi.local:HECTOR/ops/backups/ ~/hector-backups/
+```
+
+Restoring:
+
+```bash
+docker compose cp ops/backups/hector-2026-08-22.archive mongo:/tmp/restore.archive
+docker compose exec mongo mongorestore \
+  --username "$MONGO_ROOT_USERNAME" --password "$MONGO_ROOT_PASSWORD" \
+  --authenticationDatabase admin --archive=/tmp/restore.archive --drop
+```
+
+Test a restore once, now, while nothing depends on it working.
+
+---
+
+## 7. Updating
+
+```bash
+cd ~/HECTOR
+git pull
+docker compose up -d --build
+docker image prune -f
+```
+
+Base images (mongo, caddy, cloudflared) update separately:
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+Do a `mongo` major-version bump deliberately, not as a side effect of `pull` —
+read the release notes and take a backup first.
+
+---
+
+## 8. Optional hardening
+
+**Cloudflare WAF rate limiting.** The API rate-limits itself, but blocking
+abuse at Cloudflare's edge means it never reaches your home connection. Security
+→ WAF → Rate limiting rules: something like 100 requests per minute per IP to
+`/api/*`.
+
+**Cloudflare Access on the tunnel's admin surface.** Not needed here since
+there is no admin panel, but if you ever add one, Access gates it behind an
+identity provider without any code.
+
+**Bot Fight Mode** (Security → Bots) costs nothing and removes most of the
+background noise.
+
+**Uptime checks.** `GET /healthz` returns 503 when the database is down. Point
+any free uptime monitor at it.
+
+---
+
+## Troubleshooting
+
+**`mongod` exits immediately with `Illegal instruction`.**
+You are on a Pi 4 or older. See step 0.
+
+**`docker compose up` fails with `set MONGO_APP_PASSWORD in .env`.**
+The compose file uses `${VAR:?}` so a missing secret fails loudly at startup
+rather than silently starting an unauthenticated database. Fill in `.env`.
+
+**The API logs `MongoServerError: Authentication failed`.**
+`MONGO_APP_PASSWORD` was changed after the volume was initialised. The init
+script only runs on an empty data directory. Either set the password inside
+mongo, or `docker compose down -v` (destroys data) and restore from backup.
+
+**Cloudflare shows error 502.**
+cloudflared reached the tunnel but not the origin. Check the public hostname is
+`http://web:8080` — `localhost:8080` will not work from inside the cloudflared
+container.
+
+**Cloudflare shows error 1033.**
+The tunnel connector is not running. `docker compose logs cloudflared`; usually
+a bad or revoked token.
+
+**The site loads but every API call 502s.**
+The `api` container is unhealthy. `docker compose logs api`. Most often the
+config validator rejected an environment variable and the process exited — the
+message names the variable.
+
+**Sign-in appears to work but you are immediately signed out.**
+The session cookie is `Secure`, so it is only sent over HTTPS. Reaching the site
+over plain HTTP (for example directly at `http://pi-ip:8080`) will do this. Use
+the real domain.
+
+**Builds run out of memory on the Pi.**
+Increase swap (step 1), or build the images on your laptop with
+`docker buildx build --platform linux/arm64` and push them to a registry.
+
+---
+
+## What runs where
+
+| Container     | Image                    | Listens         | Reachable from                         |
+| ------------- | ------------------------ | --------------- | -------------------------------------- |
+| `mongo`       | `mongo:8`                | 27017           | `api` only                             |
+| `api`         | built from `backend/`    | 5000            | `web` only                             |
+| `web`         | Caddy + built bundle     | 8080            | `cloudflared`, and 127.0.0.1 on the Pi |
+| `cloudflared` | `cloudflare/cloudflared` | nothing inbound | —                                      |
+
+Only `web` publishes a host port, and only on loopback, for debugging over SSH.
+Everything the public reaches arrives through the tunnel.
