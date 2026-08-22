@@ -238,21 +238,39 @@ cd HECTOR
 cp .env.example .env
 ```
 
-Generate three distinct secrets:
+Generate three distinct secrets and write them straight into the file, rather
+than printing them and pasting by hand. `sed` replaces the existing line for
+each key, so nothing ends up defined twice:
 
 ```bash
 for n in MONGO_ROOT_PASSWORD MONGO_APP_PASSWORD JWT_SECRET; do
-  echo "$n=$(openssl rand -base64 36 | tr -d '/+=' | head -c 48)"
+  v=$(openssl rand -base64 36 | tr -d '/+=' | head -c 48)
+  sed -i "s|^$n=.*|$n=$v|" .env
 done
+unset v
 ```
 
-Paste those into `.env`. Fill in `MONGO_ROOT_USERNAME` and
-`MONGO_APP_USERNAME` (the defaults in the example file are fine). Leave
-`CLOUDFLARE_TUNNEL_TOKEN` empty for now; step 4 produces it.
+`MONGO_ROOT_USERNAME` and `MONGO_APP_USERNAME` already have workable defaults in
+the example file. Leave `CLOUDFLARE_TUNNEL_TOKEN` empty for now; step 4 produces
+it.
+
+**Check the file before going further.** Two mistakes here fail in ways that are
+hard to read later:
 
 ```bash
 chmod 600 .env
+
+# a key defined twice: the LAST one wins, silently, even if it is empty
+grep -oE '^[A-Z_]+' .env | sort | uniq -d
+
+# a key that should have a value and does not
+grep -nE '^(MONGO_ROOT_USERNAME|MONGO_ROOT_PASSWORD|MONGO_APP_USERNAME|MONGO_APP_PASSWORD|JWT_SECRET)=$' .env
 ```
+
+Both should print nothing. `${VAR:?}` in the compose file treats empty exactly
+like unset, so a duplicate key with an empty value produces
+`required variable X is missing a value` even though the name is right there in
+the file with a good value above it.
 
 `.env` is gitignored. Keep it that way; if you ever need it elsewhere, copy it
 over SSH rather than committing it.
@@ -300,6 +318,16 @@ subdomain `www` pointing at the same `web:8080`.
 ---
 
 ## 5. First deploy
+
+Resolve the configuration before building anything. This substitutes every
+`${VAR}` and reports what is missing, without pulling an image or starting a
+container:
+
+```bash
+docker compose config --quiet && echo "env OK"
+```
+
+Then:
 
 ```bash
 docker compose up -d --build

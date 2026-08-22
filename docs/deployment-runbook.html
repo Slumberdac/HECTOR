@@ -1059,20 +1059,53 @@ sudo systemctl restart docker</pre>
 cd HECTOR
 cp .env.example .env
 
-<span class="c"># three distinct secrets</span>
+<span class="c"># three distinct secrets, written in place rather than pasted by hand</span>
 for n in MONGO_ROOT_PASSWORD MONGO_APP_PASSWORD JWT_SECRET; do
-  echo "$n=$(openssl rand -base64 36 | tr -d '/+=' | head -c 48)"
+  v=$(openssl rand -base64 36 | tr -d '/+=' | head -c 48)
+  sed -i "s|^$n=.*|$n=$v|" .env
 done
+unset v
 
 chmod 600 .env</pre>
 				</div>
 
 				<p>
-					Paste those three lines into <code>.env</code> and fill in
-					the two usernames. Leave
+					<code>MONGO_ROOT_USERNAME</code> and
+					<code>MONGO_APP_USERNAME</code> already have workable
+					defaults in the example file. Leave
 					<code>CLOUDFLARE_TUNNEL_TOKEN</code> empty; step 04 produces
 					it.
 				</p>
+
+				<h3>Check the file before going further</h3>
+
+				<div class="cmd">
+					<div class="cmd-bar">
+						<span class="cmd-where">pi · ~/HECTOR</span>
+						<button class="copy" type="button">Copy</button>
+					</div>
+					<pre>
+<span class="c"># a key defined twice: the LAST one wins, silently, even if empty</span>
+grep -oE '^[A-Z_]+' .env | sort | uniq -d
+
+<span class="c"># a key that should have a value and does not</span>
+grep -nE '^(MONGO_ROOT_USERNAME|MONGO_ROOT_PASSWORD|MONGO_APP_USERNAME|MONGO_APP_PASSWORD|JWT_SECRET)=$' .env</pre>
+				</div>
+
+				<div class="note warn">
+					<span class="note-label"
+						>Both should print nothing at all</span
+					>
+					<p>
+						<code>${VAR:?}</code> in the compose file treats empty
+						exactly like unset. So a key listed twice, once with a
+						good value and once blank, produces
+						<code>required variable X is missing a value</code> even
+						though the name is sitting right there in the file with
+						a value above it. Pasting generated lines by hand is how
+						that happens.
+					</p>
+				</div>
 
 				<div class="note">
 					<span class="note-label">One-shot value</span>
@@ -1184,7 +1217,10 @@ chmod 600 .env</pre>
 						<span class="cmd-where">pi · ~/HECTOR</span>
 						<button class="copy" type="button">Copy</button>
 					</div>
-					<pre>docker compose up -d --build
+					<pre><span class="c"># resolve every ${VAR} first: no image pulled, no container started</span>
+docker compose config --quiet &amp;&amp; echo "env OK"
+
+docker compose up -d --build
 
 docker compose ps          <span class="c"># four services, api and web healthy</span>
 docker compose logs -f api <span class="c"># expect "Connected to MongoDB"</span>
