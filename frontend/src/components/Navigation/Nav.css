@@ -61,6 +61,10 @@
 	padding: 0;
 }
 
+/* The li draws the button; the link inside it is what you can actually click.
+   The two have to be the same shape, so the li carries the border and the
+   link carries the padding. With the padding on the li instead, everything
+   but the text itself was a dead zone. */
 .nav-container nav ul li {
 	font-family: omori;
 	/* Four items with 3px borders at a flat 2em overflowed a phone by 300px. */
@@ -68,9 +72,7 @@
 	transition: all 0.15s ease-in-out;
 	border: clamp(2px, 0.4vw, 3px) solid black;
 	border-radius: clamp(8px, 1.5vw, 15px);
-	/* Roomier than the original 0 10px: with the bar this tall the buttons
-	   need the weight to sit in it properly. */
-	padding: clamp(2px, 0.7vw, 8px) clamp(6px, 1.8vw, 24px);
+	padding: 0;
 	white-space: nowrap;
 }
 
@@ -82,8 +84,24 @@
 }
 
 .nav-container nav ul li a {
+	display: block;
+	/* Roomier than the original 0 10px: with the bar this tall the buttons
+	   need the weight to sit in it properly. */
+	padding: clamp(2px, 0.7vw, 8px) clamp(6px, 1.8vw, 24px);
 	text-decoration: none;
 	color: white;
+}
+
+/* Keyboard focus lands on the link but should light up the whole button, so
+   the ring goes on the li that draws it. */
+.nav-container nav ul li:has(a:focus-visible) {
+	outline: 3px solid var(--text);
+	outline-offset: 3px;
+	background-color: var(--accent);
+}
+
+.nav-container nav ul li a:focus-visible {
+	outline: none;
 }
 
 .nav-container nav ul li a h1 {
@@ -178,10 +196,15 @@
 	}
 
 	/* With a row to themselves they no longer need to be tiny, and they get
-	   enough padding to be a real tap target. */
+	   enough padding to be a real tap target. The padding stays on the link so
+	   the whole button remains the hit area. */
 	.nav-container nav ul li,
 	.scrolled nav ul li {
 		font-size: clamp(1rem, 4.4vw, 1.4rem);
-		padding: 6px 10px;
+	}
+
+	.nav-container nav ul li a,
+	.scrolled nav ul li a {
+		padding: 8px 14px;
 	}
 }
