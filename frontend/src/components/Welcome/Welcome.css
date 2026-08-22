@@ -7,7 +7,7 @@
 .welcome-logo {
 	position: relative;
 	background-color: var(--background);
-	box-shadow: 0 0 2em 0.5em rgba(0, 0, 0, 1);
+	box-shadow: 0 0 2em 0.2em rgba(0, 0, 0, 0.55);
 	/* Was a flat 600px, which left the logo floating in dead space on a phone
 	   and clipped the tagline on a short laptop. */
 	min-height: clamp(320px, 62vh, 600px);
@@ -163,7 +163,7 @@
 	gap: clamp(16px, 3vw, 32px);
 	position: relative;
 	background-color: var(--background);
-	box-shadow: 0 0 2em 0.5em rgba(0, 0, 0, 1);
+	box-shadow: 0 0 2em 0.2em rgba(0, 0, 0, 0.55);
 	padding: 25px clamp(16px, 3vw, 32px);
 	width: min(90%, 1200px);
 	margin: 0 auto;

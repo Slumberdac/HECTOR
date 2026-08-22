@@ -10,7 +10,13 @@
 	position: relative;
 	width: 100%;
 	min-height: 100vh;
-	backdrop-filter: blur(5px);
+	/* The page-wide treatment of the tiled rock photo behind everything, and
+	   the only place it is applied: this element wraps the routed content, so
+	   it covers the full document height. The slight darkening is what carries
+	   the effect past the last panel; blur alone is subtle enough that where
+	   the panels' shadows stopped, the background appeared to snap back to
+	   untreated. */
+	backdrop-filter: blur(9px) brightness(0.9);
 }
 
 /* The bar is a three-part flex row: logo, links, avatar. Previously the logo

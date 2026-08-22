@@ -1,5 +1,4 @@
 .users-registry-container {
-	backdrop-filter: blur(5px);
 	padding: clamp(12px, 3vw, 24px) var(--gutter) 50px;
 }
 
