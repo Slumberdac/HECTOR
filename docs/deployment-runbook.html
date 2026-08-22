@@ -821,12 +821,29 @@ Host pi
 
 				<h3>2. Write a drop-in, do not edit the main file</h3>
 
+				<div class="note stop">
+					<span class="note-label"
+						>Everything below runs on the Pi</span
+					>
+					<p>
+						Steps 2 to 4 change the SSH server, and the SSH server
+						you want to change is the Pi's. Check your prompt before
+						each one. Hardening your own laptop by mistake is
+						harmless but does nothing for the Pi, and
+						<code>sshd: no hostkeys available</code> from
+						<code>sshd -t</code> is the giveaway: it means that
+						machine has never run an SSH server at all.
+					</p>
+				</div>
+
 				<div class="cmd">
 					<div class="cmd-bar">
 						<span class="cmd-where">pi · shell</span>
 						<button class="copy" type="button">Copy</button>
 					</div>
 					<pre>
+ssh pi                              <span class="c"># if you are not already on it</span>
+
 ls /etc/ssh/sshd_config.d/          <span class="c"># see what is already there</span>
 
 sudo tee /etc/ssh/sshd_config.d/10-hardening.conf >/dev/null &lt;&lt;'EOF'

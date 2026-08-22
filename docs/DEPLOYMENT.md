@@ -103,7 +103,14 @@ keeps the _first_ value it parses for any directive. Anything in that directory
 therefore beats what you write further down in the main file, which is why
 editing `sshd_config` by hand so often appears to do nothing.
 
+Steps 2 to 4 run **on the Pi**. Check the prompt before each one: the SSH server
+you want to change is the Pi's, not your laptop's. If `sshd -t` answers
+`sshd: no hostkeys available`, you are on a machine that has never run an SSH
+server, which means you are on the wrong one.
+
 ```bash
+ssh pi                              # if you are not already on it
+
 ls /etc/ssh/sshd_config.d/          # see what is already there
 
 sudo tee /etc/ssh/sshd_config.d/10-hardening.conf >/dev/null <<'EOF'
