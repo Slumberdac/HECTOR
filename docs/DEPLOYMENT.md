@@ -58,17 +58,44 @@ single most common way a home server gets taken over.
 Do these in order. Turning passwords off before confirming your key works is how
 people lock themselves out.
 
-**1. Prove your key already works.** The Imager's advanced options install it
-into `~/.ssh/authorized_keys` for you, so this usually passes on the first try.
-Run it from your laptop:
+**1. Prove your key already works.** If you gave the Imager a public key in its
+advanced options it is already in `~/.ssh/authorized_keys` on the Pi. Check from
+your laptop:
 
 ```bash
 ssh -o PreferredAuthentications=publickey -o PasswordAuthentication=no pi@raspberrypi.local
 ```
 
-If that gives you a shell, the key is in place. If it says
-`Permission denied (publickey)`, stop and fix that first with
-`ssh-copy-id pi@raspberrypi.local`.
+A shell means the key is in place; skip to step 2.
+
+`Permission denied (publickey,password)` means it is not, and the trailing
+`password` in that list is your reassurance that you can still get in the old
+way while you fix it. Install a key now:
+
+```bash
+ls -la ~/.ssh/                      # is there an id_ed25519 at all?
+
+# only if you have no key yet:
+ssh-keygen -t ed25519 -C "$USER@$(hostname)"
+
+ssh-copy-id -i ~/.ssh/id_ed25519.pub pi@raspberrypi.local   # asks for the Pi password
+```
+
+`ssh-copy-id: ERROR: No identities found` means there is no keypair to copy, so
+run the `ssh-keygen` line first. Then re-run the publickey-only check above and
+do not continue until it gives you a shell.
+
+Worth putting in `~/.ssh/config` while you are here, so the right key is offered
+and the passphrase is asked for once per session rather than once per connection:
+
+```
+Host pi
+    Hostname raspberrypi.local
+    User YOUR_USER
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+    AddKeysToAgent yes
+```
 
 **2. Write a drop-in rather than editing the main file.** Debian's
 `sshd_config` begins with `Include /etc/ssh/sshd_config.d/*.conf`, and sshd

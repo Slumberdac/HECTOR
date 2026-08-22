@@ -752,9 +752,9 @@ uname -m</pre>
 
 				<h3>1. Prove your key already works</h3>
 				<p>
-					The Imager's advanced options install it into
-					<code>~/.ssh/authorized_keys</code> for you, so this usually
-					passes first try. Run it from your laptop.
+					If you gave the Imager a public key in its advanced options
+					it is already in <code>~/.ssh/authorized_keys</code> on the
+					Pi. Check from your laptop.
 				</p>
 
 				<div class="cmd">
@@ -767,11 +767,57 @@ ssh -o PreferredAuthentications=publickey -o PasswordAuthentication=no pi@raspbe
 				</div>
 
 				<p>
-					A shell means the key is in place.
-					<code>Permission denied (publickey)</code> means stop and
-					fix it first with
-					<code>ssh-copy-id pi@raspberrypi.local</code>.
+					A shell means the key is in place; skip to step 2.
+					<code>Permission denied (publickey,password)</code> means it
+					is not, and the trailing <code>password</code> in that list
+					is your reassurance that you can still get in the old way
+					while you fix it.
 				</p>
+
+				<div class="cmd">
+					<div class="cmd-bar">
+						<span class="cmd-where">laptop · shell</span>
+						<button class="copy" type="button">Copy</button>
+					</div>
+					<pre>
+ls -la ~/.ssh/                      <span class="c"># is there an id_ed25519 at all?</span>
+
+<span class="c"># only if you have no key yet:</span>
+ssh-keygen -t ed25519 -C "$USER@$(hostname)"
+
+ssh-copy-id -i ~/.ssh/id_ed25519.pub pi@raspberrypi.local   <span class="c"># asks for the Pi password</span></pre>
+				</div>
+
+				<div class="note warn">
+					<span class="note-label">No identities found</span>
+					<p>
+						That error from <code>ssh-copy-id</code> means there is
+						no keypair on this machine to copy, not that the Pi
+						refused one. Run the <code>ssh-keygen</code> line first,
+						then re-run the publickey-only check above, and do not
+						continue until it gives you a shell.
+					</p>
+				</div>
+
+				<p>
+					Worth putting in <code>~/.ssh/config</code> while you are
+					here, so the right key is offered and the passphrase is
+					asked for once per session rather than once per connection:
+				</p>
+
+				<div class="cmd">
+					<div class="cmd-bar">
+						<span class="cmd-where">laptop · ~/.ssh/config</span>
+						<button class="copy" type="button">Copy</button>
+					</div>
+					<pre>
+Host pi
+    Hostname raspberrypi.local
+    User YOUR_USER
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+    AddKeysToAgent yes</pre>
+				</div>
 
 				<h3>2. Write a drop-in, do not edit the main file</h3>
 
