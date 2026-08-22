@@ -1,22 +1,90 @@
+/* Foundation. Everything else in the app builds on the tokens and resets here. */
+
 :root {
 	--text: #050604;
 	--background: #f5f6f3;
 	--primary: #829c6d;
 	--secondary: #acaac5;
 	--accent: #b292b5;
+
+	/* Fluid type. Each of these reaches its old fixed value at desktop width
+	   and scales down rather than overflowing; the page titles were a flat
+	   8rem, which is 128px of text on a 390px phone. */
+	--title: clamp(2.25rem, 11vw, 8rem);
+	--heading: clamp(1.75rem, 6vw, 3rem);
+	--subheading: clamp(1.25rem, 4vw, 2rem);
+	--body-size: clamp(1rem, 2.2vw, 1.2rem);
+
+	/* Page gutter and grid gap, kept as one value so spacing stays
+	   proportionate as the viewport changes. */
+	--gutter: clamp(12px, 4vw, 30px);
+
+	/* Minimum comfortable touch target. Anything a finger has to hit uses it. */
+	--tap: 44px;
+
+	/* The outline is in em, not px. At a fixed 3px it matched the 8rem titles
+	   these were drawn at, but the same 3px around 2rem text swallows the
+	   letterforms; scaling it with the type keeps the stroke proportionate at
+	   every size. */
+	--outline:
+		-0.028em -0.028em 0 #000, 0.028em -0.028em 0 #000,
+		-0.028em 0.028em 0 #000, 0.028em 0.028em 0 #000;
 }
+
+*,
+*::before,
+*::after {
+	/* Without this, every `width: 50%` with padding overflowed its parent. */
+	box-sizing: border-box;
+}
+
+html {
+	/* Stops iOS inflating text in landscape. */
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+}
+
+/* Media never pushes its container wider than the viewport. */
+img,
+video {
+	max-width: 100%;
+}
+
+/* The outlined Omori page title, used on nearly every route. */
+.rocks-registry-container h1,
+.users-registry-container h1,
+.signin-container h1,
+.signup-container h1,
+.profile-container .profile-info h1,
+.new-rock-form h1 {
+	font-family: Omori;
+	color: var(--background);
+	font-size: var(--title);
+	line-height: 1.05;
+	text-shadow: var(--outline);
+	text-align: center;
+	margin: 0 auto 0.2em auto;
+	overflow-wrap: break-word;
+}
+
 #not-found {
 	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: -5px;
-	right: 0;
+	inset: 0;
 	background-color: var(--background);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--gutter);
 }
+
 #not-found img {
-	position: relative;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	height: 100vh;
+	/* Was height: 100vh, which on a narrow screen made a 16:9 image far wider
+	   than the viewport. */
+	max-width: 100%;
+	max-height: 100vh;
+	height: auto;
+	object-fit: contain;
 }

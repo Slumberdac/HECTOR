@@ -43,14 +43,14 @@ export default function RocksRegistry() {
 			/>
 			{loading && <p>Loading…</p>}
 			{error && <p className="error">{error}</p>}
-			<div className="rocks-registry">
+			<ul className="rocks-registry">
 				{/* Adding a companion refreshes the list in place rather than
 				    reloading the whole page. */}
 				<AddRockCard onCreated={() => load()} />
 				{filteredList.map((rock) => (
 					<RockCard key={rock._id} rock={rock} />
 				))}
-			</div>
+			</ul>
 		</div>
 	);
 }

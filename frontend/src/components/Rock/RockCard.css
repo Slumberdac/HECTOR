@@ -1,38 +1,73 @@
 @font-face {
 	font-family: Omori;
 	src: url("../../assets/fonts/OMORI_GAME2.ttf");
+	font-display: swap;
 }
 
-.rocks-registry-container .rock-card {
+/* The card fills whichever grid track it lands in; the parent decides how many
+   fit, so there is no percentage width here any more. A container context lets
+   the artwork inside size off the card rather than the viewport, which is what
+   keeps a card in a narrow sidebar looking like a smaller card and not a
+   squashed one. */
+.rocks-registry-container .rock-card,
+.rock-list .rock-card,
+.rock-card-container-profile .rock-card {
 	display: block;
-	width: 19%;
-	margin: 30px;
-	transition: all 0.15s ease-in-out;
+	width: 100%;
+	margin: 0;
+	container-type: inline-size;
+	transition: transform 0.15s ease-in-out;
 }
+
 .rock-card-container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	background-color: var(--background);
 	margin: 0;
+	padding: 0;
 	transition: all 0.15s ease-in-out;
 	border-radius: 6px;
-	height: 375px;
+	/* Was a fixed 375px, which cropped names once the card narrowed. */
+	height: 100%;
 	overflow: hidden;
 }
+
+.rock-card-container .image-container {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	overflow: hidden;
+}
+
 .rock-card-container img {
 	width: 100%;
-	height: 275px;
+	height: 100%;
 	object-fit: cover;
+}
+
+/* The placeholder is artwork with lettering in it, so it has to fit inside the
+   frame rather than be cropped to fill it the way a photo is. */
+.rock-card-container .image-container .svg-missing-image {
+	width: 100%;
+	height: 100%;
+	padding: 6%;
+}
+
+.rock-card-container .image-container .svg-missing-image svg {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
 }
 
 .rock-card-container #name {
 	font-family: Omori;
-	font-size: 2em;
+	font-size: clamp(1.1rem, 3.5vw, 2em);
 	z-index: 1;
 	margin: auto;
+	padding: 0.4em 0.3em;
 	text-align: center;
-	word-wrap: break-word;
+	overflow-wrap: anywhere;
 	max-width: 100%;
 }
 
@@ -40,17 +75,11 @@ a {
 	text-decoration: none;
 	color: var(--text);
 }
+
 .rock-card-container:hover {
 	cursor: pointer;
 	box-shadow: 0 0 1em black;
 	transform: scale(1.05);
-}
-.rock-card-container .image-container .svg-missing-image {
-	width: 300px;
-	/* height: 30vh; */
-	height: 275px;
-	/* padding: 0 0 20px 0; */
-	object-fit: cover;
 }
 
 .image-container {
@@ -61,20 +90,39 @@ a {
 	position: absolute;
 	top: 0;
 	left: 0;
-	background-color: #c3c5aa;
-	padding: 10px 0px 10px 0px;
-	color: #000;
-	font-size: 18px;
-	font-weight: bold;
 	width: 100%;
-	margin-left: auto;
-	margin-right: auto;
+	background-color: #c3c5aa;
+	padding: 8px 6px;
+	color: #000;
+	font-size: clamp(0.75rem, 2.2vw, 18px);
+	font-weight: bold;
 	text-align: center;
 }
+
+/* The add-a-companion tile. Was font-size: 24em, a 384px glyph that decided the
+   height of every card in the row. */
 .add-rock {
 	font-family: Omori;
-	font-size: 24em;
-	position: relative;
+	/* Sized off the card, not the viewport: cqw is a percentage of the card's
+	   own width, so the glyph keeps the same proportion in every layout. */
+	font-size: clamp(3rem, 42cqw, 12rem);
+	line-height: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
-	margin: 0 auto -0.15em auto;
+	height: 100%;
+	margin: 0;
+}
+
+/* The tile is a button when signed in, so it needs the surrounding chrome
+   stripped back to match the plain cards. */
+.rock-card-container button.image-container {
+	appearance: none;
+	background: none;
+	border: 0;
+	padding: 0;
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
 }

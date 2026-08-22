@@ -3,95 +3,97 @@ body {
 	background-image: url("../../assets/bg_looped.webp");
 	background-repeat: repeat;
 }
+
 .rocks-registry-container {
 	width: 100%;
 	backdrop-filter: blur(5px);
-	margin-bottom: 50px;
+	padding: clamp(12px, 3vw, 24px) var(--gutter) 50px;
 }
-.rocks-registry-container h1 {
-	font-family: Omori;
-	color: var(--background);
-	font-size: 8rem;
-	text-shadow:
-		-3px -3px 0 #000,
-		3px -3px 0 #000,
-		-3px 3px 0 #000,
-		3px 3px 0 #000;
-	text-align: center;
-	margin: -20px auto;
-}
+
+/* Auto-fill grid rather than `width: 19%` on every card. Five across on a wide
+   screen, one on a phone, and every step between, with no breakpoints to keep
+   in sync. The min() guard stops a card being wider than the viewport itself. */
 .rocks-registry {
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr));
+	gap: var(--gutter);
 	margin-top: 20px;
+	padding: 0;
+	list-style: none;
 }
+
+.search-bar {
+	display: block;
+	padding: 10px;
+	/* Was a flat 30%, which is 117px of input on a phone. */
+	width: min(100%, 420px);
+	min-height: var(--tap);
+	margin: 0 auto;
+	font-size: 1rem;
+	background-color: var(--background);
+	border: 2px solid black;
+	border-radius: 8px;
+}
+
 /* Overlay over the entire page */
 .new-rock-form {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+	position: fixed;
+	inset: 0;
 	background-color: rgba(0, 0, 0, 0.5);
 	display: flex;
 	justify-content: center;
+	align-items: flex-start;
+	padding: var(--gutter);
+	overflow-y: auto;
 	z-index: 2;
 }
-/* Form container */
+
 .new-rock-form form {
-	position: fixed;
-	width: 50%;
+	position: relative;
+	width: min(100%, 600px);
 	background-color: var(--background);
-	padding: 20px;
-	margin-top: 100px;
+	padding: clamp(14px, 3vw, 20px);
+	margin: clamp(20px, 8vh, 100px) 0;
 	border-radius: 10px;
 }
-.new-rock-form h1 {
-	font-family: Omori;
-	color: var(--background);
-	font-size: 8rem;
-	text-shadow:
-		-3px -3px 0 #000,
-		3px -3px 0 #000,
-		-3px 3px 0 #000,
-		3px 3px 0 #000;
-	text-align: center;
-	margin: -20px auto;
-}
+
 .new-rock-form input {
 	display: block;
-	width: 90%;
-	height: 50px;
-	margin: 20px auto;
-	padding: -10px;
-	font-size: 2rem;
+	width: 100%;
+	min-height: var(--tap);
+	height: auto;
+	margin: 14px auto;
+	padding: 8px 12px;
+	font-size: clamp(1rem, 3vw, 2rem);
 	font-family: Omori;
 	background-color: var(--background);
 	border: 2px solid black;
 	border-radius: 15px;
 }
+
 .new-rock-form .buttons {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: center;
-	align-items: center;
-	width: 90%;
-	margin: 20px auto;
+	gap: 12px;
+	width: 100%;
+	margin: 20px auto 0;
 }
+
 .new-rock-form .buttons button {
-	display: block;
-	margin: 0 10px;
-	width: 90%;
-	height: fit-content;
-	padding: -10px;
-	font-size: 3em;
+	flex: 1 1 140px;
+	min-height: var(--tap);
+	padding: 6px 12px;
+	font-size: clamp(1.25rem, 4vw, 3em);
 	font-family: Omori;
 	background-color: var(--secondary);
 	border: 3px solid black;
 	border-radius: 15px;
 	transition: all 0.15s ease-in-out;
 }
+
 .new-rock-form .buttons button:hover {
 	cursor: pointer;
-	transform: scale(1.1);
+	transform: scale(1.05);
 	background-color: var(--accent);
 }
