@@ -23,6 +23,66 @@
 	overflow: hidden;
 }
 
+/* Entrance sequence. Each piece lands a beat after the one before, so the
+   panel assembles itself rather than appearing all at once. `both` fill is
+   what holds the start state before the delay elapses, which is why nothing
+   needs an opacity: 0 of its own and why disabling the animation below leaves
+   everything visible. */
+@keyframes welcome-rise {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes welcome-fade {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.welcome-logo {
+	animation: welcome-rise 0.6s ease-out both;
+}
+
+.welcome-logo h1 {
+	animation: welcome-rise 0.7s ease-out 0.15s both;
+}
+
+.welcome-logo .logo {
+	animation: welcome-rise 0.9s cubic-bezier(0.2, 0.7, 0.3, 1) 0.35s both;
+}
+
+.logo-text {
+	animation: welcome-fade 0.9s ease-out 0.95s both;
+}
+
+#number-1 {
+	animation: welcome-fade 0.9s ease-out 1.2s both;
+}
+
+.welcome-content {
+	animation: welcome-fade 0.8s ease-out 1.4s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.welcome-logo,
+	.welcome-logo h1,
+	.welcome-logo .logo,
+	.logo-text,
+	#number-1,
+	.welcome-content {
+		animation: none;
+	}
+}
+
 .welcome-logo h1 {
 	position: relative;
 	font-family: Omori;
@@ -64,6 +124,10 @@
 	overflow-wrap: break-word;
 }
 
+.logo-text .cap.tight {
+	margin-right: -0.05em;
+}
+
 .logo-text .cap {
 	margin-left: clamp(2px, 0.5vw, 10px);
 	font-size: clamp(1.6rem, 7vw, 6rem);
@@ -85,6 +149,14 @@
 	text-align: center;
 }
 
+.welcome {
+	/* Replaces a 100px spacer div between the two panels. */
+	display: flex;
+	flex-direction: column;
+	gap: clamp(32px, 9vw, 100px);
+	padding-bottom: clamp(20px, 5vw, 50px);
+}
+
 .welcome-content {
 	display: flex;
 	align-items: center;
@@ -94,7 +166,7 @@
 	box-shadow: 0 0 2em 0.5em rgba(0, 0, 0, 1);
 	padding: 25px clamp(16px, 3vw, 32px);
 	width: min(90%, 1200px);
-	margin: 0 auto clamp(20px, 5vw, 50px) auto;
+	margin: 0 auto;
 	z-index: 1;
 	color: var(--text);
 	font-family: "Courier New", monospace;

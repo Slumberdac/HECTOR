@@ -1,75 +1,33 @@
-import React from "react";
-import { useState, useEffect } from "react";
-
 import Logo from "../../assets/Logo";
 import Hector from "../../assets/hectorHimself.webp";
 import "./Welcome.css";
 
 function Welcome() {
-	const [scrollY, setScrollY] = useState(0);
-	// set scroll threshold to adapt to different screen sizes
-	const scrollThreshold = window.innerHeight / 10;
-
-	useEffect(() => {
-		const handleScroll = () => {
-			setScrollY(window.scrollY);
-		};
-		handleScroll();
-
-		window.addEventListener("scroll", handleScroll);
-		return () => {
-			window.removeEventListener("scroll", handleScroll);
-		};
-	}, []);
-
+	// The reveal used to be driven by a scroll listener, which meant nothing
+	// happened until you scrolled past a tenth of the viewport, and on a tall
+	// screen the panel fits without scrolling at all so it never fired. It is a
+	// staged entrance now, run from CSS on mount: no listener, no re-render per
+	// scroll frame, and it honours prefers-reduced-motion.
 	return (
 		<div className="welcome">
 			<div className="welcome-logo">
 				<h1>Welcome to</h1>
-				{/* when scrollY reaches {scrollThreshold}, slide logo up and fade in some text */}
-				<Logo
-					color="#050604"
-					style={{
-						transform: `translateY(${
-							scrollY > scrollThreshold ? "-10%" : "0"
-						})`,
-						transition: "transform 1.5s ease-out",
-					}}
-				/>
-				<p
-					className="logo-text"
-					style={{
-						// fade in text
-						opacity: `${scrollY > scrollThreshold ? "1" : "0"}`,
-						transition: "opacity 1s",
-					}}
-				>
+				<Logo color="#050604" />
+				<p className="logo-text">
 					<span className="cap">H</span>
 					ector's
 					<span className="cap">E</span>
 					xtravagant
 					<span className="cap">C</span>
 					ontainement
-					<span className="cap" style={{ marginRight: "-15px" }}>
-						T
-					</span>
+					<span className="cap tight">T</span>
 					errain
 					<span className="cap">O</span>f
 					<span className="cap">R</span>
 					ocks
 				</p>
-				<p
-					id="number-1"
-					style={{
-						// fade in text
-						opacity: `${scrollY > scrollThreshold ? "1" : "0"}`,
-						transition: "opacity 1s",
-					}}
-				>
-					The World's #1 Pet Rock Registry
-				</p>
+				<p id="number-1">The World&apos;s #1 Pet Rock Registry</p>
 			</div>
-			<div style={{ height: "100px" }}></div>
 			<div className="welcome-content">
 				<img src={Hector}></img>
 				<p>
