@@ -9,46 +9,42 @@ import Rock from "./Rock/Rock";
 import Profile from "./User/Profile";
 import SignUp from "./User/SignUp";
 import SignIn from "./User/SignIn";
-import NotFound from "../assets/404 NotFound.png";
+import { AuthProvider } from "../context/AuthContext";
+import NotFound from "../assets/404-not-found.webp";
 import "./App.css";
+
 const App = () => {
 	return (
 		<div className="App">
 			<BrowserRouter>
-				<Routes>
-					<Route path="/" element={<Nav />}>
-						<Route index element={<Welcome />} />
-					</Route>
-					<Route path="/users" element={<Nav />}>
-						<Route index element={<UsersRegistry />} />
-					</Route>
-					<Route path="/users/:uid" element={<Nav />}>
-						<Route index element={<User />} />
-					</Route>
-					<Route path="/rocks" element={<Nav />}>
-						<Route index element={<RocksRegistry />} />
-					</Route>
-					<Route path="/rocks/:rid" element={<Nav />}>
-						<Route index element={<Rock />} />
-					</Route>
-					<Route path="/profile" element={<Nav />}>
-						<Route index element={<Profile />} />
-					</Route>
-					<Route path="/signup" element={<Nav />}>
-						<Route index element={<SignUp />} />
-					</Route>
-					<Route path="/signin" element={<Nav />}>
-						<Route index element={<SignIn />} />
-					</Route>
-					<Route
-						path="*"
-						element={
-							<div id="not-found">
-								<img src={NotFound} />
-							</div>
-						}
-					/>
-				</Routes>
+				<AuthProvider>
+					<Routes>
+						{/* One layout route rather than repeating <Nav /> for
+						    every path, and real URL params instead of parsing
+						    window.location by hand. */}
+						<Route element={<Nav />}>
+							<Route index path="/" element={<Welcome />} />
+							<Route path="/users" element={<UsersRegistry />} />
+							<Route path="/users/:uid" element={<User />} />
+							<Route path="/rocks" element={<RocksRegistry />} />
+							<Route path="/rocks/:rid" element={<Rock />} />
+							<Route path="/profile" element={<Profile />} />
+							<Route path="/signup" element={<SignUp />} />
+							<Route path="/signin" element={<SignIn />} />
+							<Route
+								path="*"
+								element={
+									<div id="not-found">
+										<img
+											src={NotFound}
+											alt="Page not found"
+										/>
+									</div>
+								}
+							/>
+						</Route>
+					</Routes>
+				</AuthProvider>
 			</BrowserRouter>
 		</div>
 	);

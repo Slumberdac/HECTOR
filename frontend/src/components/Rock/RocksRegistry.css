@@ -1,6 +1,6 @@
 body {
 	color: var(--text);
-	background-image: url("../../assets/bg_looped.jpg");
+	background-image: url("../../assets/bg_looped.webp");
 	background-repeat: repeat;
 }
 .rocks-registry-container {
@@ -12,7 +12,11 @@ body {
 	font-family: Omori;
 	color: var(--background);
 	font-size: 8rem;
-	text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000;
+	text-shadow:
+		-3px -3px 0 #000,
+		3px -3px 0 #000,
+		-3px 3px 0 #000,
+		3px 3px 0 #000;
 	text-align: center;
 	margin: -20px auto;
 }
@@ -46,7 +50,11 @@ body {
 	font-family: Omori;
 	color: var(--background);
 	font-size: 8rem;
-	text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000;
+	text-shadow:
+		-3px -3px 0 #000,
+		3px -3px 0 #000,
+		-3px 3px 0 #000,
+		3px 3px 0 #000;
 	text-align: center;
 	margin: -20px auto;
 }

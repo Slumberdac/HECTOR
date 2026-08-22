@@ -54,14 +54,14 @@ a {
 }
 
 .image-container {
-    position: relative;
+	position: relative;
 }
 
 .home {
-    position: absolute;
-    top: 0;
-    left: 0;
-	background-color: #C3C5AA;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: #c3c5aa;
 	padding: 10px 0px 10px 0px;
 	color: #000;
 	font-size: 18px;
@@ -76,5 +76,5 @@ a {
 	font-size: 24em;
 	position: relative;
 	width: 100%;
-	margin: 0 auto -.15em auto;
+	margin: 0 auto -0.15em auto;
 }

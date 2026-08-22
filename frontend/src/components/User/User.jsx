@@ -1,49 +1,58 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
 import Pfp from "./Pfp";
-import "./User.css";
 import RockCard from "../Rock/RockCard";
+import { users } from "../../api/hector";
+import "./User.css";
 
 const User = () => {
-	// extract the user id from the URL
-	const uid = window.location.pathname.split("/")[2];
-	const [user, setUser] = useState({});
-	const [rockList, setRockList] = useState([]);
+	// useParams rather than slicing window.location.pathname, so the component
+	// re-renders correctly on client-side navigation between two profiles.
+	const { uid } = useParams();
 
-	// fetch the user data from the server and set the user state
+	const [user, setUser] = useState(null);
+	const [rockList, setRockList] = useState([]);
+	const [error, setError] = useState("");
+	const [searchTerm, setSearchTerm] = useState("");
+
 	useEffect(() => {
-		fetch(
-			`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${uid}`
-		)
-			.then((res) => {
-				if (res.ok) {
-					return res.json();
-				} else {
-					throw new Error("User not found");
-				}
-			})
-			.then((data) => {
-				setUser(data.user);
+		const controller = new AbortController();
+		const opts = { signal: controller.signal };
+
+		// One request for the owner's rocks instead of downloading every rock
+		// in the database and filtering in the browser.
+		Promise.all([users.get(uid, opts), users.rocks(uid, opts)])
+			.then(([userData, rockData]) => {
+				setUser(userData.user);
+				setRockList(rockData.rocks);
 			})
 			.catch((err) => {
-				alert(err.message);
+				if (err.name !== "AbortError") setError(err.message);
 			});
+
+		return () => controller.abort();
 	}, [uid]);
-	const [searchTerm, setSearchTerm] = useState("");
-	const filteredList = rockList?.filter((item) =>
-		item["name"].toLowerCase().includes(searchTerm.toLowerCase())
+
+	if (error) {
+		return (
+			<div className="user-container">
+				<h1>{error}</h1>
+			</div>
+		);
+	}
+	if (!user) {
+		return (
+			<div className="user-container">
+				<h1>Loading…</h1>
+			</div>
+		);
+	}
+
+	const filteredList = rockList.filter((item) =>
+		item.name.toLowerCase().includes(searchTerm.toLowerCase())
 	);
-	// fetch the rocks data from the server and filters the list to the rocks the user owns
-	useEffect(() => {
-		fetch(
-			`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/rocks/`
-		)
-			.then((res) => res.json())
-			.then((data) => {
-				setRockList(data.rocks.filter((rock) => rock.owner === uid));
-			});
-	}, [uid]);
+
 	return (
 		<div className="user-container">
 			<div className="user-info">
@@ -63,10 +72,10 @@ const User = () => {
 				onChange={(e) => setSearchTerm(e.target.value)}
 				className="search-bar"
 			/>
-			{filteredList?.length > 0 ? (
+			{filteredList.length > 0 ? (
 				<div className="rock-list-container">
 					<ul className="rock-list">
-						{filteredList?.map((rock) => (
+						{filteredList.map((rock) => (
 							<RockCard key={rock._id} rock={rock} />
 						))}
 					</ul>

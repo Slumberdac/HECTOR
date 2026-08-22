@@ -1,24 +1,52 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
 import Card from "../Card/Card.jsx";
 import NewRockForm from "./NewRockForm.jsx";
+import { useAuth } from "../../context/AuthContext";
 import "./RockCard.css";
 
-const AddRockCard = () => {
+const AddRockCard = ({ onCreated }) => {
+	const { isLoggedIn } = useAuth();
 	const [showForm, setShowForm] = useState(false);
 
-	const handleAddRockClick = () => {
-		console.log("Add rock clicked");
-		setShowForm(true);
-	};
+	// Only offer the affordance to someone who can actually use it — the API
+	// rejects anonymous creates.
+	if (!isLoggedIn) {
+		return (
+			<li className="rock-card">
+				<Link to="/signin" className="rock-link">
+					<Card className="rock-card-container">
+						<div className="image-container">
+							<div className="add-rock">+</div>
+						</div>
+					</Card>
+				</Link>
+			</li>
+		);
+	}
 
 	return (
-		<li className="rock-card" onClick={handleAddRockClick}>
+		<li className="rock-card">
 			<Card className="rock-card-container">
-				<div className="image-container">
+				<button
+					type="button"
+					className="image-container"
+					aria-label="Add a companion"
+					onClick={() => setShowForm(true)}
+				>
 					<div className="add-rock">+</div>
-				</div>
+				</button>
 			</Card>
-			{showForm && <NewRockForm />}
+			{showForm && (
+				<NewRockForm
+					onCancel={() => setShowForm(false)}
+					onCreated={() => {
+						setShowForm(false);
+						onCreated?.();
+					}}
+				/>
+			)}
 		</li>
 	);
 };

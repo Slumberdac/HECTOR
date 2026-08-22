@@ -1,75 +1,36 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
 import Logo from "../../assets/Logo";
 import Pfp from "../User/Pfp";
 import Head from "../../assets/pfps/head";
 import QuestionMark from "../../assets/pfps/QuestionMark";
+import { useAuth } from "../../context/AuthContext";
 import "./Nav.css";
-import { useCookies } from "react-cookie";
+
 function Nav() {
-	const [cookies, setCookie, removeCookie] = useCookies(["uuid"]);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [user, setUser] = useState({});
+	// The signed-in user now comes from one shared source rather than each
+	// component fetching it from a cookie-held id.
+	const { user, isLoggedIn } = useAuth();
 
-	useEffect(() => {
-		// if a uuid is stored in cookies, set isLoggedIn to true
-		if (cookies.uuid && cookies.uuid !== "undefined") {
-			fetch(
-				`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${cookies.uuid}`,
-				{
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-					},
-				}
-			)
-				.then((res) => res.json())
-				.then((data) => {
-					setUser(data.user);
-					setIsLoggedIn(true);
-				})
-				.catch((err) => {});
-		}
-	}, []);
-
-	/* if logo is hovered, set color prop to white, else black */
 	const [color, setColor] = useState("#050604");
-	const handleHover = () => {
-		setColor("#222");
-	};
-	const handleLeave = () => {
-		setColor("#050604");
-	};
-
 	const [scrollY, setScrollY] = useState(0);
 
 	useEffect(() => {
-		const handleScroll = () => {
-			setScrollY(window.scrollY);
-		};
+		const handleScroll = () => setScrollY(window.scrollY);
 		handleScroll();
-
-		window.addEventListener("scroll", handleScroll);
-		return () => {
-			window.removeEventListener("scroll", handleScroll);
-		};
+		window.addEventListener("scroll", handleScroll, { passive: true });
+		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
 	return (
-		// if scrollY is greater than 0, add class "scrolled" to nav-container
-		<div
-			className={`nav-container ${
-				scrollY > window.innerHeight / 2000 ? "scrolled" : ""
-			}`}
-		>
+		<div className={`nav-container ${scrollY > 0 ? "scrolled" : ""}`}>
 			<nav>
 				<Link to="/">
 					<Logo
 						color={color}
-						onMouseEnter={handleHover}
-						onMouseLeave={handleLeave}
+						onMouseEnter={() => setColor("#222")}
+						onMouseLeave={() => setColor("#050604")}
 					/>
 				</Link>
 				<ul>
@@ -89,15 +50,9 @@ function Nav() {
 						</Link>
 					</li>
 					<li>
-						{isLoggedIn ? (
-							<Link to="/profile">
-								<h1>Profile</h1>
-							</Link>
-						) : (
-							<Link to="/signin">
-								<h1>Sign In</h1>
-							</Link>
-						)}
+						<Link to={isLoggedIn ? "/profile" : "/signin"}>
+							<h1>{isLoggedIn ? "Profile" : "Sign In"}</h1>
+						</Link>
 					</li>
 				</ul>
 				{isLoggedIn ? (

@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 import Logo from "../../assets/Logo";
-import Hector from "../../assets/hectorHimself.jpg";
+import Hector from "../../assets/hectorHimself.webp";
 import "./Welcome.css";
 
 function Welcome() {

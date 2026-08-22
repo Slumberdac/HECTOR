@@ -1,80 +1,73 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import { useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
+import { useAuth } from "../../context/AuthContext";
 import "./SignIn.css";
 
 export default function SignIn() {
+	const { signIn, isLoggedIn, loading } = useAuth();
+	const navigate = useNavigate();
+
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
-	const [cookies, setCookie, removeCookie] = useCookies(["uuid"]);
 	const [error, setError] = useState("");
+	const [submitting, setSubmitting] = useState(false);
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		// Send a PATCH request to the server
-		fetch(
-			"https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/signin",
-			{
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					username: username,
-					password: password,
-				}),
-			}
-		)
-			.then((res) => {
-				if (res.ok) {
-					return res.json();
-				} else {
-					res.json()
-						.then((data) => {
-							setError(data.message);
-							if (!username || !password) {
-								setError("Please fill in all fields");
-							}
-							throw new Error("Sign in failed");
-						})
-						.catch((err) => {
-							console.log(error);
-						});
-				}
-			})
-			.then((data) => {
-				// Save the data to cookies
-				setCookie("uuid", data.user);
+	if (!loading && isLoggedIn) {
+		return <Navigate to="/profile" replace />;
+	}
 
-				// Redirect to the home page
-				window.location.reload();
-			})
-			.catch((err) => {
-				console.log(error);
-			});
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		setError("");
+
+		if (!username || !password) {
+			setError("Please fill in all fields");
+			return;
+		}
+
+		setSubmitting(true);
+		try {
+			await signIn({ username, password });
+			// Router navigation rather than window.location.reload(), so the
+			// app keeps its state and does not round-trip the whole bundle.
+			navigate("/profile");
+		} catch (err) {
+			setError(err.message);
+		} finally {
+			setSubmitting(false);
+		}
 	};
 
 	return (
 		<div className="signin-container">
 			<form className="signin-form" onSubmit={handleSubmit}>
 				<h1>Sign In</h1>
-				{error && <label className="error">{error}</label>}
+				{error && (
+					<label className="error" role="alert">
+						{error}
+					</label>
+				)}
 				<input
 					type="text"
 					placeholder="Username"
+					autoComplete="username"
+					value={username}
 					onChange={(e) => setUsername(e.target.value)}
 				/>
 				<input
 					type="password"
 					placeholder="Password"
+					autoComplete="current-password"
+					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 				/>
-				<button>Sign In</button>
+				<button type="submit" disabled={submitting}>
+					{submitting ? "Signing in…" : "Sign In"}
+				</button>
 			</form>
 			<p>
-				<Link to="/signup">Don't have an account? Sign Up</Link>
+				<Link to="/signup">Don&apos;t have an account? Sign Up</Link>
 			</p>
 		</div>
 	);

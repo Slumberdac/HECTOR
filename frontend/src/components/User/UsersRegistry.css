@@ -1,15 +1,18 @@
-.users-registry-container{
-    backdrop-filter: blur(5px);
+.users-registry-container {
+	backdrop-filter: blur(5px);
 }
 .users-registry-container h1 {
-    font-family: Omori;
-    color: var(--background);
-    font-size: 8rem;
-    /* add black outline */
-    text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000,
-        3px 3px 0 #000;
-    text-align: center;
-    margin: -20px auto;
+	font-family: Omori;
+	color: var(--background);
+	font-size: 8rem;
+	/* add black outline */
+	text-shadow:
+		-3px -3px 0 #000,
+		3px -3px 0 #000,
+		-3px 3px 0 #000,
+		3px 3px 0 #000;
+	text-align: center;
+	margin: -20px auto;
 }
 
 .search-bar {
