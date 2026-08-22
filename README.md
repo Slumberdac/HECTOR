@@ -74,6 +74,8 @@ session cookie be `SameSite=strict` with no CORS configuration anywhere.
 
 See **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** for the full Raspberry Pi and
 Cloudflare Tunnel walkthrough, plus backups and updates.
+[docs/MIGRATION.md](docs/MIGRATION.md) covers importing the original Atlas data
+if you want the registry to start populated.
 
 The short version, once the Pi is prepared and `.env` is filled in:
 

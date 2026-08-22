@@ -108,6 +108,10 @@ promise reaches it instead of hanging the request.
   one is worse than none.
 - **Refresh tokens.** A 7-day session on a pet rock registry does not justify
   the rotation machinery.
-- **Migrating existing accounts.** The old passwords were stored in plaintext in
-  a database whose credentials were public. They should be treated as
-  compromised, not carried forward.
+- **Forcing a password reset on imported accounts.** `docs/MIGRATION.md`
+  describes importing the v1 data and bcrypt-hashing the plaintext passwords in
+  place, so old accounts keep working. That is a continuity decision, not a
+  security one: those passwords sat in plaintext behind a public credential and
+  should be assumed known. Anyone who cares about their account should change
+  it — and since there is no password-change endpoint yet, that currently means
+  deleting the account and registering again.

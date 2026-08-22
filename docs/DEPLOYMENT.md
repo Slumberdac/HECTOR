@@ -201,6 +201,38 @@ curl -si -X POST https://your-domain/api/v1/auth/login \
 
 ---
 
+## 5b. Importing the old Atlas data (optional)
+
+Only if you want the registry to start with the original rocks and accounts
+rather than empty. See [MIGRATION.md](MIGRATION.md) for the whole procedure;
+the shape of it is:
+
+```bash
+# On your laptop — dump from Atlas with a NEW temporary user, not the leaked one.
+docker run --rm -v "$PWD:/out" mongo:8 mongodump \
+  --uri "mongodb+srv://tmp_export:PASSWORD@hector.lnv1yey.mongodb.net/test" \
+  --gzip --archive=/out/hector-v1.archive.gz
+
+# Copy to the Pi and restore into the new database.
+scp hector-v1.archive.gz pi@raspberrypi.local:~/HECTOR/
+docker compose cp hector-v1.archive.gz mongo:/tmp/v1.gz
+docker compose exec mongo mongorestore \
+  --username "$MONGO_ROOT_USERNAME" --password "$MONGO_ROOT_PASSWORD" \
+  --authenticationDatabase admin \
+  --gzip --archive=/tmp/v1.gz --nsFrom 'test.*' --nsTo 'hector.*'
+
+# Convert v1 documents to the v2 shape: bcrypt the plaintext passwords,
+# normalise owners, build the unique index.
+npm run migrate:v1 -- --dry-run     # reports what it would change
+npm run migrate:v1
+docker compose restart api
+```
+
+Delete the temporary Atlas user and the archive file afterwards — that archive
+contains every account's password in the clear.
+
+---
+
 ## 6. Backups
 
 A Pi's SD card will fail eventually. Assume it.

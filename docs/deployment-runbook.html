@@ -622,6 +622,7 @@
 				<li><a href="#s3">Code and secrets</a></li>
 				<li><a href="#s4">Create the tunnel</a></li>
 				<li><a href="#s5">First deploy</a></li>
+				<li><a href="#s5b">Import the old data</a></li>
 				<li><a href="#s6">Backups</a></li>
 				<li><a href="#s7">Updating</a></li>
 				<li><a href="#s8">Optional hardening</a></li>
@@ -956,6 +957,105 @@ curl -si -X POST https://your-domain/api/v1/auth/login \
   -H 'Content-Type: application/json' \
   -d '{"username":"you","password":"…"}' | grep -i set-cookie</pre>
 				</div>
+			</section>
+
+			<!-- ============ 5b ============ -->
+			<section class="step" id="s5b">
+				<div class="step-head">
+					<span class="step-num">05b</span>
+					<h2 class="step-title">Import the old data</h2>
+				</div>
+
+				<p>
+					Optional, and only if you want the registry to open with the
+					original rocks and accounts rather than empty. Skip straight
+					to step 06 otherwise.
+				</p>
+
+				<div class="note warn">
+					<span class="note-label">Check it still exists first</span>
+					<p>
+						Atlas pauses a free M0 cluster after 60 days idle and
+						eventually deletes a paused one. Open the Atlas project:
+						if it says <strong>Paused</strong>, resume it and the
+						data is intact. If the cluster is gone, so is the data.
+					</p>
+				</div>
+
+				<h3>A temporary export user</h3>
+				<p>
+					Do not reuse <code>hector_admin</code> — that one needs
+					deleting, not using. In Atlas:
+					<strong>Database Access → Add New Database User</strong>,
+					named <code>tmp_export</code>, role
+					<strong>Only read any database</strong>. Then
+					<strong>Network Access → Add Current IP Address</strong>.
+					Remove both when you are finished.
+				</p>
+
+				<h3>Dump</h3>
+				<p>
+					<code>mongodump</code> ships inside the official mongo image,
+					so there is nothing to install.
+				</p>
+
+				<div class="cmd">
+					<div class="cmd-bar">
+						<span class="cmd-where">laptop · shell</span>
+						<button class="copy" type="button">Copy</button>
+					</div>
+					<pre><span class="c"># the old URI had no database in the path, so Mongoose used "test"</span>
+docker run --rm -v "$PWD:/out" mongo:8 mongodump \
+  --uri "mongodb+srv://tmp_export:PASSWORD@hector.lnv1yey.mongodb.net/test" \
+  --gzip --archive=/out/hector-v1.archive.gz
+
+scp hector-v1.archive.gz pi@raspberrypi.local:~/HECTOR/</pre>
+				</div>
+
+				<h3>Restore and convert</h3>
+
+				<div class="cmd">
+					<div class="cmd-bar">
+						<span class="cmd-where">pi · ~/HECTOR</span>
+						<button class="copy" type="button">Copy</button>
+					</div>
+					<pre>docker compose cp hector-v1.archive.gz mongo:/tmp/v1.gz
+
+docker compose exec mongo mongorestore \
+  --username "$MONGO_ROOT_USERNAME" --password "$MONGO_ROOT_PASSWORD" \
+  --authenticationDatabase admin \
+  --gzip --archive=/tmp/v1.gz \
+  --nsFrom 'test.*' --nsTo 'hector.*'
+
+<span class="c"># bcrypt the plaintext passwords, normalise owners, build the index</span>
+npm run migrate:v1 -- --dry-run
+npm run migrate:v1
+docker compose restart api</pre>
+				</div>
+
+				<div class="note">
+					<span class="note-label">The easy thing to miss</span>
+					<p>
+						<code>--nsFrom/--nsTo</code> is what moves the
+						collections out of the old <code>test</code> database
+						into <code>hector</code>, which is where the API looks.
+						Without it the restore reports success and the site stays
+						empty.
+					</p>
+				</div>
+
+				<p>
+					Old passwords keep working: the v2 complexity rules are
+					enforced at registration, not at login. Then delete the
+					archive from both machines and remove the
+					<code>tmp_export</code> user — that file holds every
+					account's password in the clear.
+				</p>
+
+				<p>
+					Full procedure, including how to rehearse it on a scratch
+					database first, is in <code>docs/MIGRATION.md</code>.
+				</p>
 			</section>
 
 			<!-- ============ 6 ============ -->

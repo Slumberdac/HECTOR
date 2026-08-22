@@ -35,6 +35,12 @@ export default [
 		},
 	},
 
+	// Operator-facing CLI scripts: printing to stdout is the point.
+	{
+		files: ["backend/scripts/**/*.js"],
+		rules: { "no-console": "off" },
+	},
+
 	// Frontend: ES modules, browser globals, JSX.
 	{
 		files: ["frontend/**/*.{js,jsx}"],
