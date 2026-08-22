@@ -1,7 +1,7 @@
 {
   "name": "@hector/api",
   "version": "2.0.0",
-  "description": "HECTOR API — pet rock adoption registry",
+  "description": "HECTOR API, pet rock adoption registry",
   "private": true,
   "license": "MIT",
   "type": "commonjs",
@@ -15,7 +15,8 @@
     "test": "node --test --test-concurrency=1 \"tests/**/*.test.js\"",
     "migrate:v1": "node scripts/migrate-from-v1.js",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "check:db": "node scripts/check-database.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

@@ -14,7 +14,7 @@ self-hosted application running on a Raspberry Pi behind a Cloudflare tunnel.
 | ------------- | -------------------------------------------------------------------- |
 | Frontend      | React 18, React Router 6, Vite                                       |
 | API           | Node 22, Express 4, Mongoose 8                                       |
-| Database      | MongoDB 8                                                            |
+| Database      | FerretDB 2 over PostgreSQL (MongoDB wire protocol)                   |
 | Auth          | bcrypt password hashing, JWT in an httpOnly `SameSite=strict` cookie |
 | Reverse proxy | Caddy (static files + `/api` proxy, one origin, no CORS)             |
 | Ingress       | Cloudflare Tunnel (outbound only, no ports forwarded)                |
@@ -23,22 +23,33 @@ self-hosted application running on a Raspberry Pi behind a Cloudflare tunnel.
 ## Architecture
 
 ```
-                    ┌───────────────────────────── Raspberry Pi ──────────────────────────────┐
-                    │                                                                          │
-  browser           │   cloudflared          web (Caddy :8080)          api :5000    mongo     │
-    │               │       │                      │                       │           │       │
-    │  https        │       │  outbound tunnel     │  static bundle        │  mongoose │       │
-    ├──────────────────► Cloudflare ──────────►  /                         │           │       │
-    │  hector.example       │                      │  reverse_proxy /api/* │           │       │
-    │               │       │                      ├──────────────────────►│──────────►│       │
-    │               │       │                      │                       │  internal │       │
-                    │                              └── docker network "internal" ───────┘       │
-                    └──────────────────────────────────────────────────────────────────────────┘
+                  ┌──────────────────────────── Raspberry Pi ─────────────────────────────┐
+                  │                                                                       │
+  browser         │  cloudflared      web (Caddy :8080)     api :5000                     │
+    │             │      │                  │                  │                          │
+    │  https      │      │ outbound tunnel  │ static bundle    │ mongoose                 │
+    ├────────────────► Cloudflare ──────► /                    │                          │
+    │ hector.example     │                  │ proxy /api/*     ▼                          │
+    │             │      │                  ├───────────────► ferretdb :27017             │
+    │             │      │                  │                  │ MongoDB wire protocol    │
+    │             │      │                  │                  ▼                          │
+    │             │      │                  │                 postgres :5432              │
+    │             │      │                  │                  (DocumentDB extension)     │
+                  │      └──────────── docker network "internal" ──────────────┘          │
+                  └───────────────────────────────────────────────────────────────────────┘
 ```
 
 Nothing on the Pi listens on a public port. `cloudflared` dials out to
 Cloudflare and the traffic comes back down that connection, so the router needs
 no port forwarding and the home IP is never published.
+
+**Why FerretDB rather than MongoDB.** Every MongoDB release from 5.0 onward
+requires an ARMv8.2-A CPU. The Pi 4's Cortex-A72 is ARMv8.0-A, so `mongod` dies
+on startup with `Illegal instruction`. FerretDB implements the MongoDB wire
+protocol on top of PostgreSQL, which has no such requirement, and the
+application code is unchanged: it is still Mongoose connecting to port 27017.
+`npm run check:db` exercises the specific operations this codebase depends on
+against whatever database is actually deployed.
 
 ## Quick start
 
@@ -49,7 +60,7 @@ git clone https://github.com/Slumberdac/HECTOR.git
 cd HECTOR
 npm install
 
-npm run dev:db      # MongoDB on localhost:27017
+npm run dev:db      # FerretDB on localhost:27017
 cp .env.example backend/.env   # then fill in JWT_SECRET and MONGODB_URI
 npm run dev         # API on :5000, web on :3000
 ```
@@ -60,15 +71,16 @@ session cookie be `SameSite=strict` with no CORS configuration anywhere.
 
 ### Useful commands
 
-| Command          | Does                                             |
-| ---------------- | ------------------------------------------------ |
-| `npm run dev`    | API and web dev servers together                 |
-| `npm run dev:db` | MongoDB in Docker for local development          |
-| `npm test`       | API test suite                                   |
-| `npm run lint`   | ESLint over the whole repo                       |
-| `npm run format` | Prettier write                                   |
-| `npm run build`  | Production frontend bundle into `frontend/build` |
-| `npm run deploy` | Build and start the full production stack        |
+| Command            | Does                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| `npm run dev`      | API and web dev servers together                             |
+| `npm run dev:db`   | FerretDB and Postgres in Docker, for development             |
+| `npm test`         | API test suite                                               |
+| `npm run check:db` | Probe the deployed database for the operations the app needs |
+| `npm run lint`     | ESLint over the whole repo                                   |
+| `npm run format`   | Prettier write                                               |
+| `npm run build`    | Production frontend bundle into `frontend/build`             |
+| `npm run deploy`   | Build and start the full production stack                    |
 
 ## Deployment
 
@@ -154,7 +166,7 @@ frontend/
     assets/       SVG components generated with @svgr/cli, images
   Caddyfile       production static serving and /api proxy
 ops/
-  mongo-init/     first-boot creation of the least-privilege database user
+  backup.sh       nightly pg_dump, pruned on a retention window
 docs/
 ```
 

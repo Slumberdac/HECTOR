@@ -600,7 +600,7 @@
 		<dl class="facts">
 			<div class="fact">
 				<dt>Hardware</dt>
-				<dd>Raspberry Pi 5</dd>
+				<dd>Raspberry Pi 4 or 5</dd>
 			</div>
 			<div class="fact">
 				<dt>OS</dt>
@@ -688,15 +688,29 @@
 				</div>
 
 				<h3>Hardware</h3>
+				<p>A Pi 4 or Pi 5, any RAM size; 4&nbsp;GB is comfortable.</p>
 				<p>
-					A Pi 5, any RAM size; 4&nbsp;GB is comfortable. The stack
-					runs MongoDB 8, which needs an ARMv8.2-A CPU. The Pi 5's
-					Cortex-A76 has it. A Pi 4's Cortex-A72 does not, and
-					<code>mongod</code> there dies on startup with
-					<code>Illegal instruction (core dumped)</code>. If this ever
-					moves to a Pi 4, you need MongoDB 4.4 or a wire-compatible
-					substitute such as FerretDB.
+					The database is FerretDB rather than MongoDB, and that is
+					not a preference. Every MongoDB release from 5.0 onward
+					requires an ARMv8.2-A CPU. The Pi 4's Cortex-A72 is
+					ARMv8.0-A, so
+					<code>mongod</code> dies on startup with
+					<code>Illegal instruction (core dumped)</code>. The Pi 5's
+					Cortex-A76 would be fine, but running the same stack on both
+					is worth more than the difference. FerretDB implements the
+					MongoDB wire protocol on top of PostgreSQL, which has no
+					such requirement, and the application code does not change:
+					it is still Mongoose talking to port 27017.
 				</p>
+				<p>If you want to know which board you have:</p>
+
+				<div class="cmd">
+					<div class="cmd-bar">
+						<span class="cmd-where">pi · shell</span>
+						<button class="copy" type="button">Copy</button>
+					</div>
+					<pre>cat /proc/device-tree/model; echo</pre>
+				</div>
 
 				<h3>Storage</h3>
 				<p>
@@ -956,9 +970,9 @@ sudo dpkg-reconfigure -plow unattended-upgrades</pre>
 
 				<h3>Swap</h3>
 				<p>
-					MongoDB dislikes running out of memory. On a Pi 5 with 8 GB
-					this is precautionary rather than necessary; with 4 GB it is
-					cheap insurance. Look at what you already have first,
+					PostgreSQL dislikes running out of memory. On a Pi 5 with 8
+					GB this is precautionary rather than necessary; with 4 GB it
+					is cheap insurance. Look at what you already have first,
 					because Raspberry Pi OS has used three different swap
 					mechanisms over the years.
 				</p>
@@ -1059,8 +1073,8 @@ sudo systemctl restart docker</pre>
 cd HECTOR
 cp .env.example .env
 
-<span class="c"># three distinct secrets, written in place rather than pasted by hand</span>
-for n in MONGO_ROOT_PASSWORD MONGO_APP_PASSWORD JWT_SECRET; do
+<span class="c"># distinct secrets, written in place rather than pasted by hand</span>
+for n in POSTGRES_PASSWORD JWT_SECRET; do
   v=$(openssl rand -base64 36 | tr -d '/+=' | head -c 48)
   sed -i "s|^$n=.*|$n=$v|" .env
 done
@@ -1070,11 +1084,11 @@ chmod 600 .env</pre>
 				</div>
 
 				<p>
-					<code>MONGO_ROOT_USERNAME</code> and
-					<code>MONGO_APP_USERNAME</code> already have workable
-					defaults in the example file. Leave
-					<code>CLOUDFLARE_TUNNEL_TOKEN</code> empty; step 04 produces
-					it.
+					<code>POSTGRES_USER</code> already has a workable default in
+					the example file, as do the two image tags
+					<code>FERRETDB_TAG</code> and <code>DOCUMENTDB_TAG</code>.
+					Leave <code>CLOUDFLARE_TUNNEL_TOKEN</code> empty; step 04
+					produces it.
 				</p>
 
 				<h3>Check the file before going further</h3>
@@ -1089,7 +1103,7 @@ chmod 600 .env</pre>
 grep -oE '^[A-Z_]+' .env | sort | uniq -d
 
 <span class="c"># a key that should have a value and does not</span>
-grep -nE '^(MONGO_ROOT_USERNAME|MONGO_ROOT_PASSWORD|MONGO_APP_USERNAME|MONGO_APP_PASSWORD|JWT_SECRET)=$' .env</pre>
+grep -nE '^(POSTGRES_USER|POSTGRES_PASSWORD|JWT_SECRET)=$' .env</pre>
 				</div>
 
 				<div class="note warn">
@@ -1108,14 +1122,21 @@ grep -nE '^(MONGO_ROOT_USERNAME|MONGO_ROOT_PASSWORD|MONGO_APP_USERNAME|MONGO_APP
 				</div>
 
 				<div class="note">
-					<span class="note-label">One-shot value</span>
+					<span class="note-label">First-boot value</span>
 					<p>
-						<code>MONGO_APP_PASSWORD</code> is consumed once, on the
-						very first boot, by
-						<code>ops/mongo-init/01-create-app-user.js</code>.
-						Changing it later has no effect on an existing volume;
-						you would have to change the password inside mongo, or
-						destroy the volume and restore from a backup.
+						<code>POSTGRES_PASSWORD</code> is written into the
+						database on its very first boot. Changing it in
+						<code>.env</code> afterwards does not change it in
+						Postgres, so the API would then fail to authenticate. To
+						rotate it, change it inside Postgres with
+						<code>ALTER ROLE</code> as well, or destroy the volume
+						and restore from a backup.
+					</p>
+					<p>
+						FerretDB has no user table of its own: it authenticates
+						against PostgreSQL, so the Postgres credentials are also
+						the ones in <code>MONGODB_URI</code>. That is why there
+						is no separate application-user bootstrap step.
 					</p>
 				</div>
 			</section>
@@ -1222,7 +1243,7 @@ docker compose config --quiet &amp;&amp; echo "env OK"
 
 docker compose up -d --build
 
-docker compose ps          <span class="c"># four services, api and web healthy</span>
+docker compose ps          <span class="c"># five services; postgres should be healthy</span>
 docker compose logs -f api <span class="c"># expect "Connected to MongoDB"</span>
 
 curl -fsS http://127.0.0.1:8080/healthz
@@ -1298,6 +1319,10 @@ curl -si -X POST https://your-domain/api/v1/auth/login \
 				<p>
 					<code>mongodump</code> ships inside the official mongo
 					image, so there is nothing to install.
+					<code>mongodump</code> and <code>mongorestore</code> are
+					separate Go binaries with none of <code>mongod</code>'s
+					ARMv8.2-A requirement, so they run fine on a Pi 4 even
+					though the server does not.
 				</p>
 
 				<div class="cmd">
@@ -1320,13 +1345,10 @@ scp hector-v1.archive.gz pi@raspberrypi.local:~/HECTOR/</pre>
 						<span class="cmd-where">pi · ~/HECTOR</span>
 						<button class="copy" type="button">Copy</button>
 					</div>
-					<pre>docker compose cp hector-v1.archive.gz mongo:/tmp/v1.gz
-
-docker compose exec mongo mongorestore \
-  --username "$MONGO_ROOT_USERNAME" --password "$MONGO_ROOT_PASSWORD" \
-  --authenticationDatabase admin \
-  --gzip --archive=/tmp/v1.gz \
-  --nsFrom 'test.*' --nsTo 'hector.*'
+					<pre><span class="c"># straight into FerretDB over the wire protocol</span>
+docker compose run --rm --entrypoint mongorestore -v "$PWD:/in" mongo:8 \
+  --uri "mongodb://$POSTGRES_USER:$POSTGRES_PASSWORD@ferretdb:27017/hector" \
+  --gzip --archive=/in/hector-v1.archive.gz --nsFrom 'test.*' --nsTo 'hector.*'
 
 <span class="c"># bcrypt the plaintext passwords, normalise owners, build the index</span>
 npm run migrate:v1 -- --dry-run
@@ -1370,6 +1392,14 @@ docker compose restart api</pre>
 
 				<div class="cmd">
 					<div class="cmd-bar">
+						<span class="cmd-where">pi · ~/HECTOR</span>
+						<button class="copy" type="button">Copy</button>
+					</div>
+					<pre>mkdir -p ~/HECTOR/ops/backups</pre>
+				</div>
+
+				<div class="cmd">
+					<div class="cmd-bar">
 						<span class="cmd-where">pi · crontab -e</span>
 						<button class="copy" type="button">Copy</button>
 					</div>
@@ -1379,9 +1409,12 @@ docker compose restart api</pre>
 
 				<p>
 					<code>ops/backup.sh</code> writes a compressed
-					<code>mongodump</code> archive per night and prunes anything
-					older than 30 days. Backups on the same card as the data are
-					not backups; pull them somewhere else:
+					<code>pg_dump</code> archive per night and prunes anything
+					older than 30 days. It dumps PostgreSQL rather than going
+					through FerretDB, so it captures everything including the
+					indexes and does not depend on the wire-protocol layer being
+					healthy at 3am. Backups on the same card as the data are not
+					backups; pull them somewhere else:
 				</p>
 
 				<div class="cmd">
@@ -1401,10 +1434,29 @@ rsync -av pi@raspberrypi.local:HECTOR/ops/backups/ ~/hector-backups/</pre>
 						<button class="copy" type="button">Copy</button>
 					</div>
 					<pre>
-docker compose cp ops/backups/hector-DATE.archive.gz mongo:/tmp/restore.gz
-docker compose exec mongo mongorestore \
-  --username "$MONGO_ROOT_USERNAME" --password "$MONGO_ROOT_PASSWORD" \
-  --authenticationDatabase admin --gzip --archive=/tmp/restore.gz --drop</pre>
+gunzip -c ops/backups/hector-TIMESTAMP.sql.gz |
+  docker compose exec -T -e PGPASSWORD="$POSTGRES_PASSWORD" \
+    postgres psql --username "$POSTGRES_USER" --dbname postgres</pre>
+				</div>
+
+				<p>
+					For a from-scratch restore, bring the stack down, drop the
+					volume, start only Postgres so the DocumentDB extension
+					initialises, then pipe the dump in:
+				</p>
+
+				<div class="cmd">
+					<div class="cmd-bar">
+						<span class="cmd-where">pi · ~/HECTOR</span>
+						<button class="copy" type="button">Copy</button>
+					</div>
+					<pre>
+docker compose down
+docker volume rm hector_pg-data
+docker compose up -d postgres
+
+<span class="c"># wait for it to report healthy, then run the psql line above</span>
+docker compose up -d</pre>
 				</div>
 
 				<div class="note">
@@ -1433,15 +1485,19 @@ git pull
 docker compose up -d --build
 docker image prune -f
 
-<span class="c"># base images: mongo, caddy, cloudflared</span>
+<span class="c"># base images: postgres/documentdb, ferretdb, caddy, cloudflared</span>
 docker compose pull
 docker compose up -d</pre>
 				</div>
 
 				<p>
-					Do a <code>mongo</code> major-version bump deliberately, not
-					as a side effect of <code>pull</code>. Read the release
-					notes, take a backup, then move.
+					<code>FERRETDB_TAG</code> and
+					<code>DOCUMENTDB_TAG</code> are pinned in
+					<code>.env</code> rather than floating, so
+					<code>pull</code> will not move them. Bump the two together,
+					from the same FerretDB release, and take a backup first: the
+					DocumentDB tag encodes the FerretDB version it belongs to,
+					and a mismatched pair is refused at startup.
 				</p>
 			</section>
 
@@ -1507,7 +1563,12 @@ docker compose up -d</pre>
 						</thead>
 						<tbody>
 							<tr>
-								<td><code>mongo</code></td>
+								<td><code>postgres</code></td>
+								<td>5432</td>
+								<td><code>ferretdb</code> only</td>
+							</tr>
+							<tr>
+								<td><code>ferretdb</code></td>
 								<td>27017</td>
 								<td><code>api</code> only</td>
 							</tr>
@@ -1554,11 +1615,11 @@ docker compose up -d</pre>
 					</summary>
 					<div class="symptom-body">
 						<p>
-							You are on a Pi 4 or older. MongoDB 5.0+ requires
-							ARMv8.2-A; the Cortex-A72 is ARMv8.0-A. Pin
-							<code>mongo:4.4</code> (end of life) or move to
-							FerretDB, which speaks the MongoDB wire protocol
-							over Postgres and needs no Mongoose changes.
+							You are running MongoDB rather than FerretDB on a
+							pre-ARMv8.2-A CPU: MongoDB 5.0+ requires ARMv8.2-A
+							and the Pi 4's Cortex-A72 is ARMv8.0-A. See step 00.
+							Nothing in the current compose file starts
+							<code>mongod</code>.
 						</p>
 					</div>
 				</details>
@@ -1566,14 +1627,47 @@ docker compose up -d</pre>
 				<details class="symptom">
 					<summary>
 						<code>docker compose up</code> says “set
-						MONGO_APP_PASSWORD in .env”
+						POSTGRES_PASSWORD in .env”
 					</summary>
 					<div class="symptom-body">
 						<p>
 							Working as intended. The compose file uses
 							<code>${VAR:?}</code> so a missing secret fails
 							loudly at startup rather than quietly starting an
-							unauthenticated database. Fill in <code>.env</code>.
+							unauthenticated database. Fill in <code>.env</code>,
+							and check for a duplicate key: the last definition
+							wins even when it is empty.
+						</p>
+					</div>
+				</details>
+
+				<details class="symptom">
+					<summary>
+						API logs <code>Authentication failed</code>
+					</summary>
+					<div class="symptom-body">
+						<p>
+							<code>POSTGRES_PASSWORD</code> was changed in
+							<code>.env</code> after the volume was initialised.
+							Postgres stores the password it was created with and
+							does not re-read <code>.env</code>. Either change it
+							inside Postgres:
+						</p>
+
+						<div class="cmd">
+							<div class="cmd-bar">
+								<span class="cmd-where">pi · ~/HECTOR</span>
+								<button class="copy" type="button">Copy</button>
+							</div>
+							<pre>
+docker compose exec -e PGPASSWORD="$OLD_PASSWORD" postgres \
+  psql -U "$POSTGRES_USER" -d postgres \
+  -c "ALTER ROLE \"$POSTGRES_USER\" WITH PASSWORD '$NEW_PASSWORD';"</pre>
+						</div>
+
+						<p>
+							or <code>docker compose down -v</code>, which
+							destroys the data, and restore from backup.
 						</p>
 					</div>
 				</details>
@@ -1581,16 +1675,33 @@ docker compose up -d</pre>
 				<details class="symptom">
 					<summary>
 						API logs
-						<code>MongoServerError: Authentication failed</code>
+						<code>Database not reachable yet, retrying</code>
 					</summary>
 					<div class="symptom-body">
 						<p>
-							<code>MONGO_APP_PASSWORD</code> changed after the
-							volume was initialised. The init script only runs on
-							an empty data directory. Either set the password
-							inside mongo, or
-							<code>docker compose down -v</code>, which destroys
-							the data, and restore from backup.
+							Normal on a cold boot: the API starts before
+							FerretDB is accepting connections and retries with
+							backoff. If it never stops,
+							<code>docker compose logs ferretdb</code> and
+							<code>docker compose logs postgres</code> in that
+							order; FerretDB will not serve until Postgres
+							reports healthy.
+						</p>
+					</div>
+				</details>
+
+				<details class="symptom">
+					<summary>
+						Something works in the tests but not on the Pi
+					</summary>
+					<div class="symptom-body">
+						<p>
+							The test suite runs against real MongoDB; production
+							runs FerretDB, whose coverage of the MongoDB API is
+							good but not total.
+							<code>npm run check:db</code> probes the deployed
+							database for the specific operations this codebase
+							depends on and names whichever one is missing.
 						</p>
 					</div>
 				</details>
@@ -1624,14 +1735,14 @@ docker compose up -d</pre>
 					<summary>
 						<code
 							>dependency failed to start: container
-							hector-mongo-1 is unhealthy</code
+							hector-postgres-1 is unhealthy</code
 						>
 					</summary>
 					<div class="symptom-body">
 						<p>
-							The other three containers are fine; mongo did not
-							come up. The message says nothing useful on its own,
-							so read the log.
+							The other containers are fine; Postgres did not come
+							up. The message says nothing useful on its own, so
+							read the log.
 						</p>
 
 						<div class="cmd">
@@ -1640,20 +1751,21 @@ docker compose up -d</pre>
 								<button class="copy" type="button">Copy</button>
 							</div>
 							<pre>
-docker compose logs mongo | tail -40
-docker inspect --format '{{json .State.Health}}' hector-mongo-1</pre>
+docker compose logs postgres | tail -40
+docker inspect --format '{{json .State.Health}}' hector-postgres-1</pre>
 						</div>
 
 						<p>Common causes, roughly in order:</p>
 						<ul>
 							<li>
-								Something in <code>ops/mongo-init/</code> threw,
-								which aborts initialisation and exits the
-								container. The log names it.
+								The DocumentDB extension failed to install on
+								first start, which leaves the volume
+								half-initialised. The log names the failure.
 							</li>
 							<li>
-								<code>Illegal instruction</code> means the CPU
-								is pre-ARMv8.2-A. See step 00.
+								<code>FERRETDB_TAG</code> and
+								<code>DOCUMENTDB_TAG</code> have drifted apart,
+								so the extension version does not match.
 							</li>
 							<li>
 								The first boot on an SD card was simply slow and
@@ -1667,12 +1779,10 @@ docker inspect --format '{{json .State.Health}}' hector-mongo-1</pre>
 								>Discard the volume before retrying</span
 							>
 							<p>
-								Everything in
-								<code>docker-entrypoint-initdb.d</code> runs
-								only against an empty data directory. A
-								half-initialised volume will never create the
-								application user, however many times you
-								restart.
+								The DocumentDB extension is installed on first
+								start against an empty data directory, so a
+								half-initialised volume stays half-initialised
+								however many times you restart.
 							</p>
 						</div>
 
@@ -1682,7 +1792,7 @@ docker inspect --format '{{json .State.Health}}' hector-mongo-1</pre>
 								<button class="copy" type="button">Copy</button>
 							</div>
 							<pre>
-docker compose down -v        <span class="c"># -v destroys hector_mongo-data</span>
+docker compose down -v        <span class="c"># -v destroys hector_pg-data</span>
 docker compose up -d</pre>
 						</div>
 
@@ -1690,6 +1800,22 @@ docker compose up -d</pre>
 							<code>-v</code> is safe here and only here: at this
 							point the database has nothing in it. Once you have
 							real data, <code>down -v</code> throws it away.
+						</p>
+					</div>
+				</details>
+
+				<details class="symptom">
+					<summary>
+						FerretDB logs a DocumentDB version mismatch
+					</summary>
+					<div class="symptom-body">
+						<p>
+							<code>FERRETDB_TAG</code> and
+							<code>DOCUMENTDB_TAG</code> in
+							<code>.env</code> have drifted apart. They are
+							released in lockstep and the DocumentDB tag encodes
+							the FerretDB version it belongs to; set both from
+							the same release.
 						</p>
 					</div>
 				</details>

@@ -1,7 +1,7 @@
 {
   "name": "hector",
   "version": "2.0.0",
-  "description": "HECTOR — a registry where pet rocks find; the way home",
+  "description": "HECTOR, a registry where pet rocks find; the way home",
   "private": true,
   "license": "MIT",
   "repository": {
@@ -27,7 +27,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "deploy": "docker compose up -d --build"
+    "deploy": "docker compose up -d --build",
+    "check:db": "npm run check:db --workspace backend"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",

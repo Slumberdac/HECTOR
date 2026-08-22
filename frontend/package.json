@@ -1,7 +1,7 @@
 {
   "name": "@hector/web",
   "version": "2.0.0",
-  "description": "HECTOR web client — a pet rock adoption registry",
+  "description": "HECTOR web client, a pet rock adoption registry",
   "private": true,
   "license": "MIT",
   "type": "module",
