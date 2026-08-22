@@ -1,0 +1,27 @@
+# Local development stack: MongoDB only, published on localhost.
+#
+#   docker compose -f docker-compose.dev.yml up -d
+#   cd backend  && npm run dev     # http://localhost:5000
+#   cd frontend && npm run dev     # http://localhost:3000, proxies /api
+#
+# Kept separate from the production compose file so there is no chance of
+# starting the development database with production settings by accident.
+
+name: hector-dev
+
+services:
+  mongo:
+    image: mongo:8
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - mongo-dev-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mongo-dev-data:

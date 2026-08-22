@@ -27,14 +27,17 @@
 }
 
 .user-info #username {
-    font-family: Omori;
-    color: var(--background);
-    font-size: 8rem;
-    /* add black outline */
-    text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000,
-        3px 3px 0 #000;
-    text-align: center;
-    margin: -20px auto;
+	font-family: Omori;
+	color: var(--background);
+	font-size: 8rem;
+	/* add black outline */
+	text-shadow:
+		-3px -3px 0 #000,
+		3px -3px 0 #000,
+		-3px 3px 0 #000,
+		3px 3px 0 #000;
+	text-align: center;
+	margin: -20px auto;
 }
 
 .rock-list {
@@ -50,7 +53,7 @@
 .rock-list li:hover {
 	cursor: pointer;
 	text-shadow: 0 0 5px black;
-	transform: scale(1)
+	transform: scale(1);
 }
 .search-bar {
 	display: flex;

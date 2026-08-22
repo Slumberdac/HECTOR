@@ -1,8 +1,8 @@
-import "./RockCard.css";
-import Card from "../Card/Card.jsx";
-import React from "react";
 import { Link } from "react-router-dom";
-import Missing from "../../assets/MissingImage.js";
+
+import Card from "../Card/Card.jsx";
+import Missing from "../../assets/MissingImage.jsx";
+import "./RockCard.css";
 
 const RockCard = ({ rock }) => {
 	return (
@@ -15,8 +15,14 @@ const RockCard = ({ rock }) => {
 								{rock.name} found; the way home
 							</div>
 						)}
-						{rock.image !== undefined ? (
-							<img src={rock.image} alt={rock.name} />
+						{/* `!== undefined` was true for a rock with no image
+						    at all, since the API sends null. */}
+						{rock.image ? (
+							<img
+								src={rock.image}
+								alt={rock.name}
+								loading="lazy"
+							/>
 						) : (
 							<Missing />
 						)}

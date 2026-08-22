@@ -1,53 +1,75 @@
-import React from "react";
-import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+
 import Pfp from "./Pfp";
 import RockCard from "../Rock/RockCard";
+import { users, randomAvatar } from "../../api/hector";
+import { useAuth } from "../../context/AuthContext";
 import "./Profile.css";
 
 export default function Profile() {
-	const [cookies, setCookie, removeCookie] = useCookies(["uuid"]);
+	const { user, setUser, signOut, loading, isLoggedIn } = useAuth();
+	const navigate = useNavigate();
 
-	const [user, setUser] = useState({});
 	const [rocks, setRocks] = useState([]);
+	const [error, setError] = useState("");
+	const [busy, setBusy] = useState(false);
 
 	useEffect(() => {
-		if (cookies.uuid && cookies.uuid !== "undefined") {
-			fetch(
-				`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${cookies.uuid}`,
-				{
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-					},
-				}
-			)
-				.then((res) => res.json())
-				.then((data) => {
-					setUser(data.user);
-				})
-				.catch((err) => {});
+		if (!user) return undefined;
+		const controller = new AbortController();
+		users
+			.rocks(user._id, { signal: controller.signal })
+			.then((data) => setRocks(data.rocks))
+			.catch((err) => {
+				if (err.name !== "AbortError") setError(err.message);
+			});
+		return () => controller.abort();
+	}, [user]);
 
-			fetch(
-				`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${cookies.uuid}/rocks`,
-				{
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-					},
-				}
-			)
-				.then((res) => res.json())
-				.then((data) => {
-					setRocks(data.rocks);
-				})
-				.catch((err) => {});
+	if (loading) return <p className="profile-container">Loading…</p>;
+	if (!isLoggedIn) return <Navigate to="/signin" replace />;
+
+	const rerollAvatar = async () => {
+		setBusy(true);
+		setError("");
+		try {
+			const data = await users.update(user._id, randomAvatar());
+			// Update state in place instead of reloading the page.
+			setUser(data.user);
+		} catch (err) {
+			setError(err.message);
+		} finally {
+			setBusy(false);
 		}
-	}, []);
+	};
+
+	const deleteAccount = async () => {
+		if (
+			!window.confirm(
+				"Are you sure you want to delete your account? Your companions will be released."
+			)
+		) {
+			return;
+		}
+		setBusy(true);
+		try {
+			await users.remove(user._id);
+			await signOut();
+			navigate("/");
+		} catch (err) {
+			setError(err.message);
+			setBusy(false);
+		}
+	};
+
+	const handleSignOut = async () => {
+		await signOut();
+		navigate("/");
+	};
 
 	return (
 		<div className="profile-container">
-			{/* Display the user's pfp */}
 			<Pfp
 				color={user.pfp_color ?? "#999"}
 				eyes={user.pfp_eyes ?? 1}
@@ -55,109 +77,32 @@ export default function Profile() {
 			/>
 			<div className="profile-info">
 				<h1>Profile</h1>
-				{/* Display the user's name */}
 				<h2>Name: {user.name}</h2>
-				{/* Display the user's username */}
 				<h2>Username: {user.username}</h2>
+				{error && (
+					<p className="error" role="alert">
+						{error}
+					</p>
+				)}
 				<div className="buttons">
-					{/* Button to reroll pfp features */}
-					<button
-						onClick={(e) => {
-							e.preventDefault();
-							const pfp_eyes = Math.floor(Math.random() * 16) + 1;
-							const pfp_mouth =
-								Math.floor(Math.random() * 14) + 1;
-							const pfp_color = `#${[0, 0, 0]
-								.map(() =>
-									Math.floor(
-										Math.random() * (256 - 100) + 100
-									)
-										.toString(16)
-										.padStart(2, "0")
-										.toUpperCase()
-								)
-								.join("")}`;
-							fetch(
-								`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${cookies.uuid}`,
-								{
-									method: "PATCH",
-									headers: {
-										"Content-Type": "application/json",
-									},
-									body: JSON.stringify({
-										pfp_eyes: pfp_eyes,
-										pfp_mouth: pfp_mouth,
-										pfp_color: pfp_color,
-									}),
-								}
-							)
-								.then((res) => {
-									if (res.ok) {
-										window.location.reload();
-									} else {
-										throw new Error("Failed to reroll pfp");
-									}
-								})
-								.catch((err) => {
-									alert(err.message);
-								});
-						}}
-					>
+					<button onClick={rerollAvatar} disabled={busy}>
 						Reroll PFP
 					</button>
-					{/* button to sign out which clears the cookies */}
-					<button
-						onClick={(e) => {
-							e.preventDefault();
-							removeCookie("uuid");
-							window.location.reload();
-						}}
-					>
+					<button onClick={handleSignOut} disabled={busy}>
 						Sign Out
 					</button>
-
-					{/* Button to delete account with validation */}
-					<button
-						onClick={() => {
-							if (
-								window.confirm(
-									"Are you sure you want to delete your account?"
-								)
-							) {
-								fetch(
-									`https://foura5-projet-synthese-gacoic.onrender.com/api/v1/users/${cookies.uuid}`,
-									{
-										method: "DELETE",
-									}
-								)
-									.then((res) => {
-										if (res.ok) {
-											removeCookie("uuid");
-											window.location.reload();
-										} else {
-											throw new Error(
-												"Failed to delete account"
-											);
-										}
-									})
-									.catch((err) => {
-										alert(err.message);
-									});
-							}
-						}}
-					>
+					<button onClick={deleteAccount} disabled={busy}>
 						Delete Account
 					</button>
 				</div>
 			</div>
-			{/* scrollable container of rockCards */}
 			<h2 id="your-rocks">Your Rocks</h2>
 			<div className="rock-card-container-profile">
-				<lu>
+				<ul>
 					{rocks.map((rock) => (
-						<RockCard key={rock.id} rock={rock} profile={true} />
+						<RockCard key={rock._id} rock={rock} profile={true} />
 					))}
-				</lu>
+				</ul>
 			</div>
 		</div>
 	);

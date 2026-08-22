@@ -26,7 +26,10 @@
 	color: var(--background);
 	font-size: 8rem;
 	/* add black outline */
-	text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000,
+	text-shadow:
+		-3px -3px 0 #000,
+		3px -3px 0 #000,
+		-3px 3px 0 #000,
 		3px 3px 0 #000;
 	text-align: center;
 	margin: -20px auto;
@@ -57,18 +60,18 @@
 	transition: all 0.15s ease-in-out;
 }
 .profile-info .buttons button:hover {
-    cursor: pointer;
-    transform: scale(1.1);
+	cursor: pointer;
+	transform: scale(1.1);
 	background-color: var(--accent);
 }
 .profile-container > .pfp {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 20px;
-    margin: 0;
-    width: 200px;
-    height: 200px;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 20px;
+	margin: 0;
+	width: 200px;
+	height: 200px;
 }
 #your-rocks {
 	z-index: 1;
@@ -95,17 +98,17 @@
 	overflow-y: auto;
 }
 .rock-card-container-profile .rock-link .rock-card-container {
-    list-style-type: none;
-    width: 80%;
+	list-style-type: none;
+	width: 80%;
 	height: 200px;
-    margin: auto;
-    /* margin-bottom: 70px; */
+	margin: auto;
+	/* margin-bottom: 70px; */
 }
 .rock-card-container-profile .rock-card img {
-    width: 250px;
-    height: 100px;
+	width: 250px;
+	height: 100px;
 	margin-top: 40px;
 }
 .rock-card-container-profile .rock-card #name {
-    font-size: 1.5em;
+	font-size: 1.5em;
 }

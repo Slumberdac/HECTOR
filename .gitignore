@@ -215,3 +215,17 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/git,visualstudiocode,windows,node,react
+
+### HECTOR ###
+# Secrets. .env.example is the committed template; .env never is.
+.env
+.env.*
+!.env.example
+
+# Build output — produced by CI and by the Docker build, never committed.
+frontend/build/
+backend/coverage/
+
+# Local operational scratch
+ops/backups/
+*.tar.zst

@@ -1,0 +1,109 @@
+# Production stack for the Raspberry Pi.
+#
+#   docker compose up -d --build
+#
+# Nothing here publishes a port to the host except the web container on
+# 127.0.0.1, and even that is only for local debugging. The public entry point
+# is the Cloudflare tunnel, which dials out rather than accepting connections.
+
+name: hector
+
+services:
+  mongo:
+    image: mongo:8
+    restart: unless-stopped
+    command: ["--bind_ip_all", "--wiredTigerCacheSizeGB", "0.5"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:?set MONGO_ROOT_USERNAME in .env}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:?set MONGO_ROOT_PASSWORD in .env}
+      MONGO_INITDB_DATABASE: hector
+      # Read by ops/mongo-init/01-create-app-user.js on first boot.
+      MONGO_APP_USERNAME: ${MONGO_APP_USERNAME:-hector_app}
+      MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:?set MONGO_APP_PASSWORD in .env}
+    volumes:
+      - mongo-data:/data/db
+      - ./ops/mongo-init:/docker-entrypoint-initdb.d:ro
+    # Deliberately not published to the host: only the api container, on the
+    # internal network, can reach it.
+    expose:
+      - "27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - internal
+
+  api:
+    build:
+      # Root context: npm workspaces keep a single lockfile at the top level.
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGODB_URI: mongodb://${MONGO_APP_USERNAME:-hector_app}:${MONGO_APP_PASSWORD:?set MONGO_APP_PASSWORD in .env}@mongo:27017/hector?authSource=hector
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      # Caddy and cloudflared each add a hop.
+      TRUST_PROXY: 2
+      BCRYPT_ROUNDS: ${BCRYPT_ROUNDS:-12}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    expose:
+      - "5000"
+    networks:
+      - internal
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: /api/v1
+    restart: unless-stopped
+    depends_on:
+      - api
+    # Bound to loopback so you can curl it over SSH without exposing the Pi.
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks:
+      - internal
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Outbound-only connection to Cloudflare. There is no inbound port to forward
+  # and no certificate to renew on the Pi.
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN:?set CLOUDFLARE_TUNNEL_TOKEN in .env}
+    depends_on:
+      - web
+    networks:
+      - internal
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  mongo-data:
+
+networks:
+  internal:
+    driver: bridge
