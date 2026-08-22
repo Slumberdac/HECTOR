@@ -941,11 +941,8 @@ sudo systemctl restart ssh
 					OpenSSH 8.2 or newer at both ends, which Pi OS has.
 				</p>
 
-				<h3>Patches and swap</h3>
-				<p>
-					Nobody patches a Pi they cannot see, and MongoDB dislikes
-					running out of memory.
-				</p>
+				<h3>Automatic patches</h3>
+				<p>Nobody patches a Pi they cannot see.</p>
 
 				<div class="cmd">
 					<div class="cmd-bar">
@@ -954,12 +951,63 @@ sudo systemctl restart ssh
 					</div>
 					<pre>
 sudo apt install -y unattended-upgrades
-sudo dpkg-reconfigure -plow unattended-upgrades
+sudo dpkg-reconfigure -plow unattended-upgrades</pre>
+				</div>
 
+				<h3>Swap</h3>
+				<p>
+					MongoDB dislikes running out of memory. On a Pi 5 with 8 GB
+					this is precautionary rather than necessary; with 4 GB it is
+					cheap insurance. Look at what you already have first,
+					because Raspberry Pi OS has used three different swap
+					mechanisms over the years.
+				</p>
+
+				<div class="cmd">
+					<div class="cmd-bar">
+						<span class="cmd-where">pi · shell</span>
+						<button class="copy" type="button">Copy</button>
+					</div>
+					<pre>
+free -h
+swapon --show</pre>
+				</div>
+
+				<div class="note">
+					<span class="note-label"
+						>If you see /dev/zram0, stop here</span
+					>
+					<p>
+						That image uses zram, compressed RAM rather than a file
+						on the card. It does not add capacity the way a swapfile
+						does, but it is far kinder to an SD card, and for this
+						workload it is the better arrangement. Leave it alone
+						and go to step 02.
+					</p>
+				</div>
+
+				<div class="cmd">
+					<div class="cmd-bar">
+						<span class="cmd-where">pi · shell</span>
+						<button class="copy" type="button">Copy</button>
+					</div>
+					<pre>
+<span class="c"># older images, dphys-swapfile</span>
 sudo dphys-swapfile swapoff
 sudo sed -i 's/^CONF_SWAPSIZE=.*/CONF_SWAPSIZE=2048/' /etc/dphys-swapfile
-sudo dphys-swapfile setup &amp;&amp; sudo dphys-swapfile swapon</pre>
+sudo dphys-swapfile setup &amp;&amp; sudo dphys-swapfile swapon
+
+<span class="c"># newer images, rpi-swap: drop-in config, applied on reboot</span>
+sudo mkdir -p /etc/rpi/swap.conf.d
+man swap.conf              <span class="c"># the keys your version accepts</span>
+sudo reboot</pre>
 				</div>
+
+				<p>
+					<code>dphys-swapfile: command not found</code> simply means
+					your image uses one of the others. It is a branch to take,
+					not an error to fix.
+				</p>
 			</section>
 
 			<!-- ============ 2 ============ -->

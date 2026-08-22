@@ -176,12 +176,37 @@ sudo dpkg-reconfigure -plow unattended-upgrades
 ```
 
 **Give the database some headroom.** MongoDB dislikes running out of memory.
+On a Pi 5 with 8 GB this is precautionary rather than necessary; with 4 GB it is
+cheap insurance. Look at what you already have before changing anything, because
+Raspberry Pi OS has used three different swap mechanisms over the years:
 
 ```bash
+free -h
+swapon --show
+```
+
+If `swapon --show` already lists a `/dev/zram0` device, you are on an image that
+uses zram and you should leave it alone. zram is compressed RAM rather than a
+file on the card: it does not add capacity the way a swapfile does, but it is
+considerably kinder to an SD card, and for this workload it is the better
+arrangement. Skip ahead to step 2.
+
+Otherwise, whichever tool your image ships:
+
+```bash
+# older images (dphys-swapfile)
 sudo dphys-swapfile swapoff
 sudo sed -i 's/^CONF_SWAPSIZE=.*/CONF_SWAPSIZE=2048/' /etc/dphys-swapfile
 sudo dphys-swapfile setup && sudo dphys-swapfile swapon
+
+# newer images (rpi-swap), configured by drop-in and applied on reboot
+sudo mkdir -p /etc/rpi/swap.conf.d
+# see `man swap.conf` for the keys your version accepts, then:
+sudo reboot
 ```
+
+`dphys-swapfile: command not found` simply means your image uses one of the
+others. It is not an error to fix, it is a branch to take.
 
 ---
 
