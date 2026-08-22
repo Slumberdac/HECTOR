@@ -49,7 +49,12 @@
 	list-style-type: none;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: center;
+	/* space-evenly rather than center: the links spread across the width the
+	   bar actually has, which is what stops a wide screen looking like four
+	   small buttons huddled in the middle of an empty purple band. The gap is
+	   the floor, not the spacing, so they still bunch up sensibly when the bar
+	   gets tight. */
+	justify-content: space-evenly;
 	align-items: center;
 	gap: clamp(4px, 1.5vw, 18px);
 	margin: 0;
@@ -63,7 +68,9 @@
 	transition: all 0.15s ease-in-out;
 	border: clamp(2px, 0.4vw, 3px) solid black;
 	border-radius: clamp(8px, 1.5vw, 15px);
-	padding: clamp(2px, 0.6vw, 4px) clamp(5px, 1.4vw, 10px);
+	/* Roomier than the original 0 10px: with the bar this tall the buttons
+	   need the weight to sit in it properly. */
+	padding: clamp(2px, 0.7vw, 8px) clamp(6px, 1.8vw, 24px);
 	white-space: nowrap;
 }
 
