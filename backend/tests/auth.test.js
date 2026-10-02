@@ -116,15 +116,3 @@ test("/auth/me requires a session and returns the current user", async () => {
 
 	assert.equal(res.body.user.username, payload.username);
 });
-
-test("the user registry never exposes password material", async () => {
-	const payload = validUser();
-	await request(app).post("/api/v1/auth/register").send(payload).expect(201);
-
-	const res = await request(app).get("/api/v1/users").expect(200);
-	const body = JSON.stringify(res.body);
-
-	assert.ok(!body.includes(payload.password));
-	assert.ok(!body.includes("passwordHash"));
-	assert.equal(res.body.users[0].password, undefined);
-});

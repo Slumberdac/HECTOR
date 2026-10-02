@@ -148,7 +148,7 @@ test("a rock can only be adopted once", async () => {
 	await request(app)
 		.delete(`/api/v1/users/${bob.id}/rocks/${rockId}`)
 		.set("Cookie", bob.cookie)
-		.expect(404);
+		.expect(403);
 });
 
 test("deleting an account releases its rocks instead of orphaning them", async () => {
